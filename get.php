@@ -4,7 +4,7 @@
 if ($result->num_rows > 0) {
 echo '<span>&emsp;</span>';
   while($row = $result->fetch_assoc()) {
-    $kaz_id = $row["kaz_text_id"];
+    $word = $row["text_word"];
     $tokno = $row["tokno"];
     $line_break = $row["line_break"];
    // $lat_id = $row["cyr_id"];
@@ -14,7 +14,7 @@ echo '<span>&emsp;</span>';
                                 echo '<span class="tooltip_cyr">';
 echo '<span ';
 if($word_engine_id != '') {echo 'class="tooltip"';}
-echo ' id="tokno_',$tokno,'">' . $kaz_id .'<span class="tooltiptext5"></span></span></span>' . " " ;
+echo ' id="tokno_',$tokno,'">' . $word .'<span class="tooltiptext5"></span></span></span>' . " " ;
 
 if($line_break == 1) { echo '<br>'; }
 
