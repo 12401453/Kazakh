@@ -78,8 +78,8 @@ function clearTable() {
     if (event.key == "c") {
       document.getElementById("tt_styles").href = "tooltip_cyr_style_2.css";
     }
-
   });
+  
   window.addEventListener("keyup", event => {
     var spanDisplay = spoofspan.style.display;
     if (event.key == "c") {

@@ -1,6 +1,7 @@
 .tooltip {
 position: relative;
 display: inline-block;
+color: rgb(255, 119, 119);
 /* border-bottom: 1px dotted black; */
 }
 

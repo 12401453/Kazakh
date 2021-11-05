@@ -6,42 +6,32 @@
 $new_text = '';
 if(isset($_POST['new_text'])) {
   $new_text = $_POST['new_text'];
- // echo 'set';
+
 }
 
 
 include 'db_details_web.php';
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
+
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
 
-// $res = mysql_query("SET NAMES UTF8");
-
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
-
-//this gay approach needs to be replaced with a regex for acceptable characters, or better a regexp for unacceptable characters
-//mb_ereg([a-zA-ZÀ-ÖØ-öø-ȳЀ-ӹ-әӘіІҢңғҒүҮұҰқҚөӨһҺ], );
-
-//$unwantedChars = array(',', '!', '?', '«', '»', '.', ':', ';', '\'', '"', '–');
 
 $word = strtok($new_text, " ");
 $regexp = "/[-!?\n\r\t,.«»:;–\"'\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex 
 
 while($word != false) {
 
-  
   if( preg_match_all($regexp, $word, $arr_punct) ) {
 
     $arr =  preg_split($regexp, $word);
     $arr_size = count($arr);
     $arr_size_minus_1 = $arr_size - 1;
-    //$arr_punct_size = count($arr_punct);
 
     $line_break = 1;
     
@@ -50,11 +40,6 @@ while($word != false) {
       $text_word = $arr[$c];
       $punct = $arr_punct[0][$c];
       
-     // $line_break = 0;
-
-     /* if($arr[$arr_size_minus_1] != "" /* || $arr_size == 2 && $arr[0] == "" && $arr[1] == "" ) {
-        $line_break = 1;
-      } */
       
       if($text_word != "") {
 
@@ -104,10 +89,7 @@ while($word != false) {
         $word_engine_id = $row["word_id"];
 
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', 0, $word_engine_id)";
-        $result = $conn->query($sql);
-
-
-        
+        $result = $conn->query($sql);     
 
       }
 
