@@ -13,6 +13,9 @@
    background-color: #172136;
   padding: 10px;
 }
+.chunk {
+  white-space: nowrap;
+}
 #new_text {
   margin-left: 7.3%;
   margin-right: 7.3%;

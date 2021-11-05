@@ -52,7 +52,7 @@ include 'get.php';
 </div>
 
 <div id="new_text">
-<form method ="POST" action="javascript:void(0)" id="formid">
+<form method ="POST" action="javascript:void(0)" id="formid" accept-charset="utf-8">
   <textarea id="newtext" form="formid" name="new_text"></textarea>
   <br>
   <input type="submit" class="submit_btn" value="Add text" id="add_btn" onclick="loadText()">
