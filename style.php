@@ -31,8 +31,6 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri
-
-
 }
 
 #newtext {

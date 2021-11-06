@@ -62,8 +62,6 @@ function clearTable() {
      if(xhttp.readyState == 4) location.reload();
     }
     xhttp.send();
-   
- 
   }
  
   httpRequest("POST", "clear_table.php");
@@ -79,7 +77,7 @@ function clearTable() {
       document.getElementById("tt_styles").href = "tooltip_cyr_style_2.css";
     }
   });
-  
+
   window.addEventListener("keyup", event => {
     var spanDisplay = spoofspan.style.display;
     if (event.key == "c") {

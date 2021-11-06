@@ -8,20 +8,19 @@ echo '<span>&emsp;</span>';
     $tokno = $row["tokno"];
     $line_break = $row["line_break"];
     $word_engine_id = $row["word_engine_id"];
-   // $lat_id = $row["cyr_id"];
-   // $word_engine_id = $row["word_engine_id"];
  
    
 
 if($line_break == 2) { echo '<br>'; }
-if($line_break == 3) {echo 'TAB'; }
+if($line_break == 3) {echo '  '; }
 if($line_break == 1) { echo '</span> <span class="chunk">';}
      
 
 echo '<span class="tooltip_cyr">';
-echo '<span ';
-if($word_engine_id != "") {echo 'class="tooltip"';}
-echo ' id="tokno_',$tokno,'">' . $word .'<span class="tooltiptext5"></span></span></span>';
+if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
+echo $word;
+if($word_engine_id != "") { echo '<span class="tooltiptext5"></span></span>'; }
+echo '</span>';
 
 }
 } else {

@@ -29,15 +29,13 @@
 
 include 'db_details_web.php';
 
-// Create connection
+
 $conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
+
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-
-// $res = mysql_query("SET NAMES UTF8");
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
