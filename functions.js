@@ -17,6 +17,41 @@ document.getElementById("tt_styles").setAttribute("href", "tooltip_eng_style_2.c
 }
 
 
+function selectText() {
+
+  let textselect_value = document.getElementById('textselect').value;
+  let post_data = "textselect="+textselect_value;
+  console.log(post_data);
+  if (textselect_value == 0) { return; }
+
+  const httpRequest = (method, url) => {
+
+     
+      let para1 = document.getElementById('p1');
+
+      const xhttp = new XMLHttpRequest();
+      xhttp.open(method, url, true);
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+      xhttp.onload = () => {
+        if(xhttp.readyState == 4) {
+          para1.innerHTML = xhttp.responseText;
+        }
+        else {
+            para1.innerHTML = "Something went wrong";
+        }
+      }
+
+      xhttp.send(post_data);
+
+}
+
+  httpRequest("POST", "retrieve_text.php");
+
+}
+
+
+
 
 function loadText() {
   
@@ -24,7 +59,7 @@ function loadText() {
   document.getElementById('add_btn').style.cursor = 'progress';
  const httpRequest = (method, url) => {
 
-   var send_data = "new_text="+document.getElementById('newtext').value;
+   var send_data = "new_text="+document.getElementById('newtext').value+"&text_title="+document.getElementById('text_title').value;
 
    const xhttp = new XMLHttpRequest();
    xhttp.open(method, url, true);
@@ -45,6 +80,8 @@ function loadText() {
  httpRequest("POST", "update_db.php");
  
 }
+
+
 
 function clearTable() {
   

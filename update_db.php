@@ -9,6 +9,12 @@ if(isset($_POST['new_text'])) {
 
 }
 
+$text_title = '';
+if(isset($_POST['text_title'])) {
+  $text_title = $_POST['text_title'];
+
+}
+
 
 include 'db_details_web.php';
 
@@ -18,9 +24,18 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+$dt_start = 0;
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
+
+$sql = "SELECT COUNT(*) AS dt_start FROM display_text";
+$res = $conn->query($sql);
+$row = $res->fetch_assoc();
+$dt_start = $row["dt_start"];
+
+
+
 
 $word = strtok($new_text, " ");
 $regexp = "/[-!?\n\r\t,.«»:;–\"'\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex 
@@ -48,10 +63,10 @@ while($word != false) {
         $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
         $result = $conn->query($sql);
 
-        $sql = "SELECT word_id FROM word_engine WHERE word = '$engine_word'";
+        $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        $word_engine_id = $row["word_id"];
+        $word_engine_id = $row["word_engine_id"];
 
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', $line_break, $word_engine_id)";
         $result = $conn->query($sql);
@@ -83,10 +98,10 @@ while($word != false) {
         $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
         $result = $conn->query($sql);
 
-        $sql = "SELECT word_id FROM word_engine WHERE word = '$engine_word'";
+        $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        $word_engine_id = $row["word_id"];
+        $word_engine_id = $row["word_engine_id"];
 
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', 0, $word_engine_id)";
         $result = $conn->query($sql);     
@@ -106,10 +121,10 @@ while($word != false) {
     $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
     $result = $conn->query($sql);
 
-    $sql = "SELECT word_id FROM word_engine WHERE word = '$engine_word'";
+    $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
-    $word_engine_id = $row["word_id"];
+    $word_engine_id = $row["word_engine_id"];
 
     $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$word', 1, $word_engine_id)";
     $result = $conn->query($sql);
@@ -118,6 +133,15 @@ while($word != false) {
   
   $word = strtok(" ");
 }
+
+$sql = "SELECT COUNT(*) AS dt_end FROM display_text";
+$res = $conn->query($sql);
+$row = $res->fetch_assoc();
+$dt_end = $row["dt_end"];
+$dt_end++;
+
+$sql = "INSERT INTO texts (text_title, dt_start, dt_end) VALUES ('$text_title', '$dt_start', '$dt_end')";
+$res = $conn->query($sql);
 
 $conn->close(); 
 
