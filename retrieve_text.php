@@ -37,7 +37,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     echo '<span>&emsp;</span>';
       while($row = $result->fetch_assoc()) {
-        $word = $row["text_word"];
+        $text_word = $row["text_word"];
         $tokno = $row["tokno"];
         $line_break = $row["line_break"];
         $word_engine_id = $row["word_engine_id"];
@@ -46,14 +46,28 @@ if ($result->num_rows > 0) {
     
     if($line_break == 2) { echo '<br>'; }
     if($line_break == 3) {echo '  '; }
-    if($line_break == 1) { echo '</span> <span class="chunk">';}
+    if($line_break == 1) { echo '</span> <span class="chunk">';} //the space is important
          
-    
+  /*  
     echo '<span class="tooltip_cyr">';
     if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
-    echo $word;
+    echo $text_word;
     if($word_engine_id != "") { echo '<span class="tooltiptext5"></span></span>'; }
+    echo '</span>'; 
+*/
+
+    echo '<span class="tooltip_cyr">';
+    if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
+    echo $text_word;
+    if($word_engine_id != "") { 
+     /* $sql2 = "SELECT word FROM word_engine WHERE word_engine_id = $word_engine_id";
+      $res2 = $conn->query($sql2);
+      $row2 = $res2->fetch_assoc();
+      $word = $row2["word"]; */
+      echo '<span class="tooltiptext5">'.'<input type="submit" class="submit_btn tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="submit_btn tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; 
+    }
     echo '</span>';
+
     
     }
     } else {

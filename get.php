@@ -13,7 +13,7 @@ echo '<span>&emsp;</span>';
 
 if($line_break == 2) { echo '<br>'; }
 if($line_break == 3) {echo '  '; }
-if($line_break == 1) { echo '</span> <span class="chunk">';}
+if($line_break == 1) { echo '</span> <span class="chunk">';} 
      
 
 echo '<span class="tooltip_cyr">';

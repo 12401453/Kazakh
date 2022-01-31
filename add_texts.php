@@ -16,15 +16,6 @@
 
 <body style="background-color: #071022;">
   <br>
-<!--
-<div id="main_text">
-  <?php /*  include 'controls.php'; ?>
-  <br><br><br>
-<p1><br>
-<br>
-
-
-
 <?php
 
 include 'db_details_web.php';
@@ -35,29 +26,40 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-
-
-$sql = "SET NAMES UTF8";
-$res = $conn->query($sql);
-
-$sql = "SELECT * FROM display_text WHERE tokno > 0 AND tokno < 12000";
-$result = $conn->query($sql);
-
-include 'get.php';  */
 ?>
 
-</p1>
-</div>
- -->
 <div id="new_text">
-<form action="javascript:void(0)" id="formid" accept-charset="utf-8">
+<form action="javascript:void(0)" id="formid" name="addtextform" accept-charset="utf-8">
+<span id="lang_button">
+  <label for="langselect">Language:</label>
+  <select id="langselect" name="langselect" form="formid">
+  <?php 
+
+  $sql = "SELECT * FROM languages";
+  $res = $conn->query($sql);
+
+  if ($res->num_rows > 0) {
+
+      while($row = $res->fetch_assoc()) {
+
+      echo '<option value="'.$row["lang_id"].'">'.$row["lang_name"].'</option>';
+      }
+  }    
+
+?>  
+  </select></span><br><br><br>
+
+
+
+
+
 <textarea id="text_title" form="formid" name="text_title" placeholder="Text Title"></textarea><br><br>
   <textarea id="newtext" form="formid" name="new_text" placeholder="text body"></textarea>
   <br>
   <input type="submit" class="submit_btn" value="Add text" id="add_btn" onclick="loadText()">
   </form> 
   <br>
-  <input type="submit" class="submit_btn" value="Clear all texts" onclick="clearTable()"></button>
+  <input type="submit" class="submit_btn" style="margin-bottom: 12px" value="Clear all texts" onclick="clearTable()"></button><br>
 
 </div>
 

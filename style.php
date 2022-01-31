@@ -38,7 +38,7 @@
   background-color: #071022;
   border-style: solid;
   border-radius: 2px;
-  padding: 3px;
+  padding: 6px;
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
@@ -46,8 +46,21 @@
 
 }
 
-#textselect {
-  background-color: #172136;
+#lang_button {
+  position: absolute;
+  background-color: #071022;
+ /* border-style: solid; */
+  border-radius: 2px;
+  padding: 6px; 
+  z-index: 1;
+  color: #cbcbc3;
+  font-family: Calibri;
+  font-size: 18px;
+
+}
+
+#textselect, #langselect {
+  background-color: /* #172136; */ #071022;
  /* border-style: solid;
   border-radius: 2px; 
   padding: 3px;  */

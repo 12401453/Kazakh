@@ -57,9 +57,14 @@ function loadText() {
   
   document.body.style.cursor='progress';
   document.getElementById('add_btn').style.cursor = 'progress';
- const httpRequest = (method, url) => {
 
-   var send_data = "new_text="+document.getElementById('newtext').value+"&text_title="+document.getElementById('text_title').value;
+  let newtext = encodeURIComponent(document.getElementById('newtext').value);
+  let text_title = encodeURIComponent(document.getElementById('text_title').value);
+  let langselect = document.getElementById('langselect').value;
+  
+  const httpRequest = (method, url) => {
+
+   let send_data = "new_text="+newtext+"&text_title="+text_title+"&langselect="+langselect;
 
    const xhttp = new XMLHttpRequest();
    xhttp.open(method, url, true);
@@ -69,7 +74,7 @@ function loadText() {
    xhttp.onload = () => {
      console.log("sent");
     // console.log(xhttp.responseText);
-    if(xhttp.readyState == 4) location.reload();
+    if(xhttp.readyState == 4)  location.reload(); /* window.open("update_db.php"); */
    }
    xhttp.send(send_data);
 
@@ -111,7 +116,7 @@ function clearTable() {
   window.addEventListener("keydown", event => {
     if (event.repeat) {return;}
     if (event.key == "c") {
-      document.getElementById("tt_styles").href = "tooltip_cyr_style_2.css";
+      document.getElementById("tt_styles").href = "tooltip_edit.css";
     }
   });
 

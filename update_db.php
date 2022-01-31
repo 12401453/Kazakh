@@ -2,6 +2,39 @@
 
 <?php
 
+function utf8_substr_replace($original, $replacement, $position, $length)
+{
+    $startString = mb_substr($original, 0, $position, "UTF-8");
+    $endString = mb_substr($original, $position + $length, mb_strlen($original), "UTF-8");
+
+    $out = $startString . $replacement . $endString;
+
+    return $out;
+}
+
+function mb_strtolower_Turkish ($string) {
+
+  while(gettype(mb_strpos($string, 'İ')) != "boolean") {
+    $big_i_pos = mb_strpos($string, 'İ');
+    $string = utf8_substr_replace($string, 'i', $big_i_pos, 1);
+  }
+
+   while(gettype(mb_strpos($string, 'I')) != "boolean") {
+    $I_pos = mb_strpos($string, 'I');
+    $string = utf8_substr_replace($string, 'ı', $I_pos, 1);
+  }
+
+  return mb_strtolower($string, 'UTF-8');
+}
+
+function downCase($string, $lang_id) {
+  if($lang_id == 7) {
+       return mb_strtolower_Turkish($string);
+  }
+  else return mb_strtolower($string, 'UTF-8');
+
+}
+
 
 $new_text = '';
 if(isset($_POST['new_text'])) {
@@ -9,9 +42,18 @@ if(isset($_POST['new_text'])) {
 
 }
 
+//$new_text = addslashes($new_text);
+
+
 $text_title = '';
 if(isset($_POST['text_title'])) {
   $text_title = $_POST['text_title'];
+
+}
+
+$lang_id = '';
+if(isset($_POST['langselect'])) {
+  $lang_id = $_POST['langselect'];
 
 }
 
@@ -38,7 +80,9 @@ $dt_start = $row["dt_start"];
 
 
 $word = strtok($new_text, " ");
-$regexp = "/[-!?\n\r\t,.«»:;–\"'\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex 
+
+
+$regexp = "/[-'!?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex 
 
 while($word != false) {
 
@@ -58,9 +102,9 @@ while($word != false) {
       
       if($text_word != "") {
 
-        $engine_word = mb_strtolower($text_word);
+        $engine_word = downCase($text_word, $lang_id);
 
-        $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
+        $sql = "INSERT IGNORE INTO word_engine (word, lang_id) VALUES ('$engine_word', '$lang_id')";
         $result = $conn->query($sql);
 
         $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
@@ -86,6 +130,8 @@ while($word != false) {
         $line_break = 1;
       }  
       
+      if($punct == "'") {$punct = "\'";}
+
       $sql = "INSERT INTO display_text (text_word, line_break) VALUES ('$punct', $line_break)";
       $result = $conn->query($sql);
 
@@ -93,9 +139,9 @@ while($word != false) {
       if($c == $arr_size_minus_1 - 1 && $arr[$arr_size_minus_1] != "") {
         $c++;
         $text_word = $arr[$c];
-        $engine_word = mb_strtolower($text_word);
+        $engine_word = downCase($text_word, $lang_id);
         
-        $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
+        $sql = "INSERT IGNORE INTO word_engine (word, lang_id) VALUES ('$engine_word', '$lang_id')";
         $result = $conn->query($sql);
 
         $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
@@ -116,9 +162,9 @@ while($word != false) {
 
   else {
 
-    $engine_word = mb_strtolower($word);
+    $engine_word = downCase($word, $lang_id);
 
-    $sql = "INSERT IGNORE INTO word_engine (word) VALUES ('$engine_word')";
+    $sql = "INSERT IGNORE INTO word_engine (word, lang_id) VALUES ('$engine_word', '$lang_id')";
     $result = $conn->query($sql);
 
     $sql = "SELECT word_engine_id FROM word_engine WHERE word = '$engine_word'";
@@ -140,7 +186,7 @@ $row = $res->fetch_assoc();
 $dt_end = $row["dt_end"];
 $dt_end++;
 
-$sql = "INSERT INTO texts (text_title, dt_start, dt_end) VALUES ('$text_title', '$dt_start', '$dt_end')";
+$sql = "INSERT INTO texts (text_title, dt_start, dt_end, lang_id) VALUES ('$text_title', '$dt_start', '$dt_end', '$lang_id')";
 $res = $conn->query($sql);
 
 $conn->close(); 
