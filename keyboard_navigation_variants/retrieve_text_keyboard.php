@@ -23,14 +23,12 @@ if ($conn->connect_error) {
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
 
-$sql = "SELECT dt_start, dt_end, text_title FROM texts WHERE text_id = $text_id";
+$sql = "SELECT dt_start, dt_end FROM texts WHERE text_id = $text_id";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 
 $dt_start = $row["dt_start"];
 $dt_end = $row["dt_end"];
-$text_title = $row["text_title"];
-echo '<h1 id="title">'.$text_title.'</h1>';
 
 $sql = "SELECT * FROM display_text WHERE tokno > $dt_start AND tokno < $dt_end";
 $result = $conn->query($sql);
@@ -59,7 +57,7 @@ if ($result->num_rows > 0) {
 */
 
     echo '<span class="tooltip_cyr">';
-    if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
+    if($word_engine_id != "") {echo '<span class="tooltip" tabindex="0" id="word_engine_id_'.$word_engine_id.'">';}
     echo $text_word;
     if($word_engine_id != "") { 
      /* $sql2 = "SELECT word FROM word_engine WHERE word_engine_id = $word_engine_id";

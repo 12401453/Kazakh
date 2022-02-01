@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="tooltip_eng_style_2.css" id="tt_styles">
+  <link rel="stylesheet" type="text/css" href="tooltip_edit.css" id="tt_styles">
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">

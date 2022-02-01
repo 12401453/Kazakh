@@ -23,18 +23,19 @@
   padding: 10px;
 }
 #tt_button {
-  position: absolute;
+ 
   background-color: #071022;
   border-style: solid;
   border-radius: 2px;
   padding: 3px;
   z-index: 1;
   color: #cbcbc3;
-  font-family: Calibri
+  font-family: Calibri;
+  margin-top: 10px;
 }
 
 #select_button {
-  position: absolute;
+
   background-color: #071022;
   border-style: solid;
   border-radius: 2px;
@@ -43,6 +44,7 @@
   color: #cbcbc3;
   font-family: Calibri;
   font-size: 20px;
+  margin-bottom: 10px;
 
 }
 
@@ -114,4 +116,20 @@
   background-color: #040a16;
 } 
 
+#title {
+  font-size: 26px;
+  font-family: LiberationSerif;
+  color: rgb(252, 119, 119);
+  text-align: center;
+  margin-left: 40px;
+  margin-right: 40px;
+  position: flex;
+}
+
+#control_buttons {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
     </style>

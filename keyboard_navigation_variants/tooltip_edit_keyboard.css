@@ -1,8 +1,7 @@
 .tooltip {
 position: relative;
 display: inline-block;
-/*color: rgb(252, 119, 119); */
-color: rgb(117, 116, 116);
+color: rgb(252, 119, 119);
 /* border-bottom: 1px dotted black; */
 }
 
@@ -65,11 +64,6 @@ color: rgb(117, 116, 116);
  
 }
 
-
-.tooltip:focus .tooltiptext5 {
-visibility: visible;
-}
-
 .tooltip:hover .tooltiptext5 {
   visibility: visible;
 } 
@@ -80,8 +74,5 @@ visibility: visible;
 
 
 .tooltip:hover {
-  color: white;
-}
-.tooltip:focus {
   color: white;
 }
