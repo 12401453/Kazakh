@@ -7,12 +7,25 @@
       }
 
 #main_text {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+
   margin-left: 7.3%;
   margin-right: 7.3%;
   margin-bottom: 25px;
    background-color: #172136;
   padding: 10px;
 }
+
+#whole_text {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
 .chunk {
   white-space: nowrap;
 }
@@ -31,7 +44,6 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  margin-top: 10px;
 }
 
 #select_button {
@@ -44,7 +56,6 @@
   color: #cbcbc3;
   font-family: Calibri;
   font-size: 20px;
-  margin-bottom: 10px;
 
 }
 
@@ -70,6 +81,8 @@
   color: #cbcbc3;
   font-family: Calibri;
   font-size: 18px;
+  min-width: 100px;
+
 } 
 
 #newtext {
@@ -126,10 +139,21 @@
   position: flex;
 }
 
-#control_buttons {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-evenly;
-  align-items: flex-start;
+#loadingbutton {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+
+  background-color: #071022;
+  border-style: solid;
+  border-radius: 2px;
+  padding: 6px; 
+  z-index: 1;
+  color: #cbcbc3;
+  font-family: Calibri;
+  font-size: 17px;
+
 }
-    </style>
+
+
+</style>

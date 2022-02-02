@@ -12,12 +12,18 @@ document.getElementById("tt_styles").setAttribute("href", "tooltip_none_style_2.
 }
 else {
 spoofspan.style.display = 'inline';
-document.getElementById("tt_styles").setAttribute("href", "tooltip_eng_style_2.css");
+document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
 }
 }
 
 
 function selectText() {
+  
+  console.log("selectText() has fired. CUNTS!");
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
 
   let textselect_value = document.getElementById('textselect').value;
   let post_data = "textselect="+textselect_value;
@@ -33,6 +39,17 @@ function selectText() {
       xhttp.open(method, url, true);
       xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
+      xhttp.onreadystatechange = () => {
+      
+         
+    
+        if(xhttp.readyState == 4) {
+          para1.innerHTML = xhttp.responseText;
+          loadingbutton.remove();
+        }
+     
+      }
+/*
       xhttp.onload = () => {
         if(xhttp.readyState == 4) {
           para1.innerHTML = xhttp.responseText;
@@ -40,7 +57,7 @@ function selectText() {
         else {
             para1.innerHTML = "Something went wrong";
         }
-      }
+      }   */
 
       xhttp.send(post_data);
 
@@ -128,4 +145,7 @@ function clearTable() {
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
   });
+
+
+
 

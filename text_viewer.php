@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="tooltip_eng_style_2.css" id="tt_styles">
+  <link rel="stylesheet" type="text/css" href="tooltip_edit.css" id="tt_styles">
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,7 +29,7 @@ $res = $conn->query($sql);
   <br>
 
 <div id="main_text">
-<div id="control_buttons">
+
 <div id="select_button">
   <label for="textselect">Choose text:</label>
   <select id="textselect" name="textselect" onchange="selectText()">
@@ -48,14 +48,15 @@ $res = $conn->query($sql);
   }    
 
 ?>
-  </select></div>
+  </select></div><br><br><br>
 
-
-  <?php include 'controls.php'; ?></div>
-  <br><br><br>
-<p1 id="p1">
+<div id="whole_text">
+  <?php include 'controls.php'; ?><br>
+  
+<p1 id="p1"><br><br>
 
 </p1>
+</div>
 </div>
 
 
@@ -65,3 +66,23 @@ $res = $conn->query($sql);
 
 </body>
 </html>
+
+<script>
+  const textselector = document.getElementById('textselect');
+
+textselector.addEventListener('change', event => {
+      let dummyselect = document.createElement('select');
+      let dummyoption = document.createElement('option');
+
+      dummyoption.textContent = event.target.options[event.target.selectedIndex].text;  //event.target is the <select> element; .options is a list of its options
+      dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+      dummyselect.appendChild(dummyoption);
+      event.target.after(dummyselect);//.after('') inserts stuff directly after the entire element, i.e. after its </> closing tag
+      
+      const dummywidth = dummyselect.getBoundingClientRect().width;
+      event.target.style.width = `${dummywidth}px`;
+      
+      dummyselect.remove();
+});
+textselector.style.width = "100px";
+</script>

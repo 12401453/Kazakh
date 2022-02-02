@@ -1,5 +1,4 @@
 <?php
-echo '<br><br>';
 
 $text_id = '';
 if(isset($_POST['textselect'])) {
@@ -58,7 +57,7 @@ if ($result->num_rows > 0) {
     echo '</span>'; 
 */
 
-    echo '<span class="tooltip_cyr">';
+   // echo '<span class="tooltip_cyr">';
     if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
     echo $text_word;
     if($word_engine_id != "") { 
@@ -68,7 +67,7 @@ if ($result->num_rows > 0) {
       $word = $row2["word"]; */
       echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; 
     }
-    echo '</span>';
+   // echo '</span>';
 
     
     }
