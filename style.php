@@ -1,6 +1,14 @@
 
     <style>
-     @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
+   @media (max-width:600px) {
+     #tt_button, #select_button, p1 {
+       font-size: 10px;
+     }
+
+   }
+   
+   
+   @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
       p1 {
          font-family: LiberationSerif; font-size: 24px; color: #cbcbc3;
 

@@ -28,7 +28,7 @@ function selectText() {
   let textselect_value = document.getElementById('textselect').value;
   let post_data = "textselect="+textselect_value;
   console.log(post_data);
-  if (textselect_value == 0) { return; }
+ // if (textselect_value == 0) {  loadingbutton.remove(); return; }
 
   const httpRequest = (method, url) => {
 
