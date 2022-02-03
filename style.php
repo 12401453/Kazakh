@@ -159,7 +159,7 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 17px;
+  font-size: 47px;
 
 }
 

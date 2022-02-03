@@ -82,7 +82,7 @@ $dt_start = $row["dt_start"];
 $word = strtok($new_text, " ");
 
 
-$regexp = "/[-'!?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex 
+$regexp = "/[-'$%+=~#@><}{_!“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
 
 while($word != false) {
 
