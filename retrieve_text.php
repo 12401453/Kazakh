@@ -29,7 +29,7 @@ $row = $res->fetch_assoc();
 $dt_start = $row["dt_start"];
 $dt_end = $row["dt_end"];
 $text_title = $row["text_title"];
-echo '<h1 id="title">'.$text_title.'</h1>';
+echo '<h1 id="title">'.$text_title.'</h1><div id="textbody">';
 
 $sql = "SELECT * FROM display_text WHERE tokno > $dt_start AND tokno < $dt_end";
 $result = $conn->query($sql);
@@ -65,12 +65,13 @@ if ($result->num_rows > 0) {
       $res2 = $conn->query($sql2);
       $row2 = $res2->fetch_assoc();
       $word = $row2["word"]; */
-      echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; 
+      echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>';
     }
    // echo '</span>';
 
     
     }
+    echo '</div>';
     } else {
       echo "";
     }

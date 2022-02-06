@@ -1,10 +1,11 @@
 
     <style>
+
    
    
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
       p1 {
-         font-family: LiberationSerif; font-size: 24px; color: #cbcbc3;
+         font-family: LiberationSerif; font-size: 18px; color: #cbcbc3;
 
       }
 
@@ -14,11 +15,15 @@
   justify-content: space-evenly;
   align-items: flex-start;
 
-  margin-left: 7.3%;
+ /* margin-left: 7.3%;
   margin-right: 7.3%;
-  margin-bottom: 25px;
+  margin-bottom: 25px; */
    background-color: #172136;
   padding: 10px;
+}
+
+#textbody {
+ font-size: 15px;
 }
 
 #whole_text {
@@ -32,8 +37,8 @@
   white-space: nowrap;
 }
 #new_text{
-  margin-left: 7.3%;
-  margin-right: 7.3%;
+ /* margin-left: 7.3%;
+  margin-right: 7.3%; */
   background-color: #172136;
   padding: 10px;
 }
@@ -46,7 +51,7 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 20px;
+  font-size: 13px;
 }
 
 #select_button {
@@ -54,11 +59,11 @@
   background-color: #071022;
   border-style: solid;
   border-radius: 2px;
-  padding: 6px;
+  padding: 4px;
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 20px;
+  font-size: 13px;
 
 }
 
@@ -71,7 +76,7 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 18px;
+  font-size: 14px;
 
 }
 
@@ -83,48 +88,48 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 18px;
-  min-width: 100px;
+  font-size: 13px;
+  min-width: 75px;
 
 } 
 
 #newtext {
   position: flex;
   width: 70%;
-  height: 200px;
+  height: 150px;
   border-style: solid;
-  border-radius: 5px;
+  border-radius: 4px;
   background-color: #071022;
   color: #cbcbc3;
   text-indent: 0%;
   font-family: Calibri;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 #text_title {
   position: flex;
   width: 70%;
-  height: 50px;
+  height: 38px;
   border-style: solid;
-  border-radius: 5px;
+  border-radius: 4px;
   background-color: #071022;
   color: #cbcbc3;
   text-indent: 0%;
-  font-size: 24px;
+  font-size: 18px;
   font-family: Calibri;
 }
 
 .submit_btn {
   border-style: solid;
-  padding: 5px;
+  padding: 4px;
   border-radius: 2px;
   background-color: #071022;
   color: #cbcbc3;
   font-family: Calibri;
-  top: 10px;
+  top: 8px;
   position:relative;
-  font-size: 17px;
-  left: 10px;
+  font-size: 12px;
+  left: 8px;
   cursor: pointer;
 }
 
@@ -133,12 +138,12 @@
 } 
 
 #title {
-  font-size: 26px;
+  font-size: 19px;
   font-family: LiberationSerif;
   color: rgb(252, 119, 119);
   text-align: center;
-  margin-left: 40px;
-  margin-right: 40px;
+  margin-left: 30px;
+  margin-right: 30px;
   position: flex;
 }
 
@@ -150,11 +155,11 @@
   background-color: #071022;
   border-style: solid;
   border-radius: 2px;
-  padding: 6px; 
+  padding: 5px;
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 47px;
+  font-size: 34px;
 
 }
 
