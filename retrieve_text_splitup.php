@@ -5,6 +5,16 @@ if(isset($_POST['textselect'])) {
   $text_id = $_POST['textselect'];
 }
 
+$dt_start = '';
+if(isset($_POST['dt_start'])) {
+  $dt_start = $_POST['dt_start'];
+}
+
+$dt_end = '';
+if(isset($_POST['dt_end'])) {
+  $dt_end = $_POST['dt_end'];
+}
+
 
 
 
@@ -21,16 +31,6 @@ if ($conn->connect_error) {
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
-
-$sql = "SELECT dt_start, dt_end, text_title FROM texts WHERE text_id = $text_id";
-$res = $conn->query($sql);
-$row = $res->fetch_assoc();
-
-$dt_start = $row["dt_start"];
-$dt_end = $row["dt_end"];
-$length = $dt_end - $dt_start;
-$text_title = $row["text_title"];
-echo '<h1 id="title">'.$text_title.'</h1><div id="textbody">';
 
 $sql = "SELECT * FROM display_text WHERE tokno > $dt_start AND tokno < $dt_end";
 $result = $conn->query($sql);
@@ -60,20 +60,7 @@ if ($result->num_rows > 0) {
     
     }
     echo '</div>';
-    if($length > 1000) {
-      echo '<div id="pagenos">';
-      $page_nos = ceil(($length/1000));
-      for($i = $page_nos; $i > 1; $i--) {
-        echo '<span class="pageno" onclick="selectText_splitup('.$dt_start.', '.$dt_start+1001;
-        echo ')">';
-        echo 0-$i+1+$page_nos.'</span>';
-        $dt_start+=1000;
-      }
-      echo '<span class="pageno" onclick="selectText_splitup('.$dt_start.', '.$dt_end;
-      echo ')">';
-      echo $page_nos.'</span></div>';
-
-    }
+    
 
 
 

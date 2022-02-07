@@ -19,7 +19,7 @@ document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
 
 function selectText() {
   
-  console.log("selectText() has fired. CUNTS!");
+
   let loadingbutton = document.createElement('div');
   loadingbutton.innerHTML = "Loading...";
   loadingbutton.id = 'loadingbutton';
@@ -28,8 +28,6 @@ function selectText() {
   let textselect_value = document.getElementById('textselect').value;
   let post_data = "textselect="+textselect_value;
   console.log(post_data);
- // if (textselect_value == 0) {  loadingbutton.remove(); return; }
-
   const httpRequest = (method, url) => {
 
      
@@ -49,21 +47,51 @@ function selectText() {
         }
      
       }
-/*
-      xhttp.onload = () => {
-        if(xhttp.readyState == 4) {
-          para1.innerHTML = xhttp.responseText;
-        }
-        else {
-            para1.innerHTML = "Something went wrong";
-        }
-      }   */
 
       xhttp.send(post_data);
 
 }
 
   httpRequest("POST", "retrieve_text.php");
+
+}
+
+function selectText_splitup(dt_start, dt_end) {
+  
+
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
+
+  let textselect_value = document.getElementById('textselect').value;
+  let post_data = "textselect="+textselect_value+"&dt_start="+dt_start+"&dt_end="+dt_end;
+  console.log(post_data);
+  const httpRequest = (method, url) => {
+
+     
+      let textbody = document.getElementById('textbody');
+
+      const xhttp = new XMLHttpRequest();
+      xhttp.open(method, url, true);
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+      xhttp.onreadystatechange = () => {
+      
+         
+    
+        if(xhttp.readyState == 4) {
+          textbody.innerHTML = xhttp.responseText;
+          loadingbutton.remove();
+        }
+     
+      }
+
+      xhttp.send(post_data);
+
+}
+
+  httpRequest("POST", "retrieve_text_splitup.php");
 
 }
 
@@ -145,7 +173,4 @@ function clearTable() {
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
   });
-
-
-
 

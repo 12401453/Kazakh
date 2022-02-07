@@ -35,7 +35,7 @@ $res = $conn->query($sql);
 
 <div id="select_button">
   <label for="textselect">Choose text:</label>
-  <select id="textselect" name="textselect" onchange="selectText()">
+  <select id="textselect" name="textselect" onchange="selectText_js_tt()">
   <option value="0"></option>
   <?php 
 
@@ -78,7 +78,8 @@ textselector.addEventListener('change', event => {
       let dummyoption = document.createElement('option');
 
       dummyoption.textContent = event.target.options[event.target.selectedIndex].text;  //event.target is the <select> element; .options is a list of its options
-      dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+     // dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+      dummyselect.id = 'hidden_select';
       dummyselect.appendChild(dummyoption);
       event.target.after(dummyselect);//.after('') inserts stuff directly after the entire element, i.e. after its </> closing tag
       
@@ -88,4 +89,38 @@ textselector.addEventListener('change', event => {
       dummyselect.remove();
 });
 textselector.style.width = "100px";
+
+const showButtons = (event) => {
+    if(event.target.className == 'tooltip') { 
+      let display_word = event.target.innerHTML;
+
+      event.target.innerHTML = display_word+'<span class="tooltiptext5" id="popup"><input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn"></span>';
+    console.log(event.target.id);
+
+    document.getElementById('popup').addEventListener('mouseout', hideButtons);
+    event.target.addEventListener('mouseout', hideButtons);
+
+
+
+    }
+} 
+
+const hideButtons = (event) => {
+    console.log("left");
+
+    let popup = document.getElementById('popup');
+    popup.remove();
+  /*
+  if(event.target.className == 'tooltip') { 
+    console.log('left');
+    let display_word = event.target.innerHTML;
+    
+    
+    display_word = display_word.replace('<span class="tooltiptext5" id="popup"><input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn"></span>', '');
+    event.target.innerHTML = display_word;
+    console.log(display_word);
+  } */
+} 
+
+window.addEventListener('mouseover', showButtons);
 </script>

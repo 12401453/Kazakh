@@ -6,7 +6,7 @@ color: rgb(117, 116, 116);
 /* border-bottom: 1px dotted black; */
 }
 
-
+@media all and (min-width: 769px) {
 .tooltip .tooltiptext5 {
   visibility: hidden;
   width: 170px;
@@ -35,7 +35,36 @@ color: rgb(117, 116, 116);
   justify-content: space-around;
   align-items: center;
 
-}
+} }
+
+@media all and (max-width: 768px) {
+  .tooltip .tooltiptext5 {
+    visibility: hidden;
+    width: 100%;
+    height: 40px;
+    background-color: #071022;
+    color: #cbcbc3;
+    text-align: center;
+    border-radius: 6px;
+    border: solid 1px black;
+
+    font-size: 15px;
+    font-weight: normal;
+    font-family: Calibri;
+  
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    bottom: 0;
+
+    line-height: normal;
+  
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+  
+  } }
 
 #editbtn {
 
@@ -66,10 +95,6 @@ color: rgb(117, 116, 116);
 }
 
 
-.tooltip:focus .tooltiptext5 {
-visibility: visible;
-}
-
 .tooltip:hover .tooltiptext5 {
   visibility: visible;
 } 
@@ -80,8 +105,5 @@ visibility: visible;
 
 
 .tooltip:hover {
-  color: white;
-}
-.tooltip:focus {
   color: white;
 }

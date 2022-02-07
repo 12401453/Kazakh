@@ -2,13 +2,16 @@
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="tooltip_edit.css" id="tt_styles">
+<link rel="stylesheet" type="text/css" href="tooltip_edit.css" id="tt_styles">
+
+  <link href="style.css" rel="stylesheet" media="all and (min-width: 769px)" type="text/css">
+<link href="style_small_screen.css" rel="stylesheet" media="all and (max-width: 768px)" type="text/css">
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
- <?php include 'style.php'; ?>
+ <?php // include 'style_small_screen.php'; ?>
 
 
 </head>
@@ -75,7 +78,8 @@ textselector.addEventListener('change', event => {
       let dummyoption = document.createElement('option');
 
       dummyoption.textContent = event.target.options[event.target.selectedIndex].text;  //event.target is the <select> element; .options is a list of its options
-      dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+     // dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+      dummyselect.id = 'hidden_select';
       dummyselect.appendChild(dummyoption);
       event.target.after(dummyselect);//.after('') inserts stuff directly after the entire element, i.e. after its </> closing tag
       

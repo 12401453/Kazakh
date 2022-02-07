@@ -3,6 +3,7 @@
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
       p1 {
          font-family: LiberationSerif; font-size: 24px; color: #cbcbc3;
+         max-width: 100%;
 
       }
 
@@ -18,12 +19,17 @@
    background-color: #172136;
   padding: 10px;
 }
+#textbody {
+font-size: 23px;
+}
 
 #whole_text {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
   align-items: flex-start;
+  max-width: 100%;
+
 }
 
 .chunk {
@@ -45,6 +51,7 @@
   color: #cbcbc3;
   font-family: Calibri;
   font-size: 20px;
+  max-width: 97%;
 }
 
 #select_button {
@@ -57,6 +64,7 @@
   color: #cbcbc3;
   font-family: Calibri;
   font-size: 20px;
+  max-width: 97%;
 
 }
 
@@ -83,8 +91,13 @@
   font-family: Calibri;
   font-size: 18px;
   min-width: 100px;
-
+  max-width: 100%;
 } 
+
+#hidden_select {
+
+  visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;
+}
 
 #newtext {
   position: flex;
