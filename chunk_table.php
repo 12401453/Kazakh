@@ -23,41 +23,59 @@ $res = $conn->query($sql);
 $sql = "SELECT line_break, tokno, text_word FROM display_text";
 $res = $conn->query($sql);
 
+//$sql = "SELECT COUNT(*) AS dt_count FROM display_text";
+$count = $res->num_rows;
+
+$chunk = '';
+$dt_end = 0;
+$tokno = 0;
+$x = 1;
+
 if ($res->num_rows > 0) {
 
   while($row = $res->fetch_assoc()) {
 
+    $x++;
     $lb = $row['line_break'];
     $tokno = $row['tokno'];
-    $chunk = $row['text_word'];
-    if($chunk == "'") {$chunk = "\'"; }
-
+    
+    if($chunk == '') {
+    $dt_start = $tokno;
+    $dt_end = $tokno;
+    }
+    else {
+    $dt_end++;
+    }
+    
+    
+    $next_word = $row['text_word'];
+    if($next_word == "'") {$next_word = "\'"; }
+    $chunk = $chunk.$next_word;
+  
+    echo $tokno."   ".$tokno_next."   ".$chunk."   ".$count."   ".$x."\n";
     $tokno_next = $tokno + 1;
+    
+    if($x > $count) {
+    $sql_chunk = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $dt_start, $dt_end)";
+    $res_chunk = $conn->query($sql_chunk);
+    break;
+    }
 
     $sql2 = "SELECT line_break, text_word FROM display_text WHERE tokno = $tokno_next";
     $res2 = $conn->query($sql2);
     $row2 = $res2->fetch_assoc();
     $lb_next = $row2['line_break'];
 
+    
 
-    while($lb_next == 0) {
-      
-      $next_word = $row2['text_word'];
-      if($next_word == "'") {$next_word = "\'"; }
-      $chunk = $chunk.$next_word;
-
-      $tokno_next = $tokno_next + 1;
-
-      $sql2 = "SELECT line_break, text_word FROM display_text WHERE tokno = $tokno_next";
-      $res2 = $conn->query($sql2);
-      $row2 = $res2->fetch_assoc();
-      $lb_next = $row2['line_break'];
-
+    if($lb_next > 0) {
+    
+    $sql_chunk = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $dt_start, $dt_end)";
+    $res_chunk = $conn->query($sql_chunk);
+    $chunk = '';
+    
     }
-
-    $dt_end = $tokno_next - 1;
-    $sql3 = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $tokno, $dt_end)";
-
+  
 
   }
 
