@@ -18,6 +18,7 @@
   margin-bottom: 25px;
    background-color: #172136;
   padding: 10px;
+  border-radius: 5px;
 }
 #textbody {
 font-size: 23px;
@@ -40,6 +41,7 @@ font-size: 23px;
   margin-right: 7.3%;
   background-color: #172136;
   padding: 10px;
+  border-radius: 5px;
 }
 #tt_button {
  

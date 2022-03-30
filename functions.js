@@ -56,7 +56,7 @@ function selectText() {
 
 }
 
-function selectText_splitup(dt_start, dt_end) {
+function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
   
 
   let loadingbutton = document.createElement('div');
@@ -65,7 +65,7 @@ function selectText_splitup(dt_start, dt_end) {
   document.getElementById('spoofspan').after(loadingbutton);
 
   let textselect_value = document.getElementById('textselect').value;
-  let post_data = "textselect="+textselect_value+"&dt_start="+dt_start+"&dt_end="+dt_end;
+  let post_data = "textselect="+textselect_value+"&dt_start="+dt_start+"&dt_end="+dt_end+"&page_cur="+page_cur;
   console.log(post_data);
   const httpRequest = (method, url) => {
 

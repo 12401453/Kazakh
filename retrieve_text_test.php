@@ -93,10 +93,10 @@ if ($result->num_rows > 0) {
     
     } 
     
-    if($length > $words_per_page) {echo '</span><span id="arrow">...►</span>';}
-    echo '</div>';
+    if($length > $words_per_page) {echo '</span>';}
+    echo '<div id="wordcount"><br>*****WORD COUNT: '.$word_count.'*******</div></div>';
     if($length > $words_per_page) {
-      echo '<div id="pagenos">';
+      echo '<br><div id="pagenos">';
       $page_nos = ceil(($length/$words_per_page));
       for($i = $page_nos; $i > 1; $i--) {
         $page_cur = /*0-$i+1+$page_nos;*/ 1+ $page_nos- $i;
@@ -114,7 +114,7 @@ if ($result->num_rows > 0) {
 
   
 
-    echo '<br><br>*****WORD COUNT: '.$word_count.'*******';
+   // echo '<br><br>*****WORD COUNT: '.$word_count.'*******';
 
     } else {
       echo "";
