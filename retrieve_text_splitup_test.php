@@ -36,7 +36,7 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_start = $row["dt_start"];
 
-$sql = "SELECT dt_end FROM chunks WHERE chunk_id = $chunk_end + 1";
+$sql = "SELECT dt_end FROM chunks WHERE chunk_id = $chunk_end";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_end = $row["dt_end"];

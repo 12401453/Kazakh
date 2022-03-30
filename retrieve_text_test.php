@@ -44,6 +44,8 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $chunk_end = $row["chunk_id"];
 
+$chunk_end_plus1 = $chunk_end + 1;
+
 
 /*
 $length = $dt_end - $dt_start;
@@ -104,7 +106,7 @@ if ($result->num_rows > 0) {
         echo $page_cur.'</span>';
         $chunk_start+=$words_per_page;
       }
-      echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_end.', '.$page_nos.', '.$page_nos;
+      echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_end_plus1.', '.$page_nos.', '.$page_nos;
       echo ')">';
       echo $page_nos.'</span></div>';
 
