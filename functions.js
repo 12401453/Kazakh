@@ -52,7 +52,7 @@ function selectText() {
 
 }
 
-  httpRequest("POST", "retrieve_text.php");
+  httpRequest("POST", "retrieve_text_test.php");
 
 }
 
@@ -91,7 +91,7 @@ function selectText_splitup(dt_start, dt_end) {
 
 }
 
-  httpRequest("POST", "retrieve_text_splitup.php");
+  httpRequest("POST", "retrieve_text_splitup_test.php");
 
 }
 
@@ -157,7 +157,7 @@ function clearTable() {
 
 
 
-
+/*
   window.addEventListener("keydown", event => {
     if (event.repeat) {return;}
     if (event.key == "c") {
@@ -172,5 +172,5 @@ function clearTable() {
       if(spanDisplay == 'inline') { document.getElementById("tt_styles").href = "tooltip_eng_style_2.css"; }
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
-  });
+  }); */
 
