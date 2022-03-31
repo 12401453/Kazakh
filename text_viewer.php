@@ -11,7 +11,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
- <?php // include 'style_small_screen.php'; ?>
 
 
 </head>

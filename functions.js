@@ -52,7 +52,7 @@ function selectText() {
 
 }
 
-  httpRequest("POST", "retrieve_text_test.php");
+  httpRequest("POST", "retrieve_text.php");
 
 }
 
@@ -83,6 +83,10 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
         if(xhttp.readyState == 4) {
           textbody.innerHTML = xhttp.responseText;
           loadingbutton.remove();
+          if(page_cur > 1) {
+            let title = document.getElementById("title");
+            title.scrollIntoView();
+          }
         }
      
       }
@@ -91,8 +95,9 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
 
 }
 
-  httpRequest("POST", "retrieve_text_splitup_test.php");
-
+  httpRequest("POST", "retrieve_text_splitup.php");
+  
+ 
 }
 
 
