@@ -160,6 +160,13 @@ function clearTable() {
  }
 
 
+ function texts_link() {
+   window.location = "/Kazakh_testing/text_viewer.php";
+ }
+ function add_text_link() {
+  window.location = "/Kazakh_testing/add_texts.php";
+}
+
 
 
 /*

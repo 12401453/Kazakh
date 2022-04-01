@@ -1,8 +1,9 @@
 
    
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
+   @font-face {font-family: Bookerly; src: url('Bookerly.ttf'); }
       p1 {
-         font-family: LiberationSerif; font-size: 18px; color: #cbcbc3;
+         font-family: Bookerly; font-size: 18px; color: #cbcbc3;
          max-width: 100%;
 
       }
@@ -67,6 +68,25 @@
   font-size: 13px;
   max-width: 97%;
 
+}
+
+.link-buttons {
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #071022;
+  color: #c71f1f;
+  font-family: Calibri;
+  top: 1px;
+  position:relative;
+  font-size: 10px;
+  cursor: pointer;
+  max-width:fit-content;
+
+}
+
+.link-buttons:hover {
+  background-color: #040a16;
+  color: red;
 }
 
 #lang_button {
@@ -147,7 +167,7 @@
 
 #title {
   font-size: 19px;
-  font-family: LiberationSerif;
+  font-family: Bookerly;
   color: rgb(252, 119, 119);
   text-align: center;
   margin-left: 30px;

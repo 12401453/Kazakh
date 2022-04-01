@@ -30,6 +30,8 @@ if ($conn->connect_error) {
 ?>
 
 <div id="new_text">
+<div class="link-buttons" onclick="texts_link()">View texts</div><br>
+
 <form action="javascript:void(0)" id="formid" name="addtextform" accept-charset="utf-8">
 <span id="lang_button">
   <label for="langselect">Language:</label>

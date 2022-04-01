@@ -71,12 +71,13 @@ $dt_start = 0;
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
 
-$sql = "SELECT COUNT(*) AS dt_start FROM display_text";
+$sql = "SELECT MAX(tokno) AS dt_start FROM display_text";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_start = $row["dt_start"];
+$dt_start++;
 
-
+$chunk = '';
 
 
 $word = strtok($new_text, " ");
@@ -84,22 +85,31 @@ $word = strtok($new_text, " ");
 
 $regexp = "/[-'$%+=~#@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
 
+  $sql = "SELECT MAX(tokno) AS ch_start FROM display_text";
+  $res = $conn->query($sql);
+  $row = $res->fetch_assoc();
+  $ch_start = $row["ch_start"];
+  if(is_null($ch_start)) {
+    $ch_start = 0;
+  }
+
 while($word != false) {
+  
+       //checks the token for punctuation or linebreaks, puts the characters in the first row of multi-dimensional array $arr_punct; returns 'false' if the word is clean
+  if( preg_match_all($regexp, $word, $arr_punct) ) { 
 
-  if( preg_match_all($regexp, $word, $arr_punct) ) {
-
-    $arr =  preg_split($regexp, $word);
+    $arr =  preg_split($regexp, $word); //returns an array of the non-punctuation components (words) of the token
     $arr_size = count($arr);
     $arr_size_minus_1 = $arr_size - 1;
 
-    $line_break = 1;
+    $line_break = 1; //$line_break refers to the nature of the space immediately preceding the word, so at the start of the token (which was defined as space-separated in the first place) there is always a preceding space, hence = 1
     
-    for($c = 0; $c < $arr_size_minus_1; $c++) {
+    for($c = 0; $c < $arr_size_minus_1; $c++) {  //we have to start $c at 0 because its needed as an array index
       
       $text_word = $arr[$c];
-      $punct = $arr_punct[0][$c];
+      $punct = $arr_punct[0][$c]; //other rows of this 2d array are used for some intricacies of regexes which idgaf about
       
-      
+      //$text_word could be nothing if the punctuation is at the beginning of the token, in which case we do nothing (so no else)
       if($text_word != "") {
 
         $engine_word = downCase($text_word, $lang_id);
@@ -115,9 +125,16 @@ while($word != false) {
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', $line_break, $word_engine_id)";
         $result = $conn->query($sql);
 
+        $chunk = $chunk.$text_word;
+        if($c == 0) {
+         $ch_start++;
+        }
+        else {
+          $ch_end = $ch_start + 1;
+        }
       }
 
-      $line_break = 0;
+      $line_break = 0; //line_break set to zero in anticipation of this being word-medial punctuation; if it is word-initial punctuation (i.e. if($arr[0] == "")) we set line_break to 1 below
 
       if($punct == "\n" || $punct == "\r") {
         $line_break = 2;
@@ -125,7 +142,7 @@ while($word != false) {
       if($punct == "\t") {
         $line_break = 3;
       }
-
+            //if word-initial punctuation lb = 1 because preceded by a space
       if($arr[0] == "" && $c == 0) {
         $line_break = 1;
       }  
@@ -135,7 +152,11 @@ while($word != false) {
       $sql = "INSERT INTO display_text (text_word, line_break) VALUES ('$punct', $line_break)";
       $result = $conn->query($sql);
 
+      $chunk = $chunk.$punct;
+      $ch_end = $ch_start + 1;
 
+
+          //if we have just added the second-to-last component of the token and the final component is not zero (i.e. the token is not punctuation-ended), we manually increment $c and add the final component to the table right now, otherwise $c will increment beyond maximum index of the punctuation array and try to access the punctuation array with it in the next loop and break. If the token was punctuation-ended then we don't need to do this because $c incrementing normally will take it to the maximum index of the punctuation-array and not above it.
       if($c == $arr_size_minus_1 - 1 && $arr[$arr_size_minus_1] != "") {
         $c++;
         $text_word = $arr[$c];
@@ -150,16 +171,21 @@ while($word != false) {
         $word_engine_id = $row["word_engine_id"];
 
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', 0, $word_engine_id)";
-        $result = $conn->query($sql);     
+        $result = $conn->query($sql);  
+        
+        $chunk = $chunk.$text_word;
+        $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+        $result = $conn->query($sql);
+        $chunk = '';
 
       }
 
-      $line_break = 0;
+      $line_break = 0; //line-break set to zero for the next component of the punctuation-separated token, because obviously not preceded by space
 
     }
 
   }
-
+      //if no punctuation is found in the token (if(preg_match_all == false)) we can just stick the word whole in the database with a '1' for 'preceding space' in the lb column
   else {
 
     $engine_word = downCase($word, $lang_id);
@@ -175,16 +201,24 @@ while($word != false) {
     $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$word', 1, $word_engine_id)";
     $result = $conn->query($sql);
 
+    $ch_start++;
+    $ch_end = $ch_start;
+    $chunk = $word;
+
+    $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+    $result = $conn->query($sql);
+    $chunk = '';
+
+
   }
   
   $word = strtok(" ");
 }
 
-$sql = "SELECT COUNT(*) AS dt_end FROM display_text";
+$sql = "SELECT MAX(tokno) AS dt_end FROM display_text";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_end = $row["dt_end"];
-$dt_end++;
 
 $sql = "INSERT INTO texts (text_title, dt_start, dt_end, lang_id) VALUES ('$text_title', '$dt_start', '$dt_end', '$lang_id')";
 $res = $conn->query($sql);

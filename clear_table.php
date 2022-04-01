@@ -21,6 +21,11 @@ $result = $conn->query($sql);
 $sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT(1), word_engine_id INT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
+$sql = "DROP TABLE chunks";
+$res = $conn->query($sql);
+$sql = "CREATE TABLE chunks (chunk VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_bin, dt_start INT UNSIGNED,dt_end INT UNSIGNED, chunk_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$res = $conn->query($sql);
+
 $sql = "DROP TABLE word_engine";
 $result = $conn->query($sql);
 $sql ="CREATE TABLE word_engine (word_engine_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin UNIQUE, lemma_id INT UNSIGNED, lang_id SMALLINT UNSIGNED) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
