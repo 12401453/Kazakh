@@ -90,11 +90,10 @@ if(is_null($dt_start)) {
 }
 $dt_start++;
 
-$chunk = '';
 $ch_start = $dt_start;
-
 $ch_end = 0;
 $ch_length = 0;
+
 $word = strtok($new_text, " ");
 
 $dt_counter = 0;
@@ -145,15 +144,14 @@ while($word != false) {
           $ch_end = $ch_start + $ch_length;
 
           if($line_break > 0){
-            $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+            $sql = "INSERT INTO chunks (dt_start, dt_end) VALUES ($ch_start, $ch_end)";
             $result = $conn->query($sql);
-            $chunk = $text_word;
+          
             $ch_length = 0;
 
             $ch_start = $ch_end + 1;
           }
           else {
-            $chunk = $chunk.$text_word;
             $ch_length++;
           }
           //$ch_end = $ch_start + $ch_length;
@@ -186,15 +184,14 @@ while($word != false) {
         $ch_end = $ch_start + $ch_length;
 
         if($line_break > 0) {
-          $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+          $sql = "INSERT INTO chunks (dt_start, dt_end) VALUES ($ch_start, $ch_end)";
           $result = $conn->query($sql);
-          $chunk = $punct;
+         
           $ch_length = 0;
 
           $ch_start = $ch_end + 1;
         }
         else{
-          $chunk = $chunk.$punct;
           $ch_length++;
         }
 
@@ -229,7 +226,6 @@ while($word != false) {
         $row = $result->fetch_assoc();
         $word_engine_id = $row["word_engine_id"];
 
-        $chunk = $chunk.$text_word;
         $ch_length++;
 
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', 0, $word_engine_id)";
@@ -271,10 +267,9 @@ while($word != false) {
 
       $ch_end = $ch_start + $ch_length;
 
-      $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+      $sql = "INSERT INTO chunks (dt_start, dt_end) VALUES ($ch_start, $ch_end)";
       $result = $conn->query($sql);
 
-      $chunk = $word;
       $ch_start = $ch_end + 1;
       $ch_length = 0;
       //$ch_end = $ch_start + $ch_length;
@@ -295,7 +290,7 @@ while($word != false) {
 }
 
 $ch_end = $ch_start + $ch_length;
-$sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+$sql = "INSERT INTO chunks (dt_start, dt_end) VALUES ($ch_start, $ch_end)";
 $result = $conn->query($sql);
 
 $sql = "SELECT MAX(tokno) AS dt_end FROM display_text";

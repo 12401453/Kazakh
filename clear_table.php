@@ -23,7 +23,7 @@ $result = $conn->query($sql);
 
 $sql = "DROP TABLE chunks";
 $res = $conn->query($sql);
-$sql = "CREATE TABLE chunks (chunk VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_bin, dt_start INT UNSIGNED,dt_end INT UNSIGNED, chunk_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql = "CREATE TABLE chunks (dt_start INT UNSIGNED,dt_end INT UNSIGNED, chunk_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $res = $conn->query($sql);
 
 $sql = "DROP TABLE word_engine";

@@ -23,7 +23,7 @@ if(is_null($max_eng)) {
 $word_engine_id = $max_eng + 1;
 
 
-$engine_word = "faggots";
+$engine_word = "the";
 $lang_id = 3;
 //$word_engine_id = 20;
 

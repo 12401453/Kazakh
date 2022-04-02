@@ -69,7 +69,7 @@ $res = $conn->query($sql);
 if($bool_end_text == true) {
   $sql = "INSERT INTO display_text (text_word) VALUES ('DELETE_BOUNDARY')";
   $res = $conn->query($sql);
-  $sql = "INSERT INTO chunks (chunk) VALUES ('DELETE_BOUNDARY')";
+  $sql = "INSERT INTO chunks (dt_start, dt_end) VALUES (NULL, NULL)";
   $res = $conn->query($sql);
 }
 
