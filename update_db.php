@@ -75,25 +75,24 @@ $sql = "SELECT MAX(tokno) AS dt_start FROM display_text";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_start = $row["dt_start"];
+if(is_null($dt_start)) {
+  $dt_start = 0;
+}
 $dt_start++;
 
 $chunk = '';
+$ch_start = $dt_start;
 
-
+$ch_end = 0;
+$ch_length = 0;
 $word = strtok($new_text, " ");
 
+$dt_counter = 0;
 
 $regexp = "/[-'$%+=~#@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
 
-  $sql = "SELECT MAX(tokno) AS ch_start FROM display_text";
-  $res = $conn->query($sql);
-  $row = $res->fetch_assoc();
-  $ch_start = $row["ch_start"];
-  if(is_null($ch_start)) {
-    $ch_start = 0;
-  }
-
 while($word != false) {
+  
   
        //checks the token for punctuation or linebreaks, puts the characters in the first row of multi-dimensional array $arr_punct; returns 'false' if the word is clean
   if( preg_match_all($regexp, $word, $arr_punct) ) { 
@@ -104,7 +103,7 @@ while($word != false) {
 
     $line_break = 1; //$line_break refers to the nature of the space immediately preceding the word, so at the start of the token (which was defined as space-separated in the first place) there is always a preceding space, hence = 1
     
-    for($c = 0; $c < $arr_size_minus_1; $c++) {  //we have to start $c at 0 because its needed as an array index
+    for($c = 0; $c < $arr_size_minus_1; $c++) {  //we have to start $c at 0 because it's needed as an array index
       
       $text_word = $arr[$c];
       $punct = $arr_punct[0][$c]; //other rows of this 2d array are used for some intricacies of regexes which idgaf about
@@ -122,16 +121,29 @@ while($word != false) {
         $row = $result->fetch_assoc();
         $word_engine_id = $row["word_engine_id"];
 
+        if($dt_counter != 0){
+
+          $ch_end = $ch_start + $ch_length;
+
+          if($line_break > 0){
+            $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+            $result = $conn->query($sql);
+            $chunk = $text_word;
+            $ch_length = 0;
+
+            $ch_start = $ch_end + 1;
+          }
+          else {
+            $chunk = $chunk.$text_word;
+            $ch_length++;
+          }
+          //$ch_end = $ch_start + $ch_length;
+          //$ch_start = $ch_end + 1;
+        }
+
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', $line_break, $word_engine_id)";
         $result = $conn->query($sql);
-
-        $chunk = $chunk.$text_word;
-        if($c == 0) {
-         $ch_start++;
-        }
-        else {
-          $ch_end = $ch_start + 1;
-        }
+        $dt_counter++;
       }
 
       $line_break = 0; //line_break set to zero in anticipation of this being word-medial punctuation; if it is word-initial punctuation (i.e. if($arr[0] == "")) we set line_break to 1 below
@@ -149,11 +161,29 @@ while($word != false) {
       
       if($punct == "'") {$punct = "\'";}
 
+      if($dt_counter != 0){
+
+        $ch_end = $ch_start + $ch_length;
+
+        if($line_break > 0) {
+          $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+          $result = $conn->query($sql);
+          $chunk = $punct;
+          $ch_length = 0;
+
+          $ch_start = $ch_end + 1;
+        }
+        else{
+          $chunk = $chunk.$punct;
+          $ch_length++;
+        }
+
+      }
+      
+      
       $sql = "INSERT INTO display_text (text_word, line_break) VALUES ('$punct', $line_break)";
       $result = $conn->query($sql);
-
-      $chunk = $chunk.$punct;
-      $ch_end = $ch_start + 1;
+      $dt_counter++;
 
 
           //if we have just added the second-to-last component of the token and the final component is not zero (i.e. the token is not punctuation-ended), we manually increment $c and add the final component to the table right now, otherwise $c will increment beyond maximum index of the punctuation array and try to access the punctuation array with it in the next loop and break. If the token was punctuation-ended then we don't need to do this because $c incrementing normally will take it to the maximum index of the punctuation-array and not above it.
@@ -170,14 +200,13 @@ while($word != false) {
         $row = $result->fetch_assoc();
         $word_engine_id = $row["word_engine_id"];
 
+        $chunk = $chunk.$text_word;
+        $ch_length++;
+
         $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$text_word', 0, $word_engine_id)";
         $result = $conn->query($sql);  
+        $dt_counter++;
         
-        $chunk = $chunk.$text_word;
-        $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
-        $result = $conn->query($sql);
-        $chunk = '';
-
       }
 
       $line_break = 0; //line-break set to zero for the next component of the punctuation-separated token, because obviously not preceded by space
@@ -197,23 +226,50 @@ while($word != false) {
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $word_engine_id = $row["word_engine_id"];
+   
 
+    if($dt_counter != 0){
+
+      $ch_end = $ch_start + $ch_length;
+
+      $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+      $result = $conn->query($sql);
+
+      $chunk = $word;
+      $ch_start = $ch_end + 1;
+      $ch_length = 0;
+      //$ch_end = $ch_start + $ch_length;
+      //$ch_start = $ch_end + 1;
+    } 
+/*
+    if($dt_counter != 0){
+
+      if($line_break > 0) {
+        $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+        $result = $conn->query($sql);
+        $chunk = $word;
+      }
+      else{
+        $chunk = $chunk.$word;
+        $ch_length++;
+      }
+
+    } */
+    
+    
     $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$word', 1, $word_engine_id)";
     $result = $conn->query($sql);
-
-    $ch_start++;
-    $ch_end = $ch_start;
-    $chunk = $word;
-
-    $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
-    $result = $conn->query($sql);
-    $chunk = '';
-
+    $dt_counter++;
 
   }
   
   $word = strtok(" ");
+ 
 }
+
+$ch_end = $ch_start + $ch_length;
+$sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
+$result = $conn->query($sql);
 
 $sql = "SELECT MAX(tokno) AS dt_end FROM display_text";
 $res = $conn->query($sql);

@@ -105,8 +105,10 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
 
 function loadText() {
   
-  document.body.style.cursor='progress';
-  document.getElementById('add_btn').style.cursor = 'progress';
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
 
   let newtext = encodeURIComponent(document.getElementById('newtext').value);
   let text_title = encodeURIComponent(document.getElementById('text_title').value);
@@ -124,8 +126,12 @@ function loadText() {
    xhttp.onload = () => {
      console.log("sent");
     // console.log(xhttp.responseText);
-    if(xhttp.readyState == 4)  location.reload(); /* window.open("update_db.php"); */
+    if(xhttp.readyState == 4)  {
+      loadingbutton.remove(); //not really needed
+      location.reload(); /* window.open("update_db.php"); */
+
    }
+  }
    xhttp.send(send_data);
 
  
@@ -140,6 +146,10 @@ function loadText() {
 
 function clearTable() {
   
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
 
   const httpRequest = (method, url) => {
  
@@ -151,8 +161,11 @@ function clearTable() {
     xhttp.onload = () => {
       console.log("sent");
      // console.log(xhttp.responseText);
-     if(xhttp.readyState == 4) location.reload();
+     if(xhttp.readyState == 4) {
+      loadingbutton.remove(); 
+      location.reload();
     }
+  }
     xhttp.send();
   }
  
