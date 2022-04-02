@@ -128,7 +128,7 @@ function loadText() {
     // console.log(xhttp.responseText);
     if(xhttp.readyState == 4)  {
       loadingbutton.remove(); //not really needed
-      location.reload(); /* window.open("update_db.php"); */
+      location.reload(); /* window.open("update_db.php"); */ 
 
    }
   }
@@ -138,7 +138,7 @@ function loadText() {
 
  }
 
- httpRequest("POST", "update_db.php");
+ httpRequest("POST", "update_db.php"); //SHOULD BE update_db.php
  
 }
 
