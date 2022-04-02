@@ -66,7 +66,6 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$dt_start = 0;
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
@@ -281,20 +280,7 @@ while($word != false) {
       //$ch_end = $ch_start + $ch_length;
       //$ch_start = $ch_end + 1;
     } 
-/*
-    if($dt_counter != 0){
 
-      if($line_break > 0) {
-        $sql = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $ch_start, $ch_end)";
-        $result = $conn->query($sql);
-        $chunk = $word;
-      }
-      else{
-        $chunk = $chunk.$word;
-        $ch_length++;
-      }
-
-    } */
     
     
     $sql = "INSERT INTO display_text (text_word, line_break, word_engine_id) VALUES ('$word', 1, $word_engine_id)";

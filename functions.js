@@ -196,7 +196,7 @@ function clearTable() {
      // console.log(xhttp.responseText);
      if(xhttp.readyState == 4) {
       loadingbutton.remove(); 
-      //location.reload();
+      location.reload();
     }
   }
     xhttp.send(post_data);
