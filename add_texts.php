@@ -62,6 +62,25 @@ if ($conn->connect_error) {
   <input type="submit" class="submit_btn" value="Add text" id="add_btn" onclick="loadText()">
   </form> 
   <br>
+  <div id="delete_button">
+  <label for="textselect">Text to delete:</label>
+  <select id="textselect" name="textselect" onclick="deleteText()">
+  <option value="0"></option>
+  <?php 
+
+  $sql = "SELECT * FROM texts";
+  $res = $conn->query($sql);
+
+  if ($res->num_rows > 0) {
+
+      while($row = $res->fetch_assoc()) {
+
+      echo '<option value="'.$row["text_id"].'">'.$row["text_title"].'</option>';
+      }
+  }    
+
+?>
+  </select></div>
   <input type="submit" class="submit_btn" style="margin-bottom: 12px" value="Clear all texts" onclick="clearTable()"></button><br>
 
 </div>

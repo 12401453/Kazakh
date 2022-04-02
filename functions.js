@@ -172,6 +172,40 @@ function clearTable() {
   httpRequest("POST", "clear_table.php");
  }
 
+ function deleteText() {
+  let textselect_value = document.getElementById('textselect').value;
+  if(textselect_value == 0) { return;}
+  
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
+
+  
+  let post_data = "textselect="+textselect_value;
+
+  const httpRequest = (method, url) => {
+ 
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+   // xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    
+    xhttp.onload = () => {
+      console.log(post_data);
+     // console.log(xhttp.responseText);
+     if(xhttp.readyState == 4) {
+      loadingbutton.remove(); 
+      //location.reload();
+    }
+  }
+    xhttp.send(post_data);
+  }
+ 
+  httpRequest("POST", "delete_text.php");
+
+ }
+
 
  function texts_link() {
    window.location = "/Kazakh_testing/text_viewer.php";
