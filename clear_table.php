@@ -68,6 +68,13 @@ $result = $conn->query($sql);
 $sql = "CREATE TABLE abbreviations (abbr_id INT UNSIGNED PRIMARY KEY, eng_trans TEXT CHARACTER SET utf8 COLLATE utf8_bin, word_engine_id1 INT UNSIGNED, word_engine_id2 INT UNSIGNED, word_engine_id3 INT UNSIGNED, word_engine_id4 INT UNSIGNED, word_engine_id5 INT UNSIGNED, word_engine_id6 INT UNSIGNED, word_engine_id7 INT UNSIGNED, lang_id SMALLINT UNSIGNED) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
+$sql = "DROP TABLE progress_bar";
+$result = $conn->query($sql);
+$sql = "CREATE TABLE progress_bar (word_num INT UNSIGNED)";
+$result = $conn->query($sql);
+$sql = "INSERT INTO progress_bar (word_num) VALUES (0)";
+$result = $conn->query($sql);
+
 
 $conn->close(); 
 

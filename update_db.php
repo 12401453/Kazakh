@@ -39,7 +39,6 @@ function downCase($string, $lang_id) {
 $new_text = '';
 if(isset($_POST['new_text'])) {
   $new_text = $_POST['new_text'];
-
 }
 
 //$new_text = addslashes($new_text);
@@ -48,8 +47,8 @@ if(isset($_POST['new_text'])) {
 $text_title = '';
 if(isset($_POST['text_title'])) {
   $text_title = $_POST['text_title'];
-
 }
+$text_title = addslashes($text_title);
 
 $lang_id = '';
 if(isset($_POST['langselect'])) {
@@ -94,11 +93,18 @@ $ch_start = $dt_start;
 $ch_end = 0;
 $ch_length = 0;
 
+
+$word_count = 1;
+$sql = "UPDATE progress_bar SET word_num = 0";
+$res = $conn->query($sql);
+
+
 $word = strtok($new_text, " ");
+
 
 $dt_counter = 0;
 
-$regexp = "/[-'$%+=~#@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
+$regexp = "/[-'$%£¥₽€+=~#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
 
 while($word != false) {
   
@@ -287,6 +293,9 @@ while($word != false) {
   
   $word = strtok(" ");
  
+  $sql = "UPDATE progress_bar SET word_num = $word_count";
+  $res = $conn->query($sql);
+  $word_count++;
 }
 
 $ch_end = $ch_start + $ch_length;
@@ -299,6 +308,9 @@ $row = $res->fetch_assoc();
 $dt_end = $row["dt_end"];
 
 $sql = "INSERT INTO texts (text_title, dt_start, dt_end, lang_id) VALUES ('$text_title', '$dt_start', '$dt_end', '$lang_id')";
+$res = $conn->query($sql);
+
+$sql = "UPDATE progress_bar SET word_num = $word_count";
 $res = $conn->query($sql);
 
 $conn->close(); 

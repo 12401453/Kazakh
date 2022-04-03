@@ -100,13 +100,71 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
  
 }
 
+function wordCount() {
+
+  let newtext = encodeURIComponent(document.getElementById('newtext').value);
+
+  const httpRequest = (method, url) => {
+
+    let send_data = "new_text="+newtext;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    //xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+
+      if(xhttp.readyState == 4) {
+
+        let word_count = Number(xhttp.responseText);
+        return word_count;
+      }
+
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "word_count.php");
+} 
 
 
+
+function progressBar(word_count) {
+
+  const httpRequest = (method, url) => {
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'text';
+    //xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+
+      if(xhttp.readyState == 4) {
+
+        let words_progress = Number(xhttp.responseText);
+        let percent = (words_progress*100)/word_count.toFixed(1);
+        loadingbutton.innerHTML = `${percent}%`;
+        console.log("progress_bar.php triggered");
+      }
+
+    }
+    xhttp.send();
+  }
+  httpRequest("GET", "progress_bar.php");
+} 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function loadText() {
   
+  let word_count = wordCount();
+  console.log(word_count);
+
   let loadingbutton = document.createElement('div');
-  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.innerHTML = "0%";
   loadingbutton.id = 'loadingbutton';
   document.getElementById('spoofspan').after(loadingbutton);
 
@@ -122,7 +180,8 @@ function loadText() {
    xhttp.open(method, url, true);
   // xhttp.responseType = 'json';
   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-   
+
+ 
    xhttp.onload = () => {
      console.log("sent");
     // console.log(xhttp.responseText);
@@ -133,12 +192,15 @@ function loadText() {
    }
   }
    xhttp.send(send_data);
-
- 
+  /* for(let x = 20; x > 0; x--) {
+    setInterval(progressBar(word_count), 600);
+  } */
+  
 
  }
 
  httpRequest("POST", "update_db.php"); //SHOULD BE update_db.php
+ 
  
 }
 

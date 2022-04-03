@@ -70,6 +70,17 @@
 
 }
 
+#delete_button {
+  background-color: #071022;
+  border-radius: 2px;
+  padding: 6px;
+  z-index: 1;
+  color: #cbcbc3;
+  font-family: Calibri;
+  font-size: 13px;
+  max-width: fit-content;
+}
+
 .link-buttons {
   padding: 5px;
   border-radius: 2px;
