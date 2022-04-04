@@ -5,7 +5,10 @@ if(isset($_POST['textselect'])) {
   $text_id = $_POST['textselect'];
 }
 else {$text_id = 0;}
-if ($text_id == 0) { exit(0); }
+if ($text_id == 0) {
+  echo "<br><br>";
+  exit(0); 
+}
 
 
 
