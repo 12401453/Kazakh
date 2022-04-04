@@ -27,8 +27,8 @@ $sql = "CREATE TABLE chunks (dt_start INT UNSIGNED,dt_end INT UNSIGNED, chunk_id
 $res = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS word_engine";
-$result = $conn->query($sql);                                 //the 'word' column used to be UNIQUE but now I check that manually
-$sql ="CREATE TABLE word_engine (word_engine_id INT UNSIGNED PRIMARY KEY, word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, lemma_id INT UNSIGNED, lang_id SMALLINT UNSIGNED) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$result = $conn->query($sql);                                 //the 'word' column used to be UNIQUE but that is bollocks
+$sql ="CREATE TABLE word_engine (word_engine_id INT UNSIGNED AUTO_INCREMENT UNIQUE, word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, lemma_id INT UNSIGNED, lang_id SMALLINT UNSIGNED, PRIMARY KEY(word, lang_id)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS texts";

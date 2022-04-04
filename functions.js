@@ -161,29 +161,20 @@ function loadText() {
   // xhttp.responseType = 'json';
   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
- 
-   xhttp.onload = () => {
-     console.log("sent");
-    // console.log(xhttp.responseText);
+  xhttp.onload = () => {
+    console.log("sent");
+  // console.log(xhttp.responseText);
     if(xhttp.readyState == 4)  {
       loadingbutton.remove(); //not really needed
       location.reload(); /* window.open("update_db.php"); */ 
-
-   }
+    }
   }
    xhttp.send(send_data);
-  
-  
-  
-
  }
 
  httpRequest("POST", "update_db.php"); //SHOULD BE update_db.php
  // for(let x = 150; x > 0; x--) {
-     progressBar(word_count);
- 
-
-
+ progressBar(word_count);
  
 }
 
