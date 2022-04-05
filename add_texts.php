@@ -30,6 +30,8 @@ if ($conn->connect_error) {
 ?>
 
 <div id="new_text">
+<div class="link-buttons" onclick="texts_link()">View texts</div><br>
+
 <form action="javascript:void(0)" id="formid" name="addtextform" accept-charset="utf-8">
 <span id="lang_button">
   <label for="langselect">Language:</label>
@@ -60,6 +62,25 @@ if ($conn->connect_error) {
   <input type="submit" class="submit_btn" value="Add text" id="add_btn" onclick="loadText()">
   </form> 
   <br>
+  <div id="delete_button">
+  <label for="textselect">Text to delete:</label>
+  <select id="textselect" name="textselect" onclick="deleteText()">
+  <option value="0"></option>
+  <?php 
+
+  $sql = "SELECT * FROM texts";
+  $res = $conn->query($sql);
+
+  if ($res->num_rows > 0) {
+
+      while($row = $res->fetch_assoc()) {
+
+      echo '<option value="'.$row["text_id"].'">'.$row["text_title"].'</option>';
+      }
+  }    
+
+?>
+  </select></div>
   <input type="submit" class="submit_btn" style="margin-bottom: 12px" value="Clear all texts" onclick="clearTable()"></button><br>
 
 </div>

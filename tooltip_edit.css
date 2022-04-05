@@ -2,7 +2,7 @@
 position: relative;
 display: inline-block;
 /*color: rgb(252, 119, 119); */
-color: rgb(117, 116, 116);
+color: #cbcbc3;
 /* border-bottom: 1px dotted black; */
 }
 
@@ -105,5 +105,5 @@ color: rgb(117, 116, 116);
 
 
 .tooltip:hover {
-  color: white;
+  color: rgb(252, 119, 119);
 }

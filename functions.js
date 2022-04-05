@@ -101,16 +101,56 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
 }
 
 
+function progressBar(word_count) {
+
+  const httpRequest = (method, url) => {
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'text';
+    //xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+
+      if(xhttp.readyState == 4) {
+
+        let words_progress = Number(xhttp.responseText);
+        let percent = ((words_progress*100)/word_count).toFixed(2);
+        loadingbutton.innerHTML = `Processing text: ${percent}%`;
+        //console.log("progress_bar.php triggered");
+      }
+
+    }
+    xhttp.send();
+  }
+  httpRequest("GET", "progress_bar.php");
+
+  setTimeout(`progressBar(${word_count})`, 100);
+ 
+} 
+
 
 
 function loadText() {
-  
-  document.body.style.cursor='progress';
-  document.getElementById('add_btn').style.cursor = 'progress';
 
-  let newtext = encodeURIComponent(document.getElementById('newtext').value);
+  let newtext_raw = document.getElementById('newtext').value;
+  if(newtext_raw == '') {return; }
+  let words = newtext_raw.split(' ');
+  let word_count = words.length;
+
+  let newtext = encodeURIComponent(newtext_raw);
+ 
   let text_title = encodeURIComponent(document.getElementById('text_title').value);
   let langselect = document.getElementById('langselect').value;
+
+  
+
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Processing text: 0.00%";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
+
+  
   
   const httpRequest = (method, url) => {
 
@@ -120,19 +160,21 @@ function loadText() {
    xhttp.open(method, url, true);
   // xhttp.responseType = 'json';
   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-   
-   xhttp.onload = () => {
-     console.log("sent");
-    // console.log(xhttp.responseText);
-    if(xhttp.readyState == 4)  location.reload(); /* window.open("update_db.php"); */
-   }
+
+  xhttp.onload = () => {
+    console.log("sent");
+  // console.log(xhttp.responseText);
+    if(xhttp.readyState == 4)  {
+      loadingbutton.remove(); //not really needed
+      location.reload(); /* window.open("update_db.php"); */ 
+    }
+  }
    xhttp.send(send_data);
-
- 
-
  }
 
- httpRequest("POST", "update_db.php");
+ httpRequest("POST", "update_db.php"); //SHOULD BE update_db.php
+ // for(let x = 150; x > 0; x--) {
+ progressBar(word_count);
  
 }
 
@@ -140,6 +182,10 @@ function loadText() {
 
 function clearTable() {
   
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
 
   const httpRequest = (method, url) => {
  
@@ -151,14 +197,58 @@ function clearTable() {
     xhttp.onload = () => {
       console.log("sent");
      // console.log(xhttp.responseText);
-     if(xhttp.readyState == 4) location.reload();
+     if(xhttp.readyState == 4) {
+      loadingbutton.remove(); 
+      location.reload();
     }
+  }
     xhttp.send();
   }
  
   httpRequest("POST", "clear_table.php");
  }
 
+ function deleteText() {
+  let textselect_value = document.getElementById('textselect').value;
+  if(textselect_value == 0) { return;}
+  
+  let loadingbutton = document.createElement('div');
+  loadingbutton.innerHTML = "Loading...";
+  loadingbutton.id = 'loadingbutton';
+  document.getElementById('spoofspan').after(loadingbutton);
+
+  
+  let post_data = "textselect="+textselect_value;
+
+  const httpRequest = (method, url) => {
+ 
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+   // xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    
+    xhttp.onload = () => {
+      console.log(post_data);
+     // console.log(xhttp.responseText);
+     if(xhttp.readyState == 4) {
+      loadingbutton.remove(); 
+      location.reload();
+    }
+  }
+    xhttp.send(post_data);
+  }
+ 
+  httpRequest("POST", "delete_text.php");
+
+ }
+
+
+ function texts_link() {
+   window.location = "/Kazakh_testing/text_viewer.php";
+ }
+ function add_text_link() {
+  window.location = "/Kazakh_testing/add_texts.php";
+}
 
 
 

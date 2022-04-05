@@ -55,6 +55,7 @@ if ($res->num_rows > 0) {
     echo $tokno."   ".$tokno_next."   ".$chunk."   ".$count."   ".$x."\n";
     $tokno_next = $tokno + 1;
     
+    //this deals with the end of the table where the line-break value is unimportant and would mess things up
     if($x > $count) {
     $sql_chunk = "INSERT INTO chunks (chunk, dt_start, dt_end) VALUES ('$chunk', $dt_start, $dt_end)";
     $res_chunk = $conn->query($sql_chunk);

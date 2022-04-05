@@ -5,7 +5,10 @@ if(isset($_POST['textselect'])) {
   $text_id = $_POST['textselect'];
 }
 else {$text_id = 0;}
-if ($text_id == 0) { exit(0); }
+if ($text_id == 0) {
+  echo "<br><br>";
+  exit(0); 
+}
 
 
 
@@ -34,12 +37,14 @@ echo '<h1 id="title">'.$text_title.'</h1><div id="textbody">';
 
 
 
-$sql = "SELECT chunk_id FROM chunks WHERE dt_start = $dt_start + 1";
+$sql = "SELECT chunk_id FROM chunks WHERE dt_start = $dt_start";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $chunk_start = $row["chunk_id"];
 
-$sql = "SELECT chunk_id FROM chunks WHERE dt_end = $dt_end - 1";
+$chunk_start_minus_1 = $chunk_start - 1;
+
+$sql = "SELECT chunk_id FROM chunks WHERE dt_end = $dt_end";
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $chunk_end = $row["chunk_id"];
@@ -52,7 +57,7 @@ $length = $dt_end - $dt_start;
 $words_per_page = 750;
 $pg1_dt_end = $length <= 750 ? $dt_end : $dt_start + $words_per_page; */
 
-$length = $chunk_end - $chunk_start;
+$length = $chunk_end_plus1 - $chunk_start;
 $words_per_page = 750;
 $pg1_chunk_end = $length <= $words_per_page ? $chunk_end : $chunk_start + $words_per_page - 1;
 
@@ -61,10 +66,10 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $pg1_dt_end = $row["dt_end"];
 
-$sql = "SELECT * FROM display_text WHERE tokno > $dt_start AND tokno <= $pg1_dt_end";
+$sql = "SELECT * FROM display_text WHERE tokno >= $dt_start AND tokno <= $pg1_dt_end";
 $result = $conn->query($sql);
 
-$sql = "SELECT dt_start, dt_end, chunk_id FROM chunks WHERE dt_start > $dt_start AND dt_end <= $dt_end";
+$sql = "SELECT dt_start, dt_end, chunk_id FROM chunks WHERE dt_start >= $dt_start AND dt_end <= $dt_end";
 $res_chunk = $conn->query($sql);
 $row_chunk = $res_chunk->fetch_assoc();
 
@@ -100,13 +105,13 @@ if ($result->num_rows > 0) {
       $page_nos = ceil(($length/$words_per_page));
       for($i = $page_nos; $i > 1; $i--) {
         $page_cur = /*0-$i+1+$page_nos;*/ 1+ $page_nos- $i;
-        echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_start+$words_per_page;
+        echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_start+$words_per_page-1;
         echo ', '.$page_nos.', '.$page_cur;
         echo ')">';
         echo $page_cur.'</span>';
         $chunk_start+=$words_per_page;
       }
-      echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_end_plus1.', '.$page_nos.', '.$page_nos;
+      echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_end.', '.$page_nos.', '.$page_nos;
       echo ')">';
       echo $page_nos.'</span></div>';
 

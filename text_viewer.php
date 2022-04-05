@@ -31,6 +31,8 @@ $res = $conn->query($sql);
   <br>
 
 <div id="main_text">
+    
+<div class="link-buttons" onclick="add_text_link()">Add/remove texts</div><br>
 
 <div id="select_button">
   <label for="textselect">Choose text:</label>
@@ -50,7 +52,8 @@ $res = $conn->query($sql);
   }    
 
 ?>
-  </select></div><br><br><br>
+  </select></div>
+  <br><br><br>
 
 <div id="whole_text">
   <?php include 'controls.php'; ?><br>

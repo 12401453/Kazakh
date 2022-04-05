@@ -45,10 +45,10 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $dt_end = $row["dt_end"];
 
-$sql = "SELECT * FROM display_text WHERE tokno >= $dt_start AND tokno < $dt_end";
+$sql = "SELECT * FROM display_text WHERE tokno >= $dt_start AND tokno <= $dt_end";
 $result = $conn->query($sql);
 
-$sql = "SELECT dt_start, dt_end, chunk_id FROM chunks WHERE dt_start >= $dt_start AND dt_end < $dt_end";
+$sql = "SELECT dt_start, dt_end, chunk_id FROM chunks WHERE dt_start >= $dt_start AND dt_end <= $dt_end";
 $res_chunk = $conn->query($sql);
 $row_chunk = $res_chunk->fetch_assoc();
 
