@@ -34,6 +34,13 @@
   max-width: 100%;
 }
 
+#deletion {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
 .chunk {
   white-space: nowrap;
 }
@@ -77,8 +84,8 @@
   z-index: 1;
   color: #cbcbc3;
   font-family: Calibri;
-  font-size: 13px;
-  max-width: fit-content;
+  font-size: 12px;
+  max-width: 97%;
 }
 
 .link-buttons {
@@ -165,16 +172,35 @@
   background-color: #071022;
   color: #cbcbc3;
   font-family: Calibri;
-  top: 8px;
+  margin-top: 1%;
+  margin-bottom: 1%;
   position:relative;
   font-size: 12px;
   left: 8px;
   cursor: pointer;
 }
 
-.submit_btn:hover {
+.deletion_button {
+
+  border: none;
+  padding: 4px;
+  border-radius: 2px;
+  background-color: #071022;
+  color: #c71f1f;
+  font-family: Calibri;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  position:relative;
+  font-size: 8px;
+
+  cursor: pointer;
+}
+
+.submit_btn:hover, .deletion_button:hover {
   background-color: #040a16;
+  color: red;
 } 
+
 
 #title {
   font-size: 19px;

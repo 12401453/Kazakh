@@ -103,6 +103,8 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
 
 function progressBar(word_count) {
 
+  let loading_bar_percentage = document.getElementById("percent");
+
   const httpRequest = (method, url) => {
 
     const xhttp = new XMLHttpRequest();
@@ -116,7 +118,7 @@ function progressBar(word_count) {
 
         let words_progress = Number(xhttp.responseText);
         let percent = ((words_progress*100)/word_count).toFixed(2);
-        loadingbutton.innerHTML = `Processing text: ${percent}%`;
+        loading_bar_percentage.innerHTML = `${percent}%`;
         //console.log("progress_bar.php triggered");
       }
 
@@ -125,7 +127,7 @@ function progressBar(word_count) {
   }
   httpRequest("GET", "progress_bar.php");
 
-  setTimeout(`progressBar(${word_count})`, 100);
+  setTimeout(`progressBar(${word_count})`, 100); //setTimeout() executes the function in its first argument after the number of milliseconds in its second argument, so this progressBar function gets called every 0.1 seconds forever until the page reloads when the text is fully loaded
  
 } 
 
@@ -146,7 +148,7 @@ function loadText() {
   
 
   let loadingbutton = document.createElement('div');
-  loadingbutton.innerHTML = "Processing text: 0.00%";
+  loadingbutton.innerHTML = 'Processing text: <span id="percent">0.00%</span>';
   loadingbutton.id = 'loadingbutton';
   document.getElementById('spoofspan').after(loadingbutton);
 
@@ -250,6 +252,18 @@ function clearTable() {
   window.location = "/Kazakh_testing/add_texts.php";
 }
 
+function showDeletion() {
+  let spoofspan_display = document.getElementById("spoofspan").style.display;
+  if(spoofspan_display == "inline") {
+    document.getElementById("spoofspan").style.display = "none";
+    document.getElementById("deletion").style.visibility = "visible";
+  }
+  else if(spoofspan_display == "none"){
+    document.getElementById("spoofspan").style.display = "inline";
+    document.getElementById("deletion").style.visibility = "hidden";
+  }
+
+}
 
 
 /*

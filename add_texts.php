@@ -62,6 +62,10 @@ if ($conn->connect_error) {
   <input type="submit" class="submit_btn" value="Add text" id="add_btn" onclick="loadText()">
   </form> 
   <br>
+  
+
+  <div><input type="submit" class="deletion_button" value="Delete a text" onclick="showDeletion()"></div>
+  <div id="deletion" style="visibility: hidden">
   <div id="delete_button">
   <label for="textselect">Text to delete:</label>
   <select id="textselect" name="textselect" onclick="deleteText()">
@@ -81,8 +85,8 @@ if ($conn->connect_error) {
 
 ?>
   </select></div>
-  <input type="submit" class="submit_btn" style="margin-bottom: 12px" value="Clear all texts" onclick="clearTable()"></button><br>
-
+  <input type="submit" id="cleartext_button" class="deletion_button" style="margin-bottom: 12px;" value="Clear all texts" onclick="clearTable()"></button><br>
+</div>
 </div>
 
 
@@ -92,3 +96,23 @@ if ($conn->connect_error) {
 
 </body>
 </html>
+<script>
+  const textselector = document.getElementById('textselect');
+
+textselector.addEventListener('change', event => {
+      let dummyselect = document.createElement('select');
+      let dummyoption = document.createElement('option');
+
+      dummyoption.textContent = event.target.options[event.target.selectedIndex].text;  //event.target is the <select> element; .options is a list of its options
+     // dummyselect.style.cssText += "visibility: hidden; position: fixed; font-family: Calibri; font-size: 18px;";
+      dummyselect.id = 'hidden_select';
+      dummyselect.appendChild(dummyoption);
+      event.target.after(dummyselect);//.after('') inserts stuff directly after the entire element, i.e. after its </> closing tag
+      
+      const dummywidth = dummyselect.getBoundingClientRect().width;
+      event.target.style.width = `${dummywidth}px`;
+      
+      dummyselect.remove();
+});
+textselector.style.width = "100px";
+</script>
