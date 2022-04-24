@@ -103,7 +103,7 @@ font-size: 23px;
 
 }
 
-.link-buttons:hover {
+.link-buttons:hover, .deletion_button:hover {
   background-color: #040a16;
   color: red;
 }
@@ -180,10 +180,11 @@ font-size: 23px;
   cursor: pointer;
 }
 
-.submit_btn:hover, .deletion_button:hover {
+
+.submit_btn:hover {
+ 
   background-color: #040a16;
-  color: red;
-} 
+}
 
 .deletion_button {
 
