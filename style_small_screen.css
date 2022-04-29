@@ -3,7 +3,7 @@
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
    @font-face {font-family: Bookerly; src: url('Bookerly.ttf'); }
       p1 {
-         font-family: Bookerly; font-size: 18px; color: #cbcbc3;
+         font-family: Bookerly; font-size: 18px; color: #cbd9f4;
          max-width: 100%;
 
       }
@@ -57,7 +57,7 @@
   border-radius: 2px;
   padding: 3px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 13px;
   max-width: 97%;
@@ -70,7 +70,7 @@
   border-radius: 2px;
   padding: 4px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 13px;
   max-width: 97%;
@@ -82,7 +82,7 @@
   border-radius: 2px;
   padding: 6px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 12px;
   max-width: 97%;
@@ -114,7 +114,7 @@
   border-radius: 2px;
   padding: 6px; 
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 14px;
 
@@ -126,7 +126,7 @@
   border-radius: 2px; 
   padding: 3px;  */
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 13px;
   min-width: 40px;
@@ -146,7 +146,7 @@
   border-style: solid;
   border-radius: 4px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   text-indent: 0%;
   font-family: Calibri;
   font-size: 14px;
@@ -159,7 +159,7 @@
   border-style: solid;
   border-radius: 4px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   text-indent: 0%;
   font-size: 18px;
   font-family: Calibri;
@@ -170,7 +170,7 @@
   padding: 4px;
   border-radius: 2px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -222,7 +222,7 @@
   border-radius: 2px;
   padding: 5px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 34px;
 
