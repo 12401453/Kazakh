@@ -33,7 +33,7 @@ $dt_start = $row["dt_start"];
 $dt_end = $row["dt_end"];
 $text_title = $row["text_title"];
 
-echo '<h1 id="title">'.$text_title.'</h1><div id="textbody">';
+echo '<h1 id="title">'.$text_title.'</h1><br><div id="textbody">';
 
 
 

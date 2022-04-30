@@ -2,9 +2,12 @@
    
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
    @font-face {font-family: Bookerly; src: url('Bookerly.ttf'); }
-      p1 {
-         font-family: Bookerly; font-size: 24px; color: #cbd9f4;
-         max-width: 100%;
+   @font-face {font-family: PT_Serif; src: url('PTSerif-Regular.ttf'); }
+   @font-face {font-family: IBM_Plex_Sans; src: url('IBMPlexSans-Regular.ttf'); }
+
+  p1 {
+    font-family: Bookerly; font-size: 24px; color: #cbd9f4;
+    max-width: 100%;
 
       }
 
