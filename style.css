@@ -57,9 +57,8 @@ font-size: 23px;
 #tt_button {
  
   background-color: #071022;
-  border-style: solid;
   border-radius: 2px;
-  padding: 3px;
+  padding: 6px;
   z-index: 1;
   color: #cbd9f4;
   font-family: Calibri;

@@ -43,6 +43,15 @@ function selectText() {
     
         if(xhttp.readyState == 4) {
           para1.innerHTML = xhttp.responseText;
+         
+          //experiment
+          let tt_btns = document.querySelectorAll('.tooltip');
+
+          tt_btns.forEach(tt_btn => {
+            tt_btn.onclick = showAnnotate;
+          });
+           //experiment
+
           loadingbutton.remove();
         }
      
@@ -263,6 +272,113 @@ function showDeletion() {
     document.getElementById("deletion").style.visibility = "hidden";
   }
 
+}
+
+const noun_pos = '<span id="pos_tag_noun" class="pos_tag" onclick="selectPoS()">noun</span>';
+const verb_pos = '<span id="pos_tag_verb" class="pos_tag" onclick="selectPoS()">verb</span>';
+const adverb_pos = '<span id="pos_tag_adverb" class="pos_tag" onclick="selectPoS()">adverb</span>';
+const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" onclick="selectPoS()">prep.</span>';
+const part_pos = '<span id="pos_tag_particle" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
+
+const deadFunc = function () {
+  let pos_selects = document.querySelectorAll('.pos_tag_select');
+  pos_selects.forEach(pos_select => {
+    pos_select.remove();
+  });
+  this.onclick = selectPoS;
+};
+
+
+const changePoS = function () {
+  switch (this.id) {
+    case "noun_pos":
+      document.getElementById('pos_tag_box').innerHTML = noun_pos;
+      break;
+    case "verb_pos":
+      document.getElementById('pos_tag_box').innerHTML = verb_pos;
+      break;
+    case "adverb_pos":
+      document.getElementById('pos_tag_box').innerHTML = adverb_pos;
+      break;
+    case "prep_pos":
+      document.getElementById('pos_tag_box').innerHTML = prep_pos;
+      break;
+    case "part_pos":
+      document.getElementById('pos_tag_box').innerHTML = part_pos;
+      break;
+  }
+};
+
+const selectPoS = function () {
+  let pos_tag_current_id = document.querySelector('.pos_tag').id;
+
+  let pos_tag_select_current = "noun_pos";
+
+  switch (pos_tag_current_id) {
+    case "pos_tag_noun":
+      pos_tag_select_current = "noun_pos";
+      break;
+    case "pos_tag_verb":
+      pos_tag_select_current = "verb_pos";
+      break;
+    case "pos_tag_adverb":
+      pos_tag_select_current = "adverb_pos";
+      break;
+    case "pos_tag_prep":
+      pos_tag_select_current = "prep_pos";
+      break;
+    case "pos_tag_part":
+      pos_tag_select_current = "part_pos";
+      break;
+  }
+
+  let frag = document.createRange().createContextualFragment('<span id="noun_pos" class="pos_tag_select">noun</span><span id="verb_pos" class="pos_tag_select">verb</span><span id="adverb_pos" class="pos_tag_select">adverb</span><span id="prep_pos" class="pos_tag_select" title="preposition">prep.</span><span id="part_pos" class="pos_tag_select" title="particle/interjection">part.</span>');
+
+  document.getElementById(pos_tag_current_id).after(frag);
+  document.getElementById(pos_tag_current_id).onclick = deadFunc;
+
+  document.getElementById('noun_pos').onclick = changePoS;
+  document.getElementById('verb_pos').onclick = changePoS;
+  document.getElementById('adverb_pos').onclick = changePoS;
+  document.getElementById('prep_pos').onclick = changePoS;
+  document.getElementById('part_pos').onclick = changePoS;
+
+  document.getElementById('pos_tag_box').removeChild(document.getElementById(pos_tag_select_current));
+
+};
+
+function showAnnotate() {
+  let annot_box = document.createRange().createContextualFragment('<div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag">nieszczerość</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off" autofocus></textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no" onclick="delAnnotate()">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div></div></div></div>');
+
+  document.getElementById('spoofspan').after(annot_box);
+
+  const panelSelect = function () {
+
+    const boxes = document.querySelectorAll('.box');
+    boxes.forEach(box => {
+      box.style.color = "rgb(0 255 34 / 41%)";
+      box.style.backgroundColor = "#172136";
+      box.style.border = "none";
+    });
+    document.getElementById('lemma_textarea').focus();
+    this.style.color = "rgb(0, 255, 34)";
+    this.style.backgroundColor = "#040a16";
+
+  };
+
+  document.getElementById('lemma_box').onclick = panelSelect;
+  document.getElementById('context_box').onclick = panelSelect;
+  document.getElementById('morph_box').onclick = panelSelect;
+  document.getElementById('multiword_box').onclick = panelSelect;
+  document.getElementById('accent_box').onclick = panelSelect;
+
+  document.getElementById('pos_tag_box').innerHTML = noun_pos;
+
+}
+
+const delAnnotate = function () {
+  let annot = document.getElementById('annot');
+  annot.remove();
 }
 
 
