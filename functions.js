@@ -91,6 +91,13 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
     
         if(xhttp.readyState == 4) {
           textbody.innerHTML = xhttp.responseText;
+          //experiment
+          let tt_btns = document.querySelectorAll('.tooltip');
+
+          tt_btns.forEach(tt_btn => {
+            tt_btn.onclick = showAnnotate;
+          });
+           //experiment
           loadingbutton.remove();
           if(page_cur > 1) {
             let title = document.getElementById("title");
@@ -352,7 +359,29 @@ function showAnnotate() {
 
   document.getElementById('spoofspan').after(annot_box);
 
-  const panelSelect = function () {
+  let current_box = document.getElementById('lemma_box');
+
+  let left_column = document.getElementById('left_column');
+
+  left_column.onclick = function (event) {
+    let target = event.target;
+    if (target.className != 'box') return;
+
+    selectBox(target);
+  };
+
+  function selectBox(box) {
+    if (current_box) {
+      current_box.style.color = "rgb(0 255 34 / 41%)";
+      current_box.style.backgroundColor = "#172136";
+    }
+    current_box = box;
+    document.getElementById('lemma_textarea').focus();
+    current_box.style.color = "rgb(0, 255, 34)";
+    current_box.style.backgroundColor = "#040a16";
+  }
+  //below does the same as above but less efficiently
+ /* const panelSelect = function () {
 
     const boxes = document.querySelectorAll('.box');
     boxes.forEach(box => {
@@ -364,15 +393,17 @@ function showAnnotate() {
     this.style.color = "rgb(0, 255, 34)";
     this.style.backgroundColor = "#040a16";
 
-  };
+  }; 
 
   document.getElementById('lemma_box').onclick = panelSelect;
   document.getElementById('context_box').onclick = panelSelect;
   document.getElementById('morph_box').onclick = panelSelect;
   document.getElementById('multiword_box').onclick = panelSelect;
-  document.getElementById('accent_box').onclick = panelSelect;
+  document.getElementById('accent_box').onclick = panelSelect;  */
 
   document.getElementById('pos_tag_box').innerHTML = noun_pos;
+
+  document.getElementById('lemma_textarea').focus();
 
 }
 

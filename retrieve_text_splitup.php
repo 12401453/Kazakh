@@ -70,11 +70,12 @@ if ($result->num_rows > 0) {
       if($line_break == 3) {echo '  '; }
       if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
           
-      if($word_engine_id != "") {echo '<span class="tooltip" id="word_engine_id_'.$word_engine_id.'">';}
+      if($word_engine_id != "") {echo '<span class="tooltip word_engine_id_'.$word_engine_id.'">';}
       echo $text_word;
       if($word_engine_id != "") { 
-      
-        echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>';
+        echo '</span>';
+       /*
+        echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
       }
       if($row_chunk["dt_end"] == $tokno) { echo '</span> '; //the space is important
         $row_chunk = $res_chunk->fetch_assoc(); 
