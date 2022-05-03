@@ -354,63 +354,93 @@ const selectPoS = function () {
 
 };
 
-function showAnnotate() {
-  let annot_box = document.createRange().createContextualFragment('<div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag">nieszczerość</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off" autofocus></textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no" onclick="delAnnotate()">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div></div></div></div>');
+function showAnnotate(event) {
 
-  document.getElementById('spoofspan').after(annot_box);
+  let word_engine_id = event.target.dataset.word_engine_id;
 
-  let current_box = document.getElementById('lemma_box');
+  const httpRequest = (method, url) => {
 
-  let left_column = document.getElementById('left_column');
+    let send_data = "word_engine_id="+word_engine_id;
+ 
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+   // xhttp.responseType = 'json';
+   xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+ 
+   xhttp.onload = () => {
+     console.log("sent");
+   // console.log(xhttp.responseText);
+     if(xhttp.readyState == 4)  {
 
-  left_column.onclick = function (event) {
-    let target = event.target;
-    if (target.className != 'box') return;
+      let engine_word = xhttp.responseText;
 
-    selectBox(target);
-  };
+      if(document.getElementById('annot') != null) {
+        delAnnotate();
+      }
 
-  function selectBox(box) {
-    if (current_box) {
-      current_box.style.color = "rgb(0 255 34 / 41%)";
-      current_box.style.backgroundColor = "#172136";
-    }
-    current_box = box;
-    document.getElementById('lemma_textarea').focus();
-    current_box.style.color = "rgb(0, 255, 34)";
-    current_box.style.backgroundColor = "#040a16";
+      let annot_box = document.createRange().createContextualFragment('<div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag">'+engine_word+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off" autofocus></textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no" onclick="delAnnotate()">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div></div></div></div>');
+
+      document.getElementById('spoofspan').after(annot_box);
+
+      let current_box = document.getElementById('lemma_box');
+
+      let left_column = document.getElementById('left_column');
+
+      left_column.onclick = function (event) {
+        let target = event.target;
+        if (target.className != 'box') return;
+
+        selectBox(target);
+      };
+
+      function selectBox(box) {
+        if (current_box) {
+          current_box.style.color = "rgb(0 255 34 / 41%)";
+          current_box.style.backgroundColor = "#172136";
+        }
+        current_box = box;
+        document.getElementById('lemma_textarea').focus();
+        current_box.style.color = "rgb(0, 255, 34)";
+        current_box.style.backgroundColor = "#040a16";
+      }
+      //below does the same as above but less efficiently
+    /* const panelSelect = function () {
+
+        const boxes = document.querySelectorAll('.box');
+        boxes.forEach(box => {
+          box.style.color = "rgb(0 255 34 / 41%)";
+          box.style.backgroundColor = "#172136";
+          box.style.border = "none";
+        });
+        document.getElementById('lemma_textarea').focus();
+        this.style.color = "rgb(0, 255, 34)";
+        this.style.backgroundColor = "#040a16";
+
+      }; 
+
+      document.getElementById('lemma_box').onclick = panelSelect;
+      document.getElementById('context_box').onclick = panelSelect;
+      document.getElementById('morph_box').onclick = panelSelect;
+      document.getElementById('multiword_box').onclick = panelSelect;
+      document.getElementById('accent_box').onclick = panelSelect;  */
+
+      document.getElementById('pos_tag_box').innerHTML = noun_pos;
+
+      document.getElementById('lemma_textarea').focus();
+        
+     }
+   }
+    xhttp.send(send_data);
   }
-  //below does the same as above but less efficiently
- /* const panelSelect = function () {
-
-    const boxes = document.querySelectorAll('.box');
-    boxes.forEach(box => {
-      box.style.color = "rgb(0 255 34 / 41%)";
-      box.style.backgroundColor = "#172136";
-      box.style.border = "none";
-    });
-    document.getElementById('lemma_textarea').focus();
-    this.style.color = "rgb(0, 255, 34)";
-    this.style.backgroundColor = "#040a16";
-
-  }; 
-
-  document.getElementById('lemma_box').onclick = panelSelect;
-  document.getElementById('context_box').onclick = panelSelect;
-  document.getElementById('morph_box').onclick = panelSelect;
-  document.getElementById('multiword_box').onclick = panelSelect;
-  document.getElementById('accent_box').onclick = panelSelect;  */
-
-  document.getElementById('pos_tag_box').innerHTML = noun_pos;
-
-  document.getElementById('lemma_textarea').focus();
+ 
+  httpRequest("POST", "retrieve_engword.php");
 
 }
 
 const delAnnotate = function () {
   let annot = document.getElementById('annot');
   annot.remove();
-}
+};
 
 
 /*
