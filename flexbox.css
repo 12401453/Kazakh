@@ -111,7 +111,10 @@
   height:fit-content;
   width: fit-content;
   min-height: 20px;
+  max-height: 25px;
  /* min-width: 67px; */
+  outline: none;
+  overflow: hidden;
 
   font-size: 19px;
   font-family: Bookerly;

@@ -70,7 +70,7 @@ if ($result->num_rows > 0) {
       if($line_break == 3) {echo '  '; }
       if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
           
-      if($word_engine_id != "") {echo '<span class="tooltip word_engine_id_'.$word_engine_id.'">';}
+      if($word_engine_id != "") {echo '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'">';}
       echo $text_word;
       if($word_engine_id != "") { 
         echo '</span>';
