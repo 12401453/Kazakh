@@ -48,8 +48,8 @@
   min-width: 424px;
 
   position: fixed;
-  bottom: 0;
-  left: 0;
+  bottom: 1px;
+  left: 1px;
 }
 
 #annot_topbar {
@@ -63,6 +63,77 @@
   background-color: #040a16;
   display: flex;
   flex-flow: row-reverse nowrap;
+  justify-content: space-between;
+}
+
+#close_button {
+  height: fit-content;
+  width: 50px;
+
+  font-size: 15px;
+  font-family: 'Calibri';
+  border-bottom-left-radius: 3px;
+  border-top-right-radius: 3px;
+  text-align: center;
+  color: rgb(141 147 157);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 9px;
+  padding-left: 9px;
+  background-color: #580000;
+  border: 1px solid black;
+  border-right: none;
+  border-top: none;
+  cursor: default;
+}
+#close_button:hover {
+  background-color: #9e0000;
+  color: #cbd9f4;
+
+}
+
+#disregard_button {
+  height: fit-content;
+  width: 70px;
+
+  font-size: 15px;
+  font-family: 'Calibri';
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 3px;
+  text-align: center;
+  color: rgb(141 147 157);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 9px;
+  padding-left: 9px;;
+  background-color: #3a1111;
+  border: 1px solid black;
+  border-left: none;
+  border-top: none;
+  cursor: default;
+}
+#disregard_button:hover {
+  background-color: #312626;
+  color: #cbd9f4;
+}
+#acronym_button {
+  height: fit-content;
+  width: fit-content;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 9px;
+  padding-left: 9px;
+  font-size: 15px;
+  font-family: 'Calibri';
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  text-align: center;
+  color: black;
+  background-color: #585700;
+  border: 1px solid black;
+  /* border-right: none; */
+  border-top: none;
+  cursor: default;
 }
 /*
 #annot {
@@ -345,7 +416,7 @@
 }
 
 .nav_arrow {
-  cursor: pointer;
+  cursor: default;
   color: grey;
   font-family: Liberation_Serif;
 }
@@ -401,27 +472,3 @@
   background-color: rgb(0 255 34 /  75%);
 }
 
-#close_button {
-  height: fit-content;
-  width: 50px;
-  /* min-height: 20px; */
-  /* min-width: 67px; */
-  font-size: 15px;
-  font-family: 'Calibri';
-  border-bottom-left-radius: 3px;
-  border-top-right-radius: 3px;
-  text-align: center;
-  color: rgb(141 147 157);
-  padding: 2px;
-  background-color: #580000;
-  border: 1px solid black;
-  border-right: none;
-  border-top: none;
-  cursor: default;
-}
-
-#close_button:hover {
-  background-color: #9e0000;
-  color: #cbd9f4;
-
-}
