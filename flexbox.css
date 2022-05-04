@@ -64,6 +64,7 @@
   display: flex;
   flex-flow: row-reverse nowrap;
   justify-content: space-between;
+  user-select: none;
 }
 
 #close_button {
@@ -272,7 +273,7 @@
   flex-flow: row-reverse nowrap;
   justify-content: flex-start;
   align-items: flex-end;
-
+  user-select: none;
   flex-grow: 0;
 }
 
