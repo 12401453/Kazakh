@@ -50,6 +50,7 @@
   position: fixed;
   bottom: 1px;
   left: 1px;
+  z-index: 2;
 }
 
 #annot_topbar {
@@ -69,7 +70,8 @@
 
 #close_button {
   height: fit-content;
-  width: 50px;
+  width: 76px;
+  box-sizing: border-box; /*this makes the padding-property behave more like the margin-property and takes the padding off of the width-property so the total width of the #right_body box is still 100% of its parent div */
 
   font-size: 15px;
   font-family: 'Calibri';
@@ -95,7 +97,8 @@
 
 #disregard_button {
   height: fit-content;
-  width: 70px;
+  width: 76px;
+  box-sizing: border-box; /*this makes the padding-property behave more like the margin-property and takes the padding off of the width-property so the total width of the #right_body box is still 100% of its parent div */
 
   font-size: 15px;
   font-family: 'Calibri';
@@ -400,6 +403,10 @@
   background-color: #4dac0d;
 }
 
+#pos_tag_adj {
+  background-color: #fc7f03;
+}
+
 #pos_tag_noun {
   background-color: #9cac0d;
 }
@@ -431,9 +438,11 @@
 
    padding: 4px;
    flex: 1;
-   color: navajowhite;
+   color: #cbd9f4;
    border-radius: 4px;
    border: none;
+
+   font-family: 'IBM_PLEX_SANS';
 
    size: inherit;
    min-height: 112px;
@@ -457,7 +466,7 @@
   /* min-width: 155px; */
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  background-color: rgb(0 255 34 / 41%);
+  background-color: rgb(0 255 34 / 60%); /* 41% */
   border: 1px solid black;
   border-bottom: none;
   padding: 4px;
@@ -470,6 +479,6 @@
 }
 
 #save_button:hover {
-  background-color: rgb(0 255 34 /  75%);
+  background-color: rgb(0 255 34); /* 75% */
 }
 
