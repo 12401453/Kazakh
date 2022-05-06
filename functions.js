@@ -395,6 +395,7 @@ const selectPoS = function () {
 function showAnnotate(event) {
 
   let word_engine_id = event.target.dataset.word_engine_id;
+  console.log(word_engine_id);
 
   const disRegard = function () {
     const httpRequest = (method, url) => {
