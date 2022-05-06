@@ -39,6 +39,11 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $lemma_id_wordeng = $row["lemma_id"];
 
+$sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND pos = $pos AND lang_id = $lang_id";
+$res = $conn->query($sql);
+$row = $res->fetch_assoc();
+$lemma_id_lemmas = $row["lemma_id"];
+
 
 
 if(is_null($lemma_id_wordeng)) {
@@ -47,22 +52,23 @@ if(is_null($lemma_id_wordeng)) {
 
   $sql = "INSERT IGNORE INTO lemmas (lemma, eng_trans1, lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
   $res = $conn->query($sql);
-  $sql = "SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'Kazakh' AND TABLE_NAME = 'lemmas'";
-  $res = $conn->query($sql);
-  $row = $res->fetch_assoc();
-  $lemma_id_wordeng = $row["AUTO_INCREMENT"] - 1;
 
+  if(is_null($lemma_id_lemmas)) {
+    $sql = "SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'Kazakh' AND TABLE_NAME = 'lemmas'";
+    $res = $conn->query($sql);
+    $row = $res->fetch_assoc();
+    $lemma_id_wordeng = $row["AUTO_INCREMENT"] - 1;
 
-  $sql = "UPDATE word_engine SET lemma_id = $lemma_id_wordeng WHERE word_engine_id = $word_engine_id";
-  $res = $conn->query($sql);
+    $sql = "UPDATE word_engine SET lemma_id = $lemma_id_wordeng WHERE word_engine_id = $word_engine_id";
+    $res = $conn->query($sql);
+  }
+  else {
+    $sql = "UPDATE word_engine SET lemma_id = $lemma_id_lemmas WHERE word_engine_id = $word_engine_id";
+    $res = $conn->query($sql);
+  }
 
 }
 else {  
-
-  $sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND pos = $pos AND lang_id = $lang_id";
-  $res = $conn->query($sql);
-  $row = $res->fetch_assoc();
-  $lemma_id_lemmas = $row["lemma_id"];
 
   if(is_null($lemma_id_lemmas)) {
     $sql = "INSERT IGNORE INTO lemmas (lemma, eng_trans1, lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
