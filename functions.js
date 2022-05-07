@@ -463,6 +463,13 @@ function showAnnotate(event) {
           document.getElementById('annot_box').remove();
           display_word.classList.add("tooltip");
           display_word.classList.remove("tooltip_selected");
+         // display_word.classList.add("lemma_set");
+          let dataselectorstring = '[data-word_engine_id="'+word_engine_id+'"]';
+
+          let current_words = document.querySelectorAll(dataselectorstring);
+          current_words.forEach(current_word => {
+            current_word.classList.add("lemma_set");
+          });
         }
       }
       xhttp.send(send_data);

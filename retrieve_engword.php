@@ -45,7 +45,7 @@ else {
   }
 }
 
-$json_response = json_encode(array("lemma_tag_content" => $lemma_tag_content, "lemma_textarea_content" => $lemma_textarea_content));
+$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content" => htmlentities($lemma_textarea_content)));
 echo $json_response;
 
 $conn->close();
