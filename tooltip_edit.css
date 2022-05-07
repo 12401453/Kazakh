@@ -7,11 +7,22 @@ cursor: pointer;
 /* border-bottom: 1px dotted black; */
 }
 
+.tooltip:hover {
+  color: rgb(252, 119, 119);
+}
+
 .tooltip_selected {
 position: relative;
 display: inline-block;
 color: rgb(252, 119, 119);
 cursor: pointer;
+}
+
+.tooltip.lemma_set {
+  color: rgb(0 255 186);
+}
+.tooltip.lemma_set:hover {
+  color: rgb(0 255 34);
 }
 
 @media all and (min-width: 769px) {
@@ -112,6 +123,3 @@ cursor: pointer;
 } 
 
 
-.tooltip:hover {
-  color: rgb(252, 119, 119);
-}

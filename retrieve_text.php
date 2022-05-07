@@ -82,22 +82,41 @@ if ($result->num_rows > 0) {
         $tokno = $row["tokno"];
         $line_break = $row["line_break"];
         $word_engine_id = $row["word_engine_id"];
-      /*
-        if($word_engine_id != "") {
-          $sql_eng = "SELECT word FROM word_engine WHERE word_engine_id = $word_engine_id";
-          $res_eng = $conn->query($sql_eng);
-          $row_eng = $res_eng->fetch_assoc();
-          $engine_word = $row_eng["word"];
-        } */
-    
+
+        $bool_wordeng_id_null = is_null($word_engine_id);
+        $bool_lemma_id_null = true;
+
+        $outer_tt_span = '';
+
+        if($bool_wordeng_id_null == false) {
+          $sql_lemma = "SELECT lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
+          $res_lemma = $conn->query($sql_lemma);
+          $row_lemma = $res_lemma->fetch_assoc();
+          $lemma_id = $row_lemma["lemma_id"];
+
+          $bool_lemma_id_null = is_null($lemma_id);
+
+          if($bool_lemma_id_null == false) {
+            $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'">';
+          }
+          else {
+            $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'">';
+          }
+        }
 
         if($line_break == 2) { echo '<br>'; }
         if($line_break == 3) {echo '  '; }
         if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
             
-        if($word_engine_id != "") {echo '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'">';}
+        if($bool_wordeng_id_null == false) {
+          echo $outer_tt_span;        
+        }
         echo $text_word;
-        if($word_engine_id != "") { 
+
+        if($bool_wordeng_id_null == false) { 
+          if($bool_lemma_id_null == false) {
+            echo '<span class="lemma_tt" data-lemma_id="'.$lemma_id.'"><div class="lemma_tag"></div></span>';
+          }
           echo '</span>';
         /*  echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
         }
