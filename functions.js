@@ -314,7 +314,8 @@ const verb_pos = '<span id="pos_tag_verb" class="pos_tag" onclick="selectPoS()">
 const adj_pos = '<span id="pos_tag_adj" class="pos_tag" onclick="selectPoS()" title="adjective">adject.</span>';
 const adverb_pos = '<span id="pos_tag_adverb" class="pos_tag" onclick="selectPoS()">adverb</span>';
 const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" onclick="selectPoS()">prep.</span>';
-const part_pos = '<span id="pos_tag_particle" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
+const conj_pos = '<span id="pos_tag_conj" class="pos_tag" title="conjunction" onclick="selectPoS()">conj.</span>';
+const part_pos = '<span id="pos_tag_part" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
 
 const deadFunc = function () {
   let pos_selects = document.querySelectorAll('.pos_tag_select');
@@ -342,6 +343,9 @@ const changePoS = function () {
     case "prep_pos":
       document.getElementById('pos_tag_box').innerHTML = prep_pos;
       break;
+    case "conj_pos":
+      document.getElementById('pos_tag_box').innerHTML = conj_pos;
+      break;  
     case "part_pos":
       document.getElementById('pos_tag_box').innerHTML = part_pos;
       break;
@@ -369,12 +373,15 @@ const selectPoS = function () {
     case "pos_tag_prep":
       pos_tag_select_current = "prep_pos";
       break;
+    case "pos_tag_conj":
+      pos_tag_select_current = "conj_pos";
+      break;  
     case "pos_tag_part":
       pos_tag_select_current = "part_pos";
       break;
   }
 
-  let frag = document.createRange().createContextualFragment('<span id="noun_pos" class="pos_tag_select">noun</span><span id="verb_pos" class="pos_tag_select">verb</span><span id="adj_pos" class="pos_tag_select" title="adjective">adject.</span><span id="adverb_pos" class="pos_tag_select">adverb</span><span id="prep_pos" class="pos_tag_select" title="preposition">prep.</span><span id="part_pos" class="pos_tag_select" title="particle/interjection">part.</span>');
+  let frag = document.createRange().createContextualFragment('<span id="noun_pos" class="pos_tag_select">noun</span><span id="verb_pos" class="pos_tag_select">verb</span><span id="adj_pos" class="pos_tag_select" title="adjective">adject.</span><span id="adverb_pos" class="pos_tag_select">adverb</span><span id="prep_pos" class="pos_tag_select" title="preposition">prep.</span><span id="conj_pos" class="pos_tag_select" title="conjunction">conj.</span><span id="part_pos" class="pos_tag_select" title="particle/interjection">part.</span>');
 
   document.getElementById(pos_tag_current_id).after(frag);
   document.getElementById(pos_tag_current_id).onclick = deadFunc;
@@ -384,6 +391,7 @@ const selectPoS = function () {
   document.getElementById('adj_pos').onclick = changePoS;
   document.getElementById('adverb_pos').onclick = changePoS;
   document.getElementById('prep_pos').onclick = changePoS;
+  document.getElementById('conj_pos').onclick = changePoS;
   document.getElementById('part_pos').onclick = changePoS;
 
   document.getElementById('pos_tag_box').removeChild(document.getElementById(pos_tag_select_current));
@@ -393,6 +401,16 @@ const selectPoS = function () {
 
 
 function showAnnotate(event) {
+
+  let display_word = event.target;
+
+  let previous_selections = document.querySelectorAll('.tooltip_selected');
+  previous_selections.forEach(previous_selection => {
+    previous_selection.classList.add("tooltip");
+    previous_selection.classList.remove("tooltip_selected");
+  });
+  display_word.classList.add("tooltip_selected");
+  display_word.classList.remove("tooltip");
 
   let word_engine_id = event.target.dataset.word_engine_id;
   console.log(word_engine_id);
@@ -415,6 +433,7 @@ function showAnnotate(event) {
           let json_response = xhttp.response;
           console.log(json_response);
           console.log(json_response.word); //the keys in the JSON string have to be in quotes, but as members of the json object they are just retrievable as if the key-name were a variable name. It also works as json_response["word"].
+         // display_word.style.color = "#cbd9f4";
         }
       }
       xhttp.send(send_data);
@@ -442,6 +461,8 @@ function showAnnotate(event) {
         if (xhttp.readyState == 4) {
           console.log("Lemma updated");
           document.getElementById('annot_box').remove();
+          display_word.classList.add("tooltip");
+          display_word.classList.remove("tooltip_selected");
         }
       }
       xhttp.send(send_data);
@@ -469,10 +490,11 @@ function showAnnotate(event) {
         let lemma_textarea_content = json_response.lemma_textarea_content;
 
         if(document.getElementById('annot_box') != null) {
-          delAnnotate();
+          let annot_box = document.getElementById('annot_box');
+          annot_box.remove();
         }
 
-        let annot_box = document.createRange().createContextualFragment('<div id="annot_box"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off" autofocus>'+lemma_textarea_content+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
+        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
 
         document.getElementById('spoofspan').after(annot_box);
 
@@ -523,7 +545,7 @@ function showAnnotate(event) {
 
         document.getElementById('pos_tag_box').innerHTML = noun_pos;
 
-        document.getElementById('lemma_textarea').focus();
+        //document.getElementById('lemma_textarea').focus();
           
       }
      
@@ -537,6 +559,12 @@ function showAnnotate(event) {
 
 const delAnnotate = function () {
   let annot_box = document.getElementById('annot_box');
+
+  let previous_selections = document.querySelectorAll('.tooltip_selected');
+  previous_selections.forEach(previous_selection => {
+    previous_selection.classList.add("tooltip");
+    previous_selection.classList.remove("tooltip_selected");
+  });
   annot_box.remove();
 };
 

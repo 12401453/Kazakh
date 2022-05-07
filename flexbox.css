@@ -419,7 +419,11 @@
   background-color: #0d9cac;
 }
 
-#pos_tag_particle {
+#pos_tag_conj {
+  background-color: #0dac62;
+}
+
+#pos_tag_part {
   background-color: #ac0d9c;
 }
 

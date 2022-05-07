@@ -7,6 +7,13 @@ cursor: pointer;
 /* border-bottom: 1px dotted black; */
 }
 
+.tooltip_selected {
+position: relative;
+display: inline-block;
+color: rgb(252, 119, 119);
+cursor: pointer;
+}
+
 @media all and (min-width: 769px) {
 .tooltip .tooltiptext5 {
   visibility: hidden;
