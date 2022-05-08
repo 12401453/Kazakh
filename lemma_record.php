@@ -24,6 +24,11 @@ if(isset($_POST['lemma_meaning_no'])) {
   $lemma_meaning_no = $_POST['lemma_meaning_no'];
 }
 
+
+if(isset($_POST['tokno_current'])) {
+  $tokno_current = $_POST['tokno_current'];
+}
+
 $eng_trans_sql_string = 'eng_trans'.$lemma_meaning_no;
 
 $pos = 1;
@@ -39,6 +44,9 @@ if ($conn->connect_error) {
 
 
 $sql = "SET NAMES UTF8";
+$res = $conn->query($sql);
+
+$sql = "UPDATE display_text SET lemma_meaning_no = $lemma_meaning_no WHERE tokno = $tokno_current";
 $res = $conn->query($sql);
 
 $sql = "SELECT lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";

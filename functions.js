@@ -403,6 +403,7 @@ let meanings = {};
 
 function showAnnotate(event) {
   let lemma_meaning_no = 1;
+  let lemma_id = 0;
   meanings = {};
   let display_word = event.target;
   let tokno_current = event.target.dataset.tokno;
@@ -418,6 +419,28 @@ function showAnnotate(event) {
 
   let word_engine_id = event.target.dataset.word_engine_id;
   console.log(word_engine_id);
+
+  function switchMeaningAJAX() {
+    const httpRequest = (method, url) => {
+      let send_data = "lemma_id="+lemma_id+"&lemma_meaning_no="+lemma_meaning_no;
+
+      const xhttp = new XMLHttpRequest();
+      xhttp.open(method, url, true);
+      xhttp.responseType = 'json';
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+      xhttp.onload = () => {
+        if(xhttp.readyState == 4) {
+          let json_response = xhttp.response;
+          console.log(json_response);
+          meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+          document.getElementById("lemma_textarea").innerHTML = meanings[lemma_meaning_no];
+        }
+      }
+      xhttp.send(send_data);
+    }
+    httpRequest("POST", "retrieve_meanings.php");
+  }
 
   const switchMeaning = function (event) {
     let grey_arrows = document.querySelectorAll('.nav_arrow_deactiv');
@@ -442,6 +465,12 @@ function showAnnotate(event) {
     if(lemma_meaning_no == 1) {
       document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
       document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
+    }
+    if(lemma_id != 0 && meanings[lemma_meaning_no] === undefined) {
+      switchMeaningAJAX();
+    }
+    else if(lemma_id != 0) {
+      document.getElementById("lemma_textarea").innerHTML = meanings[lemma_meaning_no];
     }
   };
 
@@ -478,7 +507,7 @@ function showAnnotate(event) {
       let lemma_form = encodeURIComponent(document.getElementById('lemma_tag').innerHTML);
       let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
 
-      let send_data = "word_engine_id="+word_engine_id+"&lemma_form="+lemma_form+"&lemma_meaning="+lemma_meaning+"&lemma_meaning_no="+lemma_meaning_no+"&lang_id="+lang_id;
+      let send_data = "word_engine_id="+word_engine_id+"&lemma_form="+lemma_form+"&lemma_meaning="+lemma_meaning+"&lemma_meaning_no="+lemma_meaning_no+"&lang_id="+lang_id+"&tokno_current="+tokno_current;
 
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, url, true);
@@ -526,6 +555,7 @@ function showAnnotate(event) {
         let lemma_tag_content = json_response.lemma_tag_content;
         let lemma_textarea_content = json_response.lemma_textarea_content;
         lemma_meaning_no = Number(json_response.lemma_meaning_no);
+        lemma_id = Number(json_response.lemma_id);
 
         if(lemma_meaning_no != 0) {
           meanings[lemma_meaning_no] = lemma_textarea_content;

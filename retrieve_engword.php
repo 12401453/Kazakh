@@ -47,14 +47,16 @@ else {
   $lemma_meaning_no = $row["lemma_meaning_no"];
 
   if(is_null($lemma_meaning_no)) {
-    $sql_eng_trans = "SELECT eng_trans1 FROM lemmas WHERE lemma_id = $lemma_id";
+    $eng_trans_selector = "eng_trans1";
+    
   }
   else {
-    $sql_eng_trans = "SELECT eng_trans".$lemma_meaning_no." FROM lemmas WHERE lemma_id = $lemma_id";
+    $eng_trans_selector = "eng_trans".$lemma_meaning_no;
   }
+  $sql_eng_trans = "SELECT $eng_trans_selector FROM lemmas WHERE lemma_id = $lemma_id";
   $res = $conn->query($sql_eng_trans);
   $row = $res->fetch_assoc();
-  $lemma_textarea_content = $row["eng_trans".$lemma_meaning_no];
+  $lemma_textarea_content = $row[$eng_trans_selector];
   if(is_null($lemma_textarea_content)) {
     $lemma_textarea_content = "";
   }
@@ -62,7 +64,7 @@ else {
 
 
 
-$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content" => htmlentities($lemma_textarea_content), "lemma_meaning_no" => $lemma_meaning_no));
+$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content" => htmlentities($lemma_textarea_content), "lemma_meaning_no" => $lemma_meaning_no, "lemma_id" => $lemma_id));
 echo $json_response;
 
 $conn->close();
