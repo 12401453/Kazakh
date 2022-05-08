@@ -6,6 +6,11 @@ if(isset($_POST['word_engine_id'])) {
 }
 else {$word_engine_id = 5;}
 
+$tokno_current = 0;
+if(isset($_POST['tokno_current'])) {
+  $tokno_current = $_POST['tokno_current'];
+}
+
 
 
 
@@ -35,7 +40,13 @@ if(is_null($row["lemma_id"]) == false) {
   $row = $res->fetch_assoc();
   $eng_trans1 = $row["eng_trans1"];
 }
-$json_response = json_encode(array("word" => $word, "eng_trans1" => $eng_trans1));
+
+$sql = "SELECT lemma_meaning_no FROM display_text WHERE tokno = $tokno_current";
+$res = $conn->query($sql);
+$row = $res->fetch_assoc();
+$lemma_meaning_no = $row["lemma_meaning_no"];
+
+$json_response = json_encode(array("word" => $word, "eng_trans1" => $eng_trans1, "lemma_meaning_no" => $lemma_meaning_no));
 echo $json_response;
 
 

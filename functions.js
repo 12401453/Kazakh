@@ -399,10 +399,14 @@ const selectPoS = function () {
 };
 
 
+let meanings = {};
 
 function showAnnotate(event) {
-
+  let meaning_no = 1;
+  meanings = {};
   let display_word = event.target;
+  let tokno_current = event.target.dataset.tokno;
+ 
 
   let previous_selections = document.querySelectorAll('.tooltip_selected');
   previous_selections.forEach(previous_selection => {
@@ -415,11 +419,22 @@ function showAnnotate(event) {
   let word_engine_id = event.target.dataset.word_engine_id;
   console.log(word_engine_id);
 
+  const switchMeaning = function (event) {
+    let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
+    if (bool_uparrow) {
+      meaning_no++;
+    }
+    else {
+      meaning_no--;
+    }
+    document.getElementById("number").innerHTML = meaning_no;
+  };
+
   const disRegard = function () {
     const httpRequest = (method, url) => {
 
 
-      let send_data = "word_engine_id=" + word_engine_id;
+      let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current;
 
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, url, true);
@@ -480,7 +495,7 @@ function showAnnotate(event) {
 
   const httpRequest = (method, url) => {
 
-    let send_data = "word_engine_id="+word_engine_id;
+    let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current;
  
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
@@ -495,18 +510,27 @@ function showAnnotate(event) {
         let json_response = xhttp.response;
         let lemma_tag_content = json_response.lemma_tag_content;
         let lemma_textarea_content = json_response.lemma_textarea_content;
+        let lemma_meaning_no = Number(json_response.lemma_meaning_no);
+
+        if(lemma_meaning_no != 0) {
+          meanings[lemma_meaning_no] = lemma_textarea_content;
+        }
+       
+        
 
         if(document.getElementById('annot_box') != null) {
           let annot_box = document.getElementById('annot_box');
           annot_box.remove();
         }
 
-        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning 1</div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
+        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number">1</span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
 
         document.getElementById('spoofspan').after(annot_box);
 
         document.getElementById('disregard_button').onclick = disRegard;
         document.getElementById('save_button').onclick = lemmaRecord;
+        document.getElementById('meaning_leftarrow').onclick = switchMeaning;
+        document.getElementById('meaning_rightarrow').onclick = switchMeaning;
 
         let current_box = document.getElementById('lemma_box');
 
@@ -572,6 +596,7 @@ const delAnnotate = function () {
     previous_selection.classList.add("tooltip");
     previous_selection.classList.remove("tooltip_selected");
   });
+  meanings = {};
   annot_box.remove();
 };
 
@@ -641,5 +666,7 @@ const makeDraggable = function () {
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
   }); */
+
+
 
 

@@ -78,10 +78,10 @@ if ($result->num_rows > 0) {
           $bool_lemma_id_null = is_null($lemma_id);
 
           if($bool_lemma_id_null == false) {
-            $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'">';
+            $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
           }
           else {
-            $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'">';
+            $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
           }
         }
 
