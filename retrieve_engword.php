@@ -54,7 +54,7 @@ else {
   }
   $res = $conn->query($sql_eng_trans);
   $row = $res->fetch_assoc();
-  $lemma_textarea_content = $row["eng_trans1"];
+  $lemma_textarea_content = $row["eng_trans".$lemma_meaning_no];
   if(is_null($lemma_textarea_content)) {
     $lemma_textarea_content = "";
   }

@@ -311,12 +311,6 @@
   font-weight: 900;
 }
 
-.meaning_arrow_deactiv {
-  color: rgb(128,128,128,0.3);
-  background-color: rgb(51, 51, 51, 0.3);
-  cursor: default;
-}
-
 #meaning_no {
   height:fit-content;
   width: fit-content;
@@ -435,6 +429,12 @@
 .nav_arrow:hover {
   background-color:#172136;
   color: white;
+}
+
+.nav_arrow_deactiv {
+  cursor: default;
+  color: grey;
+  font-family: Liberation_Serif;
 }
 
 #lemma_textarea {

@@ -19,6 +19,13 @@ if(isset($_POST['lang_id'])) {
   $lang_id = $_POST['lang_id'];
 }
 
+$lemma_meaning_no = 1;
+if(isset($_POST['lemma_meaning_no'])) {
+  $lemma_meaning_no = $_POST['lemma_meaning_no'];
+}
+
+$eng_trans_sql_string = 'eng_trans'.$lemma_meaning_no;
+
 $pos = 1;
 
 
@@ -50,7 +57,7 @@ if(is_null($lemma_id_wordeng)) {
   
 
 
-  $sql = "INSERT IGNORE INTO lemmas (lemma, eng_trans1, lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
+  $sql = "INSERT IGNORE INTO lemmas (lemma, ".$eng_trans_sql_string.", lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
   $res = $conn->query($sql);
 
   if(is_null($lemma_id_lemmas)) {
@@ -71,7 +78,7 @@ if(is_null($lemma_id_wordeng)) {
 else {  
 
   if(is_null($lemma_id_lemmas)) {
-    $sql = "INSERT IGNORE INTO lemmas (lemma, eng_trans1, lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
+    $sql = "INSERT IGNORE INTO lemmas (lemma, ".$eng_trans_sql_string.", lang_id, pos) VALUES ('$lemma_form', '$lemma_meaning', $lang_id, $pos)"; 
     $res = $conn->query($sql);
     $sql = "SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'Kazakh' AND TABLE_NAME = 'lemmas'";
     $res = $conn->query($sql);
@@ -91,7 +98,7 @@ else {
 
   else {
 
-    $sql = "UPDATE lemmas SET lemma = '$lemma_form', eng_trans1 = '$lemma_meaning', lang_id = $lang_id, pos = $pos WHERE lemma_id = $lemma_id_wordeng";
+    $sql = "UPDATE lemmas SET lemma = '$lemma_form', ".$eng_trans_sql_string." = '$lemma_meaning', lang_id = $lang_id, pos = $pos WHERE lemma_id = $lemma_id_wordeng";
     $res = $conn->query($sql);
   }
 
