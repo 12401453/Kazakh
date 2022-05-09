@@ -38,7 +38,7 @@ function downCase($string, $lang_id) {
 
 $new_text = '';
 if(isset($_POST['new_text'])) {
-  $new_text = $_POST['new_text'];
+  $new_text = trim($_POST['new_text']); //trim() gets rid of leading and trailing whitespace and newlines etc. from sloppy copy-pasting of the source text
 }
 
 //$new_text = addslashes($new_text);
@@ -104,7 +104,7 @@ $word = strtok($new_text, " ");
 
 $dt_counter = 0;
 
-$regexp = "/[-'$%£¥₽€—+=~#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]/u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte fuckery where cyrillic characters can consist partly of the hex-value of characters in the regex
+$regexp = "#[-/'$%£¥₽€—+…=~\#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]#u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte issues where cyrillic characters can consist partly of the hex-value of characters in the regex
 
 while($word != false) {
   

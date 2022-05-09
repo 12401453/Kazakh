@@ -2,9 +2,12 @@
    
    @font-face { font-family: LiberationSerif; src: url('LiberationSerif-Regular.ttf'); }
    @font-face {font-family: Bookerly; src: url('Bookerly.ttf'); }
-      p1 {
-         font-family: Bookerly; font-size: 24px; color: #cbcbc3;
-         max-width: 100%;
+   @font-face {font-family: PT_Serif; src: url('PTSerif-Regular.ttf'); }
+   @font-face {font-family: IBM_Plex_Sans; src: url('IBMPlexSans-Regular.ttf'); }
+
+  p1 {
+    font-family: Bookerly; font-size: 24px; color: #cbd9f4;
+    max-width: 100%;
 
       }
 
@@ -34,6 +37,13 @@ font-size: 23px;
 
 }
 
+#deletion {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
 .chunk {
   white-space: nowrap;
 }
@@ -47,11 +57,10 @@ font-size: 23px;
 #tt_button {
  
   background-color: #071022;
-  border-style: solid;
   border-radius: 2px;
-  padding: 3px;
+  padding: 6px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 20px;
   max-width: 97%;
@@ -64,7 +73,7 @@ font-size: 23px;
   border-radius: 2px;
   padding: 6px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 20px;
   max-width: 97%;
@@ -76,10 +85,10 @@ font-size: 23px;
   border-radius: 2px;
   padding: 6px;
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
-  font-size: 18px;
-  max-width: 70%;
+  font-size: 17px;
+  max-width: 97%;
 }
 
 .link-buttons {
@@ -96,7 +105,7 @@ font-size: 23px;
 
 }
 
-.link-buttons:hover {
+.link-buttons:hover, .deletion_button:hover {
   background-color: #040a16;
   color: red;
 }
@@ -108,7 +117,7 @@ font-size: 23px;
   border-radius: 2px;
   padding: 6px; 
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 18px;
 
@@ -120,7 +129,7 @@ font-size: 23px;
   border-radius: 2px; 
   padding: 3px;  */
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 18px;
   min-width: 100px;
@@ -139,7 +148,7 @@ font-size: 23px;
   border-style: solid;
   border-radius: 5px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   text-indent: 0%;
   font-family: Calibri;
   font-size: 18px;
@@ -152,7 +161,7 @@ font-size: 23px;
   border-style: solid;
   border-radius: 5px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   text-indent: 0%;
   font-size: 24px;
   font-family: Calibri;
@@ -163,18 +172,40 @@ font-size: 23px;
   padding: 5px;
   border-radius: 2px;
   background-color: #071022;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
-  top: 10px;
+  margin-top: 1%;
+  margin-bottom: 1%;
   position:relative;
   font-size: 17px;
   left: 10px;
   cursor: pointer;
 }
 
+
 .submit_btn:hover {
+ 
   background-color: #040a16;
-} 
+}
+
+.deletion_button {
+
+  border-style: none;
+  padding: 4px;
+  border-radius: 2px;
+  background-color: #071022;
+  color: #c71f1f;
+  font-family: Calibri;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  position:relative;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+
 
 #title {
   font-size: 26px;
@@ -196,9 +227,26 @@ font-size: 23px;
   border-radius: 2px;
   padding: 6px; 
   z-index: 1;
-  color: #cbcbc3;
+  color: #cbd9f4;
   font-family: Calibri;
   font-size: 47px;
 
 }
 
+#pagenos {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  font-family: Calibri;
+}
+
+.pageno {
+  cursor: pointer
+}
+.pageno:hover {
+  color: rgb(0 255 186);
+}
+.current_pageno {
+  color: rgb(0 255 186);
+  border-bottom: 2px solid rgb(0 255 186);
+}
