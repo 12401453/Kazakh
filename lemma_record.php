@@ -24,6 +24,13 @@ if(isset($_POST['lemma_meaning_no'])) {
   $lemma_meaning_no = $_POST['lemma_meaning_no'];
 }
 
+$pos = 1;
+/*
+if(isset($_POST['pos'])) {
+  $pos = $_POST['pos'];
+}
+*/
+
 
 if(isset($_POST['tokno_current'])) {
   $tokno_current = $_POST['tokno_current'];
@@ -31,7 +38,7 @@ if(isset($_POST['tokno_current'])) {
 
 $eng_trans_sql_string = 'eng_trans'.$lemma_meaning_no;
 
-$pos = 1;
+
 
 
 include 'db_details_web.php';

@@ -25,6 +25,13 @@ if ($conn->connect_error) {
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
+/*
+$sql = "UPDATE display_text SET word_engine_id = NULL WHERE tokno = $tokno_current";
+$res = $conn->query($sql);
+
+$sql = "DELETE FROM word_engine WHERE word_engine_id = $word_engine_id";
+$res = $conn->query($sql);
+*/
 
 $sql = "SELECT word, lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
 $res = $conn->query($sql);
@@ -48,7 +55,6 @@ $lemma_meaning_no = $row["lemma_meaning_no"];
 
 $json_response = json_encode(array("word" => $word, "eng_trans1" => $eng_trans1, "lemma_meaning_no" => $lemma_meaning_no));
 echo $json_response;
-
 
 
 $conn->close();

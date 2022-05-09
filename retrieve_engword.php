@@ -11,6 +11,8 @@ if(isset($_POST['tokno_current'])) {
   $tokno_current = $_POST['tokno_current'];
 }
 
+$pos = 1;
+
 
 include 'db_details_web.php';
 
@@ -36,10 +38,11 @@ if(is_null($lemma_id)) {
   $lemma_textarea_content = "";
 }
 else {
-  $sql = "SELECT lemma FROM lemmas WHERE lemma_id = $lemma_id";
+  $sql = "SELECT lemma, pos FROM lemmas WHERE lemma_id = $lemma_id";
   $res = $conn->query($sql);
   $row = $res->fetch_assoc();
   $lemma_tag_content = $row["lemma"];
+  $pos = $row["pos"];
 
   $sql = "SELECT lemma_meaning_no FROM display_text WHERE tokno = $tokno_current";
   $res = $conn->query($sql);
@@ -64,7 +67,7 @@ else {
 
 
 
-$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content" => htmlentities($lemma_textarea_content), "lemma_meaning_no" => $lemma_meaning_no, "lemma_id" => $lemma_id));
+$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content_html" => htmlentities($lemma_textarea_content), "lemma_textarea_content" => $lemma_textarea_content, "lemma_meaning_no" => $lemma_meaning_no, "lemma_id" => $lemma_id, "pos" => $pos));
 echo $json_response;
 
 $conn->close();

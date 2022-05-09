@@ -38,7 +38,7 @@ $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS lemmas";
 $result = $conn->query($sql);
-$sql = "CREATE TABLE lemmas (lemma_id INT UNSIGNED AUTO_INCREMENT UNIQUE, lemma VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin UNIQUE, eng_trans1 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans2 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans3 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans4 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans5 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans6 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans7 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans8 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans9 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans10 TEXT CHARACTER SET utf8 COLLATE utf8_bin, lang_id SMALLINT UNSIGNED, pos SMALLINT UNSIGNED, PRIMARY KEY(lemma, lang_id, pos)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql = "CREATE TABLE lemmas (lemma_id INT UNSIGNED AUTO_INCREMENT UNIQUE, lemma VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, eng_trans1 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans2 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans3 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans4 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans5 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans6 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans7 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans8 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans9 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans10 TEXT CHARACTER SET utf8 COLLATE utf8_bin, lang_id SMALLINT UNSIGNED, pos TINYINT UNSIGNED, PRIMARY KEY(lemma, lang_id, pos)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS multiword_index";

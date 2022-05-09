@@ -233,3 +233,20 @@ font-size: 23px;
 
 }
 
+#pagenos {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  font-family: Calibri;
+}
+
+.pageno {
+  cursor: pointer
+}
+.pageno:hover {
+  color: rgb(0 255 186);
+}
+.current_pageno {
+  color: rgb(0 255 186);
+  border-bottom: 2px solid rgb(0 255 186);
+}

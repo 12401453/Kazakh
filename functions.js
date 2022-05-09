@@ -79,8 +79,16 @@ function selectText() {
             tt_btn.onclick = showAnnotate;
           });
            //experiment
+          let pagenos = document.querySelectorAll('.pageno');
+          pagenos.forEach(pageno => {
+            if(Number(pageno.innerHTML) == 1) {
+              pageno.classList.add("current_pageno");
+            }
+          }); 
 
           loadingbutton.remove();
+          
+
         }
      
       }
@@ -94,7 +102,11 @@ function selectText() {
 }
 
 function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
-  
+
+  let highlight_pagenos = document.querySelectorAll('.current_pageno');
+  highlight_pagenos.forEach(highlighted_pageno => {
+    highlighted_pageno.classList.remove("current_pageno");
+  });
 
   let loadingbutton = document.createElement('div');
   loadingbutton.innerHTML = "Loading...";
@@ -131,6 +143,13 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
             let title = document.getElementById("title");
             title.scrollIntoView();
           }
+          let pagenos = document.querySelectorAll('.pageno');
+          pagenos.forEach(pageno => {
+            if(Number(pageno.innerHTML) == page_cur) {
+              pageno.classList.add("current_pageno");
+            }
+          });
+
         }
      
       }
@@ -143,6 +162,11 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
   
  
 }
+
+/*
+const highlightPageno = function (event) {
+  event.target.classList.add("current_pageno");
+}; */
 
 
 function progressBar(word_count) {
@@ -317,6 +341,34 @@ const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" on
 const conj_pos = '<span id="pos_tag_conj" class="pos_tag" title="conjunction" onclick="selectPoS()">conj.</span>';
 const part_pos = '<span id="pos_tag_part" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
 
+function choosePoS(pos_number) {
+  let pos_html = noun_pos;
+  switch(pos_number) {
+    case 1:
+      pos_html = noun_pos;
+      break;
+    case 2:
+      pos_html = verb_pos;
+      break;
+    case 3:
+      pos_html = adj_pos;
+      break;
+    case 4:
+      pos_html = adverb_pos;
+      break;  
+    case 5:
+      pos_html = prep_pos;
+      break;  
+    case 6:
+      pos_html = conj_pos;
+      break;  
+    case 7:
+      pos_html = part_pos;
+      break;    
+  }
+  return pos_html;
+}
+
 const deadFunc = function () {
   let pos_selects = document.querySelectorAll('.pos_tag_select');
   pos_selects.forEach(pos_select => {
@@ -325,29 +377,36 @@ const deadFunc = function () {
   this.onclick = selectPoS;
 };
 
-
+//the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
 const changePoS = function () {
   switch (this.id) {
     case "noun_pos":
       document.getElementById('pos_tag_box').innerHTML = noun_pos;
+      pos = 1;
       break;
     case "verb_pos":
       document.getElementById('pos_tag_box').innerHTML = verb_pos;
+      pos = 2;
       break;
     case "adj_pos":
       document.getElementById('pos_tag_box').innerHTML = adj_pos;
+      pos = 3;
       break;  
     case "adverb_pos":
       document.getElementById('pos_tag_box').innerHTML = adverb_pos;
+      pos = 4;
       break;
     case "prep_pos":
       document.getElementById('pos_tag_box').innerHTML = prep_pos;
+      pos = 5;
       break;
     case "conj_pos":
       document.getElementById('pos_tag_box').innerHTML = conj_pos;
+      pos = 6;
       break;  
     case "part_pos":
       document.getElementById('pos_tag_box').innerHTML = part_pos;
+      pos = 7;
       break;
   }
 };
@@ -398,13 +457,14 @@ const selectPoS = function () {
 
 };
 
-
-let meanings = {};
+let pos = 1;
+//let meanings = {};
 
 function showAnnotate(event) {
   let lemma_meaning_no = 1;
   let lemma_id = 0;
-  meanings = {};
+  let meanings = {};
+  pos = 1;
   let display_word = event.target;
   let tokno_current = event.target.dataset.tokno;
  
@@ -434,7 +494,7 @@ function showAnnotate(event) {
           let json_response = xhttp.response;
           console.log(json_response);
           meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
-          document.getElementById("lemma_textarea").innerHTML = meanings[lemma_meaning_no];
+          document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
         }
       }
       xhttp.send(send_data);
@@ -447,8 +507,7 @@ function showAnnotate(event) {
     grey_arrows.forEach(grey_arrow => {
       grey_arrow.classList.add("nav_arrow");
       grey_arrow.classList.remove("nav_arrow_deactiv");
-    });
-  
+    });  
         
     let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
     if(bool_uparrow && lemma_meaning_no < 10) {
@@ -470,10 +529,10 @@ function showAnnotate(event) {
       switchMeaningAJAX();
     }
     else if(lemma_id != 0) {
-      document.getElementById("lemma_textarea").innerHTML = meanings[lemma_meaning_no];
+      document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
     }
   };
-
+    //this is just placeholder
   const disRegard = function () {
     const httpRequest = (method, url) => {
 
@@ -489,10 +548,11 @@ function showAnnotate(event) {
         console.log("sent");
         // console.log(xhttp.responseText);
         if (xhttp.readyState == 4) {
-          let json_response = xhttp.response;
-          console.log(json_response);
-          console.log(json_response.word); //the keys in the JSON string have to be in quotes, but as members of the json object they are just retrievable as if the key-name were a variable name. It also works as json_response["word"].
-         // display_word.style.color = "#cbd9f4";
+         let json_response = xhttp.response;
+         console.log(json_response);
+         console.log(json_response.word); //the keys in the JSON string have to be in quotes, but as members of the json object they are just retrievable as if the key-name were a variable name. It also works as json_response["word"].
+        
+
         }
       }
       xhttp.send(send_data);
@@ -507,7 +567,7 @@ function showAnnotate(event) {
       let lemma_form = encodeURIComponent(document.getElementById('lemma_tag').innerHTML);
       let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
 
-      let send_data = "word_engine_id="+word_engine_id+"&lemma_form="+lemma_form+"&lemma_meaning="+lemma_meaning+"&lemma_meaning_no="+lemma_meaning_no+"&lang_id="+lang_id+"&tokno_current="+tokno_current;
+      let send_data = "word_engine_id="+word_engine_id+"&lemma_form="+lemma_form+"&lemma_meaning="+lemma_meaning+"&lemma_meaning_no="+lemma_meaning_no+"&lang_id="+lang_id+"&tokno_current="+tokno_current+"&pos="+pos; //the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
 
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, url, true);
@@ -554,8 +614,10 @@ function showAnnotate(event) {
         let json_response = xhttp.response;
         let lemma_tag_content = json_response.lemma_tag_content;
         let lemma_textarea_content = json_response.lemma_textarea_content;
+        let lemma_textarea_content_html = json_response.lemma_textarea_content_html;
         lemma_meaning_no = Number(json_response.lemma_meaning_no);
         lemma_id = Number(json_response.lemma_id);
+        pos = Number(json_response.pos);
 
         if(lemma_meaning_no != 0) {
           meanings[lemma_meaning_no] = lemma_textarea_content;
@@ -570,7 +632,7 @@ function showAnnotate(event) {
           annot_box.remove();
         }
 
-        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number">'+lemma_meaning_no+'</span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
+        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine (DOES NOTHING ATM)">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content_html+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number">'+lemma_meaning_no+'</span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
 
         document.getElementById('spoofspan').after(annot_box);
         if(lemma_meaning_no == 1) {
@@ -628,10 +690,8 @@ function showAnnotate(event) {
         document.getElementById('morph_box').onclick = panelSelect;
         document.getElementById('multiword_box').onclick = panelSelect;
         document.getElementById('accent_box').onclick = panelSelect;  */
-
-        document.getElementById('pos_tag_box').innerHTML = noun_pos;
-
-        //document.getElementById('lemma_textarea').focus();
+        
+        document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
           
       }
      

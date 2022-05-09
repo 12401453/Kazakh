@@ -26,7 +26,7 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $lemma_textarea_content = $row[$eng_trans_selector];
 
-$json_response = json_encode(array("lemma_textarea_content" => htmlentities($lemma_textarea_content), "lemma_meaning_no" => $lemma_meaning_no));
+$json_response = json_encode(array("lemma_textarea_content" => $lemma_textarea_content, "lemma_meaning_no" => $lemma_meaning_no)); //remove htmlentites() from textarea_content because it is being set with the textarea.value property instead of as innerHTML
 echo $json_response;
 
 $conn->close();
