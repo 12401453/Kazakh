@@ -27,6 +27,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
+$sql = "SET NAMES UTF8";
+$res = $conn->query($sql);
 ?>
 
 <div id="new_text">
