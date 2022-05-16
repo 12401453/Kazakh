@@ -377,36 +377,42 @@ const deadFunc = function () {
   this.onclick = selectPoS;
 };
 
-//the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
 const changePoS = function () {
   switch (this.id) {
     case "noun_pos":
       document.getElementById('pos_tag_box').innerHTML = noun_pos;
       pos = 1;
+      pullInLemma(false);
       break;
     case "verb_pos":
       document.getElementById('pos_tag_box').innerHTML = verb_pos;
       pos = 2;
+      pullInLemma(false);
       break;
     case "adj_pos":
       document.getElementById('pos_tag_box').innerHTML = adj_pos;
       pos = 3;
+      pullInLemma(false);
       break;  
     case "adverb_pos":
       document.getElementById('pos_tag_box').innerHTML = adverb_pos;
       pos = 4;
+      pullInLemma(false);
       break;
     case "prep_pos":
       document.getElementById('pos_tag_box').innerHTML = prep_pos;
       pos = 5;
+      pullInLemma(false);
       break;
     case "conj_pos":
       document.getElementById('pos_tag_box').innerHTML = conj_pos;
       pos = 6;
+      pullInLemma(false);
       break;  
     case "part_pos":
       document.getElementById('pos_tag_box').innerHTML = part_pos;
       pos = 7;
+      pullInLemma(false);
       break;
   }
 };
@@ -455,20 +461,234 @@ const selectPoS = function () {
 
   document.getElementById('pos_tag_box').removeChild(document.getElementById(pos_tag_select_current));
 
+}; 
+
+const pullInLemma = function (can_skip = true) {
+
+  let lemma_form = document.getElementById('lemma_tag').value;
+  if (lemma_form == lemma_form_tag_intial && can_skip || document.getElementById('lemma_textarea').value != "") {
+    return;
+  }
+  document.getElementById('save_button').onclick = "";
+  const httpRequest = (method, url) => {
+    let send_data = "lemma_form=" + lemma_form + "&lemma_meaning_no=" + lemma_meaning_no + "&pos=" + pos + "&lang_id=" + lang_id;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        let json_response = xhttp.response;
+        console.log(json_response);
+        lemma_id = json_response.lemma_id;
+        meanings = {};
+        meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
+
+        document.getElementById('save_button').onclick = lemmaRecord;
+      }
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "pull_lemma.php");
 };
 
+function switchMeaningAJAX() {
+  const httpRequest = (method, url) => {
+    let send_data = "lemma_id=" + lemma_id + "&lemma_meaning_no=" + lemma_meaning_no;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        let json_response = xhttp.response;
+        console.log(json_response);
+        meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
+      }
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "retrieve_meanings.php");
+}
+
+const switchMeaning = function (event) {
+  let grey_arrows = document.querySelectorAll('.nav_arrow_deactiv');
+  grey_arrows.forEach(grey_arrow => {
+    grey_arrow.classList.add("nav_arrow");
+    grey_arrow.classList.remove("nav_arrow_deactiv");
+  });
+
+  let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
+  if (bool_uparrow && lemma_meaning_no < 10) {
+    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    lemma_meaning_no++;
+  }
+  else if (bool_uparrow == false && lemma_meaning_no > 1) {
+    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    lemma_meaning_no--;
+  }
+  document.getElementById("number").innerHTML = lemma_meaning_no;
+  if (lemma_meaning_no == 10) {
+    document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
+  }
+  if (lemma_meaning_no == 1) {
+    document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
+  }
+  if (lemma_id != 0 && meanings[lemma_meaning_no] === undefined) {
+    switchMeaningAJAX();
+  }
+ /* else if (lemma_id != 0) {  */
+  document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no] == undefined ? "" : meanings[lemma_meaning_no];
+  // }
+  
+};
+//this is just placeholder
+const disRegard = function () {
+  const httpRequest = (method, url) => {
+
+
+    let send_data = "word_engine_id=" + word_engine_id + "&tokno_current=" + tokno_current;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'json';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      console.log("sent");
+      // console.log(xhttp.responseText);
+      if (xhttp.readyState == 4) {
+        let json_response = xhttp.response;
+        console.log(json_response);
+        console.log(json_response.word); //the keys in the JSON string have to be in quotes, but as members of the json object they are just retrievable as if the key-name were a variable name. It also works as json_response["word"].
+
+
+      }
+    }
+    xhttp.send(send_data);
+  }
+
+  httpRequest("POST", "json_test.php");
+};
+
+const lemmaRecord = function () {
+  meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+  let clicked_lemma_meaning_no = lemma_meaning_no;
+  for (let lemma_meaning_no in meanings) {
+    lemma_meaning = meanings[lemma_meaning_no];
+    
+    const httpRequest = (method, url) => {
+
+    let lemma_form = encodeURIComponent(document.getElementById('lemma_tag').value.trim());
+    lemma_meaning = encodeURIComponent(lemma_meaning);
+   // let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
+
+    let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no; //the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      console.log("sent");
+      // console.log(xhttp.responseText);
+      if (xhttp.readyState == 4) {
+        console.log("Lemma updated");
+      //  document.getElementById('annot_box').remove();
+        display_word.classList.add("tooltip");
+        display_word.classList.remove("tooltip_selected");
+        // display_word.classList.add("lemma_set");
+        let dataselectorstring = '[data-word_engine_id="' + word_engine_id + '"]';
+
+        let current_words = document.querySelectorAll(dataselectorstring);
+        current_words.forEach(current_word => {
+          current_word.classList.add("lemma_set");
+        });
+      }
+    }
+    xhttp.send(send_data);
+  }
+
+  httpRequest("POST", "lemma_record.php");
+  }
+  document.getElementById('annot_box').remove();
+  meanings = {};
+};
+
+const lemmaDelete = function () {
+  const httpRequest = (method, url) => {
+
+    let send_data = "lemma_id="+lemma_id+"&word_engine_id="+word_engine_id+"&tokno+current="+tokno_current;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'text';
+
+    xhttp.onload = () => {
+      if(xhttp.readyState == 4) {
+        let lemma_still_set = Boolean(xhttp.responseText);
+
+        console.log('Lemma deleted');
+        document.getElementById('annot_box').remove();
+        display_word.classList.add("tooltip");
+        display_word.classList.remove("tooltip_selected");
+        if(lemma_still_set == false) {
+          let dataselectorstring = '[data-word_engine_id="' + word_engine_id + '"]';
+          let current_words = document.querySelectorAll(dataselectorstring);
+          current_words.forEach(current_word => {
+            current_word.classList.remove("lemma_set");
+          });
+          
+        }
+      }
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "lemma_delete.php");
+  meanings = {};
+
+};
+
+const setLemmaTagSize = function () {
+  let lemma_tag = document.getElementById('lemma_tag');
+  let hidden_lemma_tag = document.getElementById('hidden_lemma_tag');
+
+  hidden_lemma_tag.innerHTML = lemma_tag.value;
+
+  let new_width = hidden_lemma_tag.offsetWidth+"px";
+  let new_height = hidden_lemma_tag.offsetHeight+"px";
+  lemma_tag.style.width = new_width;
+  lemma_tag.style.height = new_height;
+};
+
+
 let pos = 1;
-//let meanings = {};
+let lemma_form_tag_intial = "";
+let lemma_meaning_no = 1;
+let lemma_id = 0;
+let meanings = {};
+
+let display_word;
+let tokno_current = 0;
+let word_engine_id = 0;
+
 
 function showAnnotate(event) {
-  let lemma_meaning_no = 1;
-  let lemma_id = 0;
-  let meanings = {};
-  pos = 1;
-  let display_word = event.target;
-  let tokno_current = event.target.dataset.tokno;
- 
-
+   
+  display_word = event.target;
+  tokno_current = event.target.dataset.tokno;
+  
+  
   let previous_selections = document.querySelectorAll('.tooltip_selected');
   previous_selections.forEach(previous_selection => {
     previous_selection.classList.add("tooltip");
@@ -477,129 +697,12 @@ function showAnnotate(event) {
   display_word.classList.add("tooltip_selected");
   display_word.classList.remove("tooltip");
 
-  let word_engine_id = event.target.dataset.word_engine_id;
+  word_engine_id = event.target.dataset.word_engine_id;
   console.log(word_engine_id);
-
-  function switchMeaningAJAX() {
-    const httpRequest = (method, url) => {
-      let send_data = "lemma_id="+lemma_id+"&lemma_meaning_no="+lemma_meaning_no;
-
-      const xhttp = new XMLHttpRequest();
-      xhttp.open(method, url, true);
-      xhttp.responseType = 'json';
-      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-      xhttp.onload = () => {
-        if(xhttp.readyState == 4) {
-          let json_response = xhttp.response;
-          console.log(json_response);
-          meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
-          document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
-        }
-      }
-      xhttp.send(send_data);
-    }
-    httpRequest("POST", "retrieve_meanings.php");
-  }
-
-  const switchMeaning = function (event) {
-    let grey_arrows = document.querySelectorAll('.nav_arrow_deactiv');
-    grey_arrows.forEach(grey_arrow => {
-      grey_arrow.classList.add("nav_arrow");
-      grey_arrow.classList.remove("nav_arrow_deactiv");
-    });  
-        
-    let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
-    if(bool_uparrow && lemma_meaning_no < 10) {
-      lemma_meaning_no++;
-    }
-    else if(bool_uparrow == false && lemma_meaning_no > 1) {
-      lemma_meaning_no--;
-    }
-    document.getElementById("number").innerHTML = lemma_meaning_no;
-    if(lemma_meaning_no == 10) {
-      document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
-      document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
-    }
-    if(lemma_meaning_no == 1) {
-      document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
-      document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
-    }
-    if(lemma_id != 0 && meanings[lemma_meaning_no] === undefined) {
-      switchMeaningAJAX();
-    }
-    else if(lemma_id != 0) {
-      document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
-    }
-  };
-    //this is just placeholder
-  const disRegard = function () {
-    const httpRequest = (method, url) => {
-
-
-      let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current;
-
-      const xhttp = new XMLHttpRequest();
-      xhttp.open(method, url, true);
-      xhttp.responseType = 'json';
-      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-      xhttp.onload = () => {
-        console.log("sent");
-        // console.log(xhttp.responseText);
-        if (xhttp.readyState == 4) {
-         let json_response = xhttp.response;
-         console.log(json_response);
-         console.log(json_response.word); //the keys in the JSON string have to be in quotes, but as members of the json object they are just retrievable as if the key-name were a variable name. It also works as json_response["word"].
-        
-
-        }
-      }
-      xhttp.send(send_data);
-    }
-
-    httpRequest("POST", "json_test.php");
-  };
-
-  const lemmaRecord = function () {
-    const httpRequest = (method, url) => {
-
-      let lemma_form = encodeURIComponent(document.getElementById('lemma_tag').innerHTML);
-      let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
-
-      let send_data = "word_engine_id="+word_engine_id+"&lemma_form="+lemma_form+"&lemma_meaning="+lemma_meaning+"&lemma_meaning_no="+lemma_meaning_no+"&lang_id="+lang_id+"&tokno_current="+tokno_current+"&pos="+pos; //the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
-
-      const xhttp = new XMLHttpRequest();
-      xhttp.open(method, url, true);
-
-      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-      xhttp.onload = () => {
-        console.log("sent");
-        // console.log(xhttp.responseText);
-        if (xhttp.readyState == 4) {
-          console.log("Lemma updated");
-          document.getElementById('annot_box').remove();
-          display_word.classList.add("tooltip");
-          display_word.classList.remove("tooltip_selected");
-         // display_word.classList.add("lemma_set");
-          let dataselectorstring = '[data-word_engine_id="'+word_engine_id+'"]';
-
-          let current_words = document.querySelectorAll(dataselectorstring);
-          current_words.forEach(current_word => {
-            current_word.classList.add("lemma_set");
-          });
-        }
-      }
-      xhttp.send(send_data);
-    }
-
-    httpRequest("POST", "lemma_record.php");
-  };
 
   const httpRequest = (method, url) => {
 
-    let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current;
+    let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current+"&lang_id="+lang_id;
  
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
@@ -613,6 +716,7 @@ function showAnnotate(event) {
 
         let json_response = xhttp.response;
         let lemma_tag_content = json_response.lemma_tag_content;
+        lemma_form_tag_intial = lemma_tag_content;
         let lemma_textarea_content = json_response.lemma_textarea_content;
         let lemma_textarea_content_html = json_response.lemma_textarea_content_html;
         lemma_meaning_no = Number(json_response.lemma_meaning_no);
@@ -632,7 +736,7 @@ function showAnnotate(event) {
           annot_box.remove();
         }
 
-        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="'+word_engine_id+'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine (DOES NOTHING ATM)">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><div id="lemma_tag" role="textbox" contenteditable>'+lemma_tag_content+'</div></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content_html+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number">'+lemma_meaning_no+'</span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_button">Save</div></div></div></div></div>');
+        let annot_box = document.createRange().createContextualFragment('<div id="annot_box" data-word_engine_id="' + word_engine_id +'"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine (DOES NOTHING ATM)">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="context_box" class="box">Context translation</span><span id="morph_box" class="box">Morphology</span><span id="multiword_box" class="box">Multiword</span><span id="accent_box" class="box">Accentology</span></div><div id="right_column"><div id="right_header"><textarea id="lemma_tag">'+lemma_tag_content+'</textarea></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off">'+lemma_textarea_content_html+'</textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number">'+lemma_meaning_no+'</span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_and_delete_box"><div id="save_button">Save</div><div id="delete_lemma_button">Delete</div></div></div></div></div></div>');
 
         document.getElementById('spoofspan').after(annot_box);
         if(lemma_meaning_no == 1) {
@@ -644,10 +748,16 @@ function showAnnotate(event) {
           document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
         }
 
+        if(lemma_id == 0) {
+          document.getElementById('delete_lemma_button').style.display = "none";
+        }
+        document.getElementById('delete_lemma_button').onclick = lemmaDelete;
+
         document.getElementById('disregard_button').onclick = disRegard;
         document.getElementById('save_button').onclick = lemmaRecord;
         document.getElementById('meaning_leftarrow').onclick = switchMeaning;
         document.getElementById('meaning_rightarrow').onclick = switchMeaning;
+        document.getElementById('lemma_tag').onblur = pullInLemma;
 
         let current_box = document.getElementById('lemma_box');
 
@@ -692,6 +802,9 @@ function showAnnotate(event) {
         document.getElementById('accent_box').onclick = panelSelect;  */
         
         document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
+        
+        document.getElementById('lemma_tag').oninput = setLemmaTagSize;
+        setLemmaTagSize();
           
       }
      

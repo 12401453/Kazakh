@@ -69,6 +69,7 @@ $res = $conn->query($sql);
 <script src ="functions.js"></script>
 
 <span id="spoofspan" style="display: inline;"></span>
+<span id="spoofspan2"><span id="hidden_lemma_tag"></span></span>
 
 </body>
 </html>
