@@ -54,7 +54,7 @@ if(is_null($leftover_lemma_id)) {
   $sql = "UPDATE display_text SET lemma_meaning_no = NULL, lemma_id = NULL WHERE word_engine_id = $word_engine_id";
   $res = $conn->query($sql);
 
-  echo "";
+  echo "false";
 }
 else {
 

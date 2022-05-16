@@ -636,7 +636,7 @@ const lemmaDelete = function () {
 
     xhttp.onload = () => {
       if(xhttp.readyState == 4) {
-        let lemma_still_set = Boolean(xhttp.responseText);
+        let lemma_still_set = xhttp.responseText.trim() == "false" ? false : true;
 
         console.log('Lemma deleted');
         document.getElementById('annot_box').remove();
