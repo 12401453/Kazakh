@@ -18,7 +18,7 @@ $res = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS display_text";
 $result = $conn->query($sql);
-$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, lemma_id INT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS chunks";
@@ -28,7 +28,7 @@ $res = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS word_engine";
 $result = $conn->query($sql);                                 //the 'word' column used to be UNIQUE but that is bollocks
-$sql ="CREATE TABLE word_engine (word_engine_id INT UNSIGNED AUTO_INCREMENT UNIQUE, word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, lemma_id INT UNSIGNED, lang_id SMALLINT UNSIGNED, PRIMARY KEY(word, lang_id)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql ="CREATE TABLE word_engine (word_engine_id INT UNSIGNED AUTO_INCREMENT UNIQUE, word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, lang_id SMALLINT UNSIGNED, first_lemma_id INT UNSIGNED, PRIMARY KEY(word, lang_id)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS texts";

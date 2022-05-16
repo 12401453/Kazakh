@@ -89,12 +89,14 @@ if ($result->num_rows > 0) {
         $outer_tt_span = '';
 
         if($bool_wordeng_id_null == false) {
-          $sql_lemma = "SELECT lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
-          $res_lemma = $conn->query($sql_lemma);
-          $row_lemma = $res_lemma->fetch_assoc();
-          $lemma_id = $row_lemma["lemma_id"];
+          $lemma_id = $row["lemma_id"];
+          
+          $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
+          $res = $conn->query($sql);
+          $row = $res->fetch_assoc();
+          $first_lemma_id = $row["first_lemma_id"];
 
-          $bool_lemma_id_null = is_null($lemma_id);
+          $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
 
           if($bool_lemma_id_null == false) {
             $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';

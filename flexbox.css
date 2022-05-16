@@ -229,7 +229,8 @@
   flex-grow: 0;
 }
 
-#lemma_tag {
+#hidden_lemma_tag {
+
   height:fit-content;
   width: fit-content;
   min-height: 20px;
@@ -240,13 +241,37 @@
 
   font-size: 19px;
   font-family: Bookerly;
+  color: red;
+  visibility: hidden;
+
+  border-bottom-left-radius: 6px;
+  padding-top: 5px;
+  padding-right: 7px; /* extra side-padding is needed on the span compared to the textarea because the textarea wraps to the next line due to some differences in inherent padding or something if the side-padding is 5px on both */
+  padding-bottom: 5px;
+  padding-left: 7px;
+  background-color: #040a16;
+  border: 1px solid black;
+  border-right: none;
+  border-top: none;
+}
+#lemma_tag {
+  outline: none;
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  font-size: 19px;
+  font-family: Bookerly;
+  color: #cbd9f4;
 
   border-bottom-left-radius: 6px;
   padding: 5px;
   background-color: #040a16;
   border: 1px solid black;
   border-right: none;
-   border-top: none;
+  border-top: none;
+
+  resize: none;
 }
 
 
@@ -459,6 +484,15 @@
   padding: 2px;
 }
 
+#save_and_delete_box {
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  justify-content: space-around;
+  align-items: flex-end;
+  user-select: none;
+  flex-grow: 1;
+}
+
 #save_button {
   /* display: flex; */
   /* flex-flow: row nowrap; */
@@ -478,11 +512,32 @@
   font-size: 17px;
   font-family: IBM_Plex_Sans;
   color: #040a16;
-  margin-right: 13%;
-  margin-left: 9%;
+ /* margin-right: 13%; */
+/*  margin-left: 9%; */
 }
 
 #save_button:hover {
   background-color: rgb(0 255 34); /* 75% */
 }
 
+#delete_lemma_button {
+
+  height: fit-content;
+  width: 40px;
+  text-align: center;
+  /* min-height: 13px; */
+  /* min-width: 155px; */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  background-color: rgba(255, 0, 0, 0.6); /* 41% */
+  border: 1px solid black;
+  border-bottom: none;
+  padding: 4px;
+  cursor: default;
+  font-size: 12px;
+  font-family: IBM_Plex_Sans;
+  color: #040a16;
+}
+#delete_lemma_button:hover {
+  background-color: rgba(255, 0, 0);
+}
