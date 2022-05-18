@@ -653,7 +653,7 @@ const lemmaDelete = function () {
       }
     }
     xhttp.send(send_data);
-  }
+  };
   httpRequest("POST", "lemma_delete.php");
   meanings = {};
 
@@ -669,6 +669,45 @@ const setLemmaTagSize = function () {
   let new_height = hidden_lemma_tag.offsetHeight+"px";
   lemma_tag.style.width = new_width;
   lemma_tag.style.height = new_height;
+};
+
+const lemmaTooltip = function () {
+  let lemma_set_words = document.querySelectorAll('.lemma_set');
+  let set_toknos = new Array();
+  let set_word_eng_ids = new Array();
+  lemma_set_words.forEach(lemma_set_word => {
+    let lemma_set_tokno = lemma_set_word.dataset.tokno;
+    let lemma_set_word_eng_id = lemma_set_word.dataset.word_engine_id;
+    set_toknos.push(lemma_set_tokno);
+    set_word_eng_ids.push(lemma_set_word_eng_id);
+  });
+  /* let toknos_POST_data = "toknos=";
+  set_toknos.forEach(tokno => {
+    toknos_POST_data += `${tokno},`;
+  });
+  toknos_POST_data = toknos_POST_data.slice(0, -1); */
+
+
+  const httpRequest = (method, url) => {
+
+    // let send_data = toknos_POST_data;
+    let send_data = "toknos=" + set_toknos + "&word_eng_ids=" + set_word_eng_ids;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'json';
+
+    xhttp.onload = () => {
+      if(xhttp.readyState == 4) {
+       
+
+      }
+
+    }
+    xhttp.send(send_data);
+  };
+  httpRequest("POST", "lemma_tooltip.php");
+
 };
 
 
@@ -894,7 +933,4 @@ const makeDraggable = function () {
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
   }); */
-
-
-
 
