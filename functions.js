@@ -699,7 +699,14 @@ const lemmaTooltip = function () {
 
     xhttp.onload = () => {
       if(xhttp.readyState == 4) {
+        tooltips_shown = true;
+        json_lemma_transes = xhttp.response;
+        console.log(json_lemma_transes);
+        if(json_lemma_transes == null) {
+         return;
+        }
        
+
 
       }
 
@@ -716,6 +723,7 @@ let lemma_form_tag_intial = "";
 let lemma_meaning_no = 1;
 let lemma_id = 0;
 let meanings = {};
+let tooltips_shown = false;
 
 let display_word;
 let tokno_current = 0;
@@ -727,6 +735,7 @@ function showAnnotate(event) {
   display_word = event.target;
   tokno_current = event.target.dataset.tokno;
   
+  document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
   
   let previous_selections = document.querySelectorAll('.tooltip_selected');
   previous_selections.forEach(previous_selection => {
@@ -865,6 +874,9 @@ const delAnnotate = function () {
   });
   meanings = {};
   annot_box.remove();
+  if(tooltips_shown == true) {
+    document.getElementById("tt_styles").setAttribute("href", "tooltip_edit_lemma_tt.css");
+  }
 };
 
 const makeDraggable = function () {
