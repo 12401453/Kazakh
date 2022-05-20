@@ -680,6 +680,7 @@ const lemmaTooltip = function () {
     let lemma_set_word_eng_id = lemma_set_word.dataset.word_engine_id;
     set_toknos.push(lemma_set_tokno);
     set_word_eng_ids.push(lemma_set_word_eng_id);
+  
   });
   /* let toknos_POST_data = "toknos=";
   set_toknos.forEach(tokno => {
@@ -687,7 +688,7 @@ const lemmaTooltip = function () {
   });
   toknos_POST_data = toknos_POST_data.slice(0, -1); */
 
-
+  document.getElementById("tt_styles").setAttribute("href", "tooltip_edit_lemma_tt.css");
   const httpRequest = (method, url) => {
 
     // let send_data = toknos_POST_data;
@@ -705,6 +706,12 @@ const lemmaTooltip = function () {
         if(json_lemma_transes == null) {
          return;
         }
+        let tt_lemma_tags = document.querySelectorAll('.lemma_tag');
+        let i = 0;
+        tt_lemma_tags.forEach(tt_lemma_tag => {
+          tt_lemma_tag.innerHTML = json_lemma_transes[i]["lemma_form"];
+          i++;
+        });
        
 
 
