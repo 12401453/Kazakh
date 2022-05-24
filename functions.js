@@ -1,19 +1,15 @@
 
 function tt_type() {
-
-  var spoofspan = document.getElementById('spoofspan');
-  var spanDisplay = spoofspan.style.display;
-
-if (spanDisplay == 'inline') {
-
-spoofspan.style.display = 'none';
-document.getElementById("tt_styles").setAttribute("href", "tooltip_none_style_2.css");
-
-}
-else {
-spoofspan.style.display = 'inline';
-document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
-}
+  if(tooltips_shown) {
+    let lemma_tooltips = document.querySelectorAll('.lemma_tt');
+    lemma_tooltips.forEach(lemma_tooltip => {
+      lemma_tooltip.remove();
+    });
+    tooltips_shown = false;
+  }
+  else {
+    lemmaTooltip();
+  }
 }
 
 let lang_id = 0;
@@ -85,6 +81,9 @@ function selectText() {
               pageno.classList.add("current_pageno");
             }
           }); 
+          if(tooltips_shown) {
+            lemmaTooltip();
+          }
 
           loadingbutton.remove();
           
@@ -138,6 +137,9 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
             tt_btn.onclick = showAnnotate;
           });
            //experiment
+          if(tooltips_shown) {
+            lemmaTooltip();
+          }
           loadingbutton.remove();
           if(page_cur > 1) {
             let title = document.getElementById("title");
