@@ -45,11 +45,12 @@ foreach ($tokno_arr as $tokno) {
 
     $eng_trans_selector = "eng_trans".$lemma_meaning_no;
 
-    $sql = "SELECT lemma, $eng_trans_selector FROM lemmas WHERE lemma_id = $lemma_id";
+    $sql = "SELECT lemma, $eng_trans_selector, pos FROM lemmas WHERE lemma_id = $lemma_id";
     $res = $conn->query($sql);
     $row = $res->fetch_assoc();
     $lemma_form = $row["lemma"];
     $lemma_trans = $row[$eng_trans_selector];
+    $pos = $row["pos"];
 
   }
   else {
@@ -59,15 +60,16 @@ foreach ($tokno_arr as $tokno) {
     $row = $res->fetch_assoc();
     $lemma_id = $row["first_lemma_id"];
 
-    $sql = "SELECT lemma, eng_trans1 FROM lemmas WHERE lemma_id = $lemma_id";
+    $sql = "SELECT lemma, eng_trans1, pos FROM lemmas WHERE lemma_id = $lemma_id";
     $res = $conn->query($sql);
     $row = $res->fetch_assoc();
     $lemma_form = $row["lemma"];
     $lemma_trans = $row["eng_trans1"];
+    $pos = $row["pos"];
   }
 
   
-  $lemmas_arr[] = array("lemma_form" => htmlentities($lemma_form), "lemma_trans" => htmlentities($lemma_trans));
+  $lemmas_arr[] = array("lemma_form" => htmlentities($lemma_form), "lemma_trans" => htmlentities($lemma_trans), "pos" => $pos);
   $x++;
 }
 echo json_encode($lemmas_arr);
