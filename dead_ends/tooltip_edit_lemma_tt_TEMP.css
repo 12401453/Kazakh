@@ -1,0 +1,161 @@
+.tooltip {
+position: relative;
+display: inline-block;
+/*color: rgb(252, 119, 119); */
+color: #cbd9f4;
+cursor: pointer;
+/* border-bottom: 1px dotted black; */
+}
+
+.tooltip:hover {
+  color: rgb(252, 119, 119);
+}
+
+
+
+.lemma_set {
+  color: rgb(0 255 186);
+
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.lemma_set:hover {
+  color: rgb(0 255 34);
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip_selected {
+  position: relative;
+  display: inline-block;
+  color: rgb(252, 119, 119);
+  cursor: pointer;
+  }
+
+
+
+
+
+#editbtn {
+
+  color: rgb(0, 255, 34);
+  border: 1px solid rgb(0, 255, 34);
+}
+
+#delbtn {
+  color: red;
+  border: 1px solid red;
+}
+
+
+.tooltip_opt {
+
+  width: 60px;
+  border-style: solid;
+  padding: 2px;
+  border-radius: 2px;
+  background-color: #071022;
+  color: #cbd9f4;
+  font-family: Calibri;
+  position:relative;
+  font-size: 17px;
+  cursor: pointer;
+  background-color: #172136;
+ 
+}
+
+
+.tooltip:hover .lemma_tt {
+  visibility: visible;
+} 
+
+.tooltip_opt:hover {
+  background-color: #040a16;
+} 
+
+@media all and (min-width: 769px) {
+  .tooltip .lemma_tt, .tooltip_selected .lemma_tt{
+    visibility: hidden;
+    width: 170px;
+    height: 40px;
+    background-color: #071022;
+    color: #cbd9f4;
+    text-align: center;
+    border-radius: 6px;
+    border: solid 1px black;
+
+    font-size: 15px;
+    font-weight: normal;
+    font-family: Calibri;
+  
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -85px; 
+    line-height: normal;
+  
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-grow: 0;
+    cursor: default;
+  
+  } }
+
+@media all and (max-width: 768px) {
+  .tooltip .lemma_tt, .tooltip_selected .lemma_tt {
+    visibility: hidden;
+    width: 100%;
+    height: 40px;
+    background-color: #071022;
+    color: #cbd9f4;
+    text-align: center;
+    border-radius: 6px;
+    border: solid 1px black;
+
+    font-size: 15px;
+    font-weight: normal;
+    font-family: Calibri;
+  
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    bottom: 0;
+    cursor: default;
+    line-height: normal;
+  
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+  
+  } } 
+
+.lemma_tag {
+  height:fit-content;
+  width: fit-content;
+ /* min-height: 20px; */
+  
+
+  outline: none;
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  font-size: 15px;
+  font-family: Bookerly;
+  color: #cbd9f4;
+
+  border-bottom-right-radius: 6px;
+  padding: 5px;
+  background-color: #040a16;
+  border: 1px solid black;
+  border-right: none;
+  border-top: none;
+
+  resize: none;
+}

@@ -97,9 +97,9 @@ if ($result->num_rows > 0) {
         echo $text_word;
 
         if($bool_wordeng_id_null == false) { 
-          if($bool_lemma_id_null == false) {
+         /* if($bool_lemma_id_null == false) {
             echo '<span class="lemma_tt" data-lemma_id="'.$lemma_id.'"><div class="lemma_tag"></div></span>';
-          }
+          } */
           echo '</span>';
         /*  echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
         }

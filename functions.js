@@ -341,6 +341,16 @@ const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" on
 const conj_pos = '<span id="pos_tag_conj" class="pos_tag" title="conjunction" onclick="selectPoS()">conj.</span>';
 const part_pos = '<span id="pos_tag_part" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
 
+const noun_pos_tt = '<span id="pos_tag_noun_tt" class="pos_tag_tt" title="noun"></span>';
+const verb_pos_tt = '<span id="pos_tag_verb_tt" class="pos_tag_tt" title="verb"></span>';
+const adj_pos_tt = '<span id="pos_tag_adj_tt" class="pos_tag_tt" title="adjective"></span>';
+const adverb_pos_tt = '<span id="pos_tag_adverb_tt" class="pos_tag_tt" title="adverb"></span>';
+const prep_pos_tt = '<span id="pos_tag_prep_tt" class="pos_tag_tt" title="preposition"></span>';
+const conj_pos_tt = '<span id="pos_tag_conj_tt" class="pos_tag_tt" title="conjunction"></span>';
+const part_pos_tt = '<span id="pos_tag_part_tt" class="pos_tag_tt" title="particle/interjection"></span>';
+
+const tt_pos_arr = {1: noun_pos_tt, 2: verb_pos_tt, 3: adj_pos_tt, 4: adverb_pos_tt, 5: prep_pos_tt, 6: conj_pos_tt, 7: part_pos_tt,};
+
 function choosePoS(pos_number) {
   let pos_html = noun_pos;
   switch(pos_number) {
@@ -613,6 +623,9 @@ const lemmaRecord = function () {
         current_words.forEach(current_word => {
           current_word.classList.add("lemma_set");
         });
+        if(tooltips_shown == true) {
+          lemmaTooltip();
+        }
       }
     }
     xhttp.send(send_data);
@@ -650,6 +663,9 @@ const lemmaDelete = function () {
           });
           
         }
+        if(tooltips_shown) {
+          lemmaTooltip();
+        }
       }
     }
     xhttp.send(send_data);
@@ -672,6 +688,12 @@ const setLemmaTagSize = function () {
 };
 
 const lemmaTooltip = function () {
+
+  let lemma_tooltips = document.querySelectorAll('.lemma_tt');
+  lemma_tooltips.forEach(lemma_tooltip => {
+    lemma_tooltip.remove();
+  });
+
   let lemma_set_words = document.querySelectorAll('.lemma_set');
   let set_toknos = new Array();
   let set_word_eng_ids = new Array();
@@ -706,10 +728,13 @@ const lemmaTooltip = function () {
         if(json_lemma_transes == null) {
          return;
         }
-        let tt_lemma_tags = document.querySelectorAll('.lemma_tag');
         let i = 0;
-        tt_lemma_tags.forEach(tt_lemma_tag => {
-          tt_lemma_tag.innerHTML = json_lemma_transes[i]["lemma_form"];
+        lemma_set_words.forEach(lemma_set_word => {
+          json_pos = Number(json_lemma_transes[i].pos);
+
+          let lemma_tt_box = '<span class="lemma_tt" onclick="event.stopPropagation()"><span id="tt_top"><div class="lemma_tag_tt">'+json_lemma_transes[i].lemma_form+'</div><span id="pos_tag_box_tt">'+tt_pos_arr[json_pos]+'</span></span><span id="tt_mid"><div id="tt_meaning">'+json_lemma_transes[i].lemma_trans+'</div></span><span id="tt_bottom"></span></span>';
+
+          lemma_set_word.innerHTML = lemma_set_word.innerHTML + lemma_tt_box;
           i++;
         });
        
