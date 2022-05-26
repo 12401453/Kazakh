@@ -9,6 +9,7 @@ function tt_type() {
   }
   else {
     lemmaTooltip();
+    tooltips_shown = true; //redundant but done incase the AJAX request in lemmaTooltips() fails
   }
 }
 
@@ -603,7 +604,7 @@ const lemmaRecord = function () {
     lemma_meaning = encodeURIComponent(lemma_meaning);
    // let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
 
-    let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no; //the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
+    let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no;
 
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
@@ -626,7 +627,7 @@ const lemmaRecord = function () {
           current_word.classList.add("lemma_set");
         });
         if(tooltips_shown == true) {
-          lemmaTooltip();
+          lemmaRecordTooltipUpdate(current_words);
         }
       }
     }
@@ -739,15 +740,66 @@ const lemmaTooltip = function () {
           lemma_set_word.innerHTML = lemma_set_word.innerHTML + lemma_tt_box;
           i++;
         });
-       
-
-
       }
 
     }
     xhttp.send(send_data);
   };
   httpRequest("POST", "lemma_tooltip.php");
+
+};
+
+const lemmaRecordTooltipUpdate = function (current_words) {
+  current_words.forEach(current_word => {
+    let current_lemma_tt = current_word.querySelector('.lemma_tt');
+    if(current_lemma_tt != null) {
+      current_lemma_tt.remove();
+    }
+  });
+
+  let current_toknos = new Array();
+  let current_word_eng_ids = new Array();
+  current_words.forEach(current_word => {
+    let current_tokno = current_word.dataset.tokno;
+    let current_word_eng_id = current_word.dataset.word_engine_id;
+    current_toknos.push(current_tokno);
+    current_word_eng_ids.push(current_word_eng_id);
+  });
+
+  const httpRequest = (method, url) => {
+
+    // let send_data = toknos_POST_data;
+    let send_data = "toknos=" + current_toknos + "&word_eng_ids=" + current_word_eng_ids;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'json';
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        tooltips_shown = true;
+        json_lemma_transes = xhttp.response;
+        console.log(json_lemma_transes);
+        if (json_lemma_transes == null) {
+          return;
+        }
+        let i = 0;
+        current_words.forEach(current_word => {
+          json_pos = Number(json_lemma_transes[i].pos);
+
+          let lemma_tt_box = '<span class="lemma_tt" onclick="event.stopPropagation()"><span id="tt_top"><div class="lemma_tag_tt">' + json_lemma_transes[i].lemma_form + '</div><span id="pos_tag_box_tt">' + tt_pos_arr[json_pos] + '</span></span><span id="tt_mid"><div id="tt_meaning">' + json_lemma_transes[i].lemma_trans + '</div></span><span id="tt_bottom"></span></span>';
+
+          current_word.innerHTML = current_word.innerHTML + lemma_tt_box;
+          i++;
+        });
+      }
+
+    }
+    xhttp.send(send_data);
+  };
+  httpRequest("POST", "lemma_tooltip.php");
+
+
 
 };
 
@@ -769,7 +821,7 @@ function showAnnotate(event) {
   display_word = event.target;
   tokno_current = event.target.dataset.tokno;
   
-  document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
+ // document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
   
   let previous_selections = document.querySelectorAll('.tooltip_selected');
   previous_selections.forEach(previous_selection => {
