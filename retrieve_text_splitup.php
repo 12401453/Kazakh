@@ -56,6 +56,7 @@ $word_count = 0;
 
 
 if ($result->num_rows > 0) {
+ $just_done_lb = false;
  if($page_cur == 1) echo '<span>&emsp;</span>';
     while($row = $result->fetch_assoc()) {
       $text_word = $row["text_word"];
@@ -87,7 +88,10 @@ if ($result->num_rows > 0) {
           }
         }
 
-        if($line_break == 2) { echo '<br>'; }
+      //  if($line_break == 2) { echo '<br>'; }
+        if($line_break == 2 && $just_done_lb == false) { echo '<br><br>'; $just_done_lb = true; }
+        else if($line_break == 2) { $just_done_lb = false; }
+        if($just_done_lb == true && $line_break != 2) {$just_done_lb = false; } 
         if($line_break == 3) {echo '  '; }
         if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
             

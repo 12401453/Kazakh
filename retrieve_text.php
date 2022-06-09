@@ -75,55 +75,62 @@ $row_chunk = $res_chunk->fetch_assoc();
 
 $word_count = 0;
 
+
 if ($result->num_rows > 0) {
-    echo '<span>&emsp;</span>';
-      while($row = $result->fetch_assoc()) {
-        $text_word = $row["text_word"];
-        $tokno = $row["tokno"];
-        $line_break = $row["line_break"];
-        $word_engine_id = $row["word_engine_id"];
 
-        $bool_wordeng_id_null = is_null($word_engine_id);
-        $bool_lemma_id_null = true;
+  $just_done_lb = false;
 
-        $outer_tt_span = '';
+  echo '<span>&emsp;</span>';
+    while($row = $result->fetch_assoc()) {
+      $text_word = $row["text_word"];
+      $tokno = $row["tokno"];
+      $line_break = $row["line_break"];
+      $word_engine_id = $row["word_engine_id"];
 
-        if($bool_wordeng_id_null == false) {
-          $lemma_id = $row["lemma_id"];
+      $bool_wordeng_id_null = is_null($word_engine_id);
+      $bool_lemma_id_null = true;
+
+      $outer_tt_span = '';
+
+      if($bool_wordeng_id_null == false) {
+        $lemma_id = $row["lemma_id"];
+        
+        $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
+        $res = $conn->query($sql);
+        $row = $res->fetch_assoc();
+        $first_lemma_id = $row["first_lemma_id"];
+
+        $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
+
+        if($bool_lemma_id_null == false) {
+          $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        }
+        else {
+          $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        }
+      }
+
+     // if($line_break == 2) { echo '<br>'; }
+      if($line_break == 2 && $just_done_lb == false) { echo '<br><br>'; $just_done_lb = true; }
+      else if($line_break == 2) { $just_done_lb = false; }
+      if($just_done_lb == true && $line_break != 2) {$just_done_lb = false; } 
+      if($line_break == 3) {echo '  '; }
+      if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
           
-          $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
-          $res = $conn->query($sql);
-          $row = $res->fetch_assoc();
-          $first_lemma_id = $row["first_lemma_id"];
+      if($bool_wordeng_id_null == false) {
+        echo $outer_tt_span;        
+      }
+      echo $text_word;
 
-          $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
-
-          if($bool_lemma_id_null == false) {
-            $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-          }
-          else {
-            $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-          }
-        }
-
-        if($line_break == 2) { echo '<br>'; }
-        if($line_break == 3) {echo '  '; }
-        if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
-            
-        if($bool_wordeng_id_null == false) {
-          echo $outer_tt_span;        
-        }
-        echo $text_word;
-
-        if($bool_wordeng_id_null == false) { 
-        /*  if($bool_lemma_id_null == false) {
-            echo '<span class="lemma_tt" data-lemma_id="'.$lemma_id.'"><div class="lemma_tag"></div></span>';
-          } */
-          echo '</span>';
-        /*  echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
-        }
-        if($row_chunk["dt_end"] == $tokno) { echo '</span> ';  $row_chunk = $res_chunk->fetch_assoc(); $word_count++;}  //the space is important
-    
+      if($bool_wordeng_id_null == false) { 
+      /*  if($bool_lemma_id_null == false) {
+          echo '<span class="lemma_tt" data-lemma_id="'.$lemma_id.'"><div class="lemma_tag"></div></span>';
+        } */
+        echo '</span>';
+      /*  echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
+      }
+      if($row_chunk["dt_end"] == $tokno) { echo '</span> ';  $row_chunk = $res_chunk->fetch_assoc(); $word_count++;}  //the space is important
+  
     } 
     
     if($length > $words_per_page) {echo '</span>';}
