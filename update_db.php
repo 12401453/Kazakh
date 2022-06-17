@@ -311,7 +311,7 @@ while($word != false) {
   
   $word = strtok(" ");
   //writing to the second database completely undermines our BEGIN...COMMIT statements because each UPDATE to the second database is its own transaction and so we get stuck by the extremely low transactions/sec limit again; only updating once every 500 words massively reduced the number of transactions so the limiting factor stops being transactions and is just data-write speed, at the cost of precision in the progress bar display. More thorough testing is needed to find the sweetspot minimum INSERT no. to completely get rid of the transaction bottleneck while preserving maximum progress bar precision.
-  if($word_count % 500 == 0) {
+  if($word_count % 100 == 0) {
     $sql = "UPDATE progress_bar SET word_num = $word_count";
     $res = $conn_2->query($sql);
   }
