@@ -12,7 +12,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$conn_2 = new mysqli("localhost", "joe", "password", "progressBar");
+$conn_2 = new mysqli($servername, $username, $password, $dbname_pb);
 
 if ($conn_2->connect_error) {
   die("Connection failed: " . $conn_2->connect_error);
