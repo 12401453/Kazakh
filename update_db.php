@@ -65,6 +65,12 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+$conn_2 = new mysqli("localhost", "joe", "password", "progressBar");
+
+if ($conn_2->connect_error) {
+  die("Connection failed: " . $conn_2->connect_error);
+}
+
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
@@ -96,7 +102,7 @@ $ch_length = 0;
 
 $word_count = 1;
 $sql = "UPDATE progress_bar SET word_num = 0";
-$res = $conn->query($sql);
+$res = $conn_2->query($sql);
 
 
 $word = strtok($new_text, " ");
@@ -305,7 +311,7 @@ while($word != false) {
   $word = strtok(" ");
  
   $sql = "UPDATE progress_bar SET word_num = $word_count";
-  $res = $conn->query($sql);
+  $res = $conn_2->query($sql);
   $word_count++;
 }
 $sql = "COMMIT";
@@ -324,8 +330,9 @@ $sql = "INSERT INTO texts (text_title, dt_start, dt_end, lang_id) VALUES ('$text
 $res = $conn->query($sql);
 
 $sql = "UPDATE progress_bar SET word_num = $word_count";
-$res = $conn->query($sql);
+$res = $conn_2->query($sql);
 
 $conn->close(); 
+$conn_2->close();
 
 ?>

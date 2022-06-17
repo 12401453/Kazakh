@@ -2,7 +2,7 @@
 
 include 'db_details_web.php';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli("localhost", "joe", "password", "progressBar");
 
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
