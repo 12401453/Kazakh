@@ -105,7 +105,8 @@ $word = strtok($new_text, " ");
 $dt_counter = 0;
 
 $regexp = "#[-/'$%£¥₽€—+…=~\#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]#u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte issues where cyrillic characters can consist partly of the hex-value of characters in the regex
-
+$sql = "START TRANSACTION";
+$result = $conn->query($sql);
 while($word != false) {
   
   
@@ -307,6 +308,8 @@ while($word != false) {
   $res = $conn->query($sql);
   $word_count++;
 }
+$sql = "COMMIT";
+$result = $conn->query($sql);
 
 $ch_end = $ch_start + $ch_length;
 $sql = "INSERT INTO chunks (dt_start, dt_end) VALUES ($ch_start, $ch_end)";
