@@ -56,13 +56,13 @@ $res = $conn->query($sql);
   </select></div>
   <br><br><br>
 
-<div id="whole_text">
+
   <?php include 'controls.php'; ?><br>
   
 <p1 id="p1"><br><br>
 
 </p1>
-</div>
+
 </div>
 
 
