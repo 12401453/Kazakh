@@ -111,7 +111,7 @@ $word = strtok($new_text, " ");
 
 $dt_counter = 0;
 
-$regexp = "#[-/'$%£¥₽€—+…=~\#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]#u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte issues where cyrillic characters can consist partly of the hex-value of characters in the regex
+$regexp = "#[-/'$%£¥`₽€—+…=~\#’@><}{_!”“„?\n\r\t,.&^«»:;–\"\[)\](]#u"; //the 'u' modifier is needed to force UTF-8 encoding and prevent multibyte issues where cyrillic characters can consist partly of the hex-value of characters in the regex
 $sql = "START TRANSACTION";
 $result = $conn->query($sql);
 while($word != false) {
