@@ -206,14 +206,14 @@ function progressBar(word_count) {
 
 function loadText() {
 
-  let newtext_raw = document.getElementById('newtext').value;
+  let newtext_raw = document.getElementById('newtext').value.trim();
   if(newtext_raw == '') {return; }
   let words = newtext_raw.split(' ');
   let word_count = words.length;
 
   let newtext = encodeURIComponent(newtext_raw);
  
-  let text_title = encodeURIComponent(document.getElementById('text_title').value);
+  let text_title = encodeURIComponent(document.getElementById('text_title').value.trim());
   let langselect = document.getElementById('langselect').value;
 
   
