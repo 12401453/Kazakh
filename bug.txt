@@ -1,2 +1,0 @@
-If you assign a lemma-form to a word which is not uniform with the lemma, and then assign this lemma to a word which is uniform with the lemma, and then you delete the lemma on the uniform-with-the-lemma word, the non-uniform-with-the-lemma word will carry on being highlighted as annotated but will have nothing at all in their fields
-This is because the lemma has been deleted from the lemma-table, so the first_lemma_id entry in the non-uniform-with-the-lemma word points to nothing
