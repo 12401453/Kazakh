@@ -60,7 +60,7 @@ else {
 
   $sql = "UPDATE word_engine SET first_lemma_id = $leftover_lemma_id WHERE word_engine_id = $word_engine_id";
   $res = $conn->query($sql);
-  $sql = "UPDATE display_text SET lemma_meaning_no = 1, lemma_id = $leftover_lemma_id WHERE word_engine_id = $word_engine_id";
+  $sql = "UPDATE display_text SET lemma_meaning_no = NULL, lemma_id = NULL WHERE lemma_id = $lemma_id";
   $res = $conn->query($sql); 
 
   echo "true";
