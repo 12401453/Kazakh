@@ -1,19 +1,16 @@
 
 function tt_type() {
-
-  var spoofspan = document.getElementById('spoofspan');
-  var spanDisplay = spoofspan.style.display;
-
-if (spanDisplay == 'inline') {
-
-spoofspan.style.display = 'none';
-document.getElementById("tt_styles").setAttribute("href", "tooltip_none_style_2.css");
-
-}
-else {
-spoofspan.style.display = 'inline';
-document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
-}
+  if(tooltips_shown) {
+    let lemma_tooltips = document.querySelectorAll('.lemma_tt');
+    lemma_tooltips.forEach(lemma_tooltip => {
+      lemma_tooltip.remove();
+    });
+    tooltips_shown = false;
+  }
+  else {
+    lemmaTooltip();
+    tooltips_shown = true; //redundant but done incase the AJAX request in lemmaTooltips() fails
+  }
 }
 
 let lang_id = 0;
@@ -85,6 +82,9 @@ function selectText() {
               pageno.classList.add("current_pageno");
             }
           }); 
+          if(tooltips_shown) {
+            lemmaTooltip();
+          }
 
           loadingbutton.remove();
           
@@ -138,6 +138,9 @@ function selectText_splitup(dt_start, dt_end, page_nos, page_cur) {
             tt_btn.onclick = showAnnotate;
           });
            //experiment
+          if(tooltips_shown) {
+            lemmaTooltip();
+          }
           loadingbutton.remove();
           if(page_cur > 1) {
             let title = document.getElementById("title");
@@ -203,14 +206,14 @@ function progressBar(word_count) {
 
 function loadText() {
 
-  let newtext_raw = document.getElementById('newtext').value;
+  let newtext_raw = document.getElementById('newtext').value.trim();
   if(newtext_raw == '') {return; }
   let words = newtext_raw.split(' ');
   let word_count = words.length;
 
   let newtext = encodeURIComponent(newtext_raw);
  
-  let text_title = encodeURIComponent(document.getElementById('text_title').value);
+  let text_title = encodeURIComponent(document.getElementById('text_title').value.trim());
   let langselect = document.getElementById('langselect').value;
 
   
@@ -340,6 +343,16 @@ const adverb_pos = '<span id="pos_tag_adverb" class="pos_tag" onclick="selectPoS
 const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" onclick="selectPoS()">prep.</span>';
 const conj_pos = '<span id="pos_tag_conj" class="pos_tag" title="conjunction" onclick="selectPoS()">conj.</span>';
 const part_pos = '<span id="pos_tag_part" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
+
+const noun_pos_tt = '<span id="pos_tag_noun_tt" class="pos_tag_tt" title="noun"></span>';
+const verb_pos_tt = '<span id="pos_tag_verb_tt" class="pos_tag_tt" title="verb"></span>';
+const adj_pos_tt = '<span id="pos_tag_adj_tt" class="pos_tag_tt" title="adjective"></span>';
+const adverb_pos_tt = '<span id="pos_tag_adverb_tt" class="pos_tag_tt" title="adverb"></span>';
+const prep_pos_tt = '<span id="pos_tag_prep_tt" class="pos_tag_tt" title="preposition"></span>';
+const conj_pos_tt = '<span id="pos_tag_conj_tt" class="pos_tag_tt" title="conjunction"></span>';
+const part_pos_tt = '<span id="pos_tag_part_tt" class="pos_tag_tt" title="particle/interjection"></span>';
+
+const tt_pos_arr = {1: noun_pos_tt, 2: verb_pos_tt, 3: adj_pos_tt, 4: adverb_pos_tt, 5: prep_pos_tt, 6: conj_pos_tt, 7: part_pos_tt,};
 
 function choosePoS(pos_number) {
   let pos_html = noun_pos;
@@ -508,8 +521,10 @@ function switchMeaningAJAX() {
       if (xhttp.readyState == 4) {
         let json_response = xhttp.response;
         console.log(json_response);
-        meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
-        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
+        if(json_response.lemma_textarea_content != null) {
+          meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+        }
+        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no] == undefined ? "" : meanings[lemma_meaning_no];
       }
     }
     xhttp.send(send_data);
@@ -526,14 +541,19 @@ const switchMeaning = function (event) {
 
   let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
   if (bool_uparrow && lemma_meaning_no < 10) {
-    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+      meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
     lemma_meaning_no++;
   }
   else if (bool_uparrow == false && lemma_meaning_no > 1) {
-    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+      meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
     lemma_meaning_no--;
   }
   document.getElementById("number").innerHTML = lemma_meaning_no;
+
   if (lemma_meaning_no == 10) {
     document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
     document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
@@ -580,7 +600,10 @@ const disRegard = function () {
 };
 
 const lemmaRecord = function () {
-  meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+  if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+  }
+  
   let clicked_lemma_meaning_no = lemma_meaning_no;
   for (let lemma_meaning_no in meanings) {
     lemma_meaning = meanings[lemma_meaning_no];
@@ -591,7 +614,7 @@ const lemmaRecord = function () {
     lemma_meaning = encodeURIComponent(lemma_meaning);
    // let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
 
-    let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no; //the part-of-speech stuff doesn't work yet because the tables need to be redesigned such that a certain column becomes NOT NULL, and a lot of code relies on checking if the values in that column are null instead of empty
+    let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no;
 
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
@@ -603,9 +626,7 @@ const lemmaRecord = function () {
       // console.log(xhttp.responseText);
       if (xhttp.readyState == 4) {
         console.log("Lemma updated");
-      //  document.getElementById('annot_box').remove();
-        display_word.classList.add("tooltip");
-        display_word.classList.remove("tooltip_selected");
+      //  document.getElementById('annot_box').remove();        
         // display_word.classList.add("lemma_set");
         let dataselectorstring = '[data-word_engine_id="' + word_engine_id + '"]';
 
@@ -613,6 +634,9 @@ const lemmaRecord = function () {
         current_words.forEach(current_word => {
           current_word.classList.add("lemma_set");
         });
+        if(tooltips_shown == true) {
+          lemmaRecordTooltipUpdate(current_words); //this being repeated for every meaning{} sometimes causes an issue with double tooltips; the lemma_record.php scripts are fired off without waiting for the previous one to return
+        }
       }
     }
     xhttp.send(send_data);
@@ -621,6 +645,8 @@ const lemmaRecord = function () {
   httpRequest("POST", "lemma_record.php");
   }
   document.getElementById('annot_box').remove();
+  display_word.classList.add("tooltip");
+  display_word.classList.remove("tooltip_selected");
   meanings = {};
 };
 
@@ -636,7 +662,7 @@ const lemmaDelete = function () {
 
     xhttp.onload = () => {
       if(xhttp.readyState == 4) {
-        let lemma_still_set = Boolean(xhttp.responseText);
+        let lemma_still_set = xhttp.responseText.trim() == "false" ? false : true;
 
         console.log('Lemma deleted');
         document.getElementById('annot_box').remove();
@@ -650,10 +676,13 @@ const lemmaDelete = function () {
           });
           
         }
+        if(tooltips_shown) {
+          lemmaTooltip();
+        }
       }
     }
     xhttp.send(send_data);
-  }
+  };
   httpRequest("POST", "lemma_delete.php");
   meanings = {};
 
@@ -671,12 +700,126 @@ const setLemmaTagSize = function () {
   lemma_tag.style.height = new_height;
 };
 
+const lemmaTooltip = function () {
+
+  let lemma_tooltips = document.querySelectorAll('.lemma_tt');
+  lemma_tooltips.forEach(lemma_tooltip => {
+    lemma_tooltip.remove();
+  });
+
+  let lemma_set_words = document.querySelectorAll('.lemma_set');
+  let set_toknos = new Array();
+  let set_word_eng_ids = new Array();
+  lemma_set_words.forEach(lemma_set_word => {
+    let lemma_set_tokno = lemma_set_word.dataset.tokno;
+    let lemma_set_word_eng_id = lemma_set_word.dataset.word_engine_id;
+    set_toknos.push(lemma_set_tokno);
+    set_word_eng_ids.push(lemma_set_word_eng_id);
+  
+  });
+  /* let toknos_POST_data = "toknos=";
+  set_toknos.forEach(tokno => {
+    toknos_POST_data += `${tokno},`;
+  });
+  toknos_POST_data = toknos_POST_data.slice(0, -1); */
+
+  document.getElementById("tt_styles").setAttribute("href", "tooltip_edit_lemma_tt.css");
+  const httpRequest = (method, url) => {
+
+    // let send_data = toknos_POST_data;
+    let send_data = "toknos=" + set_toknos + "&word_eng_ids=" + set_word_eng_ids;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'json';
+
+    xhttp.onload = () => {
+      if(xhttp.readyState == 4) {
+        tooltips_shown = true;
+        json_lemma_transes = xhttp.response;
+        console.log(json_lemma_transes);
+        if(json_lemma_transes == null) {
+         return;
+        }
+        let i = 0;
+        lemma_set_words.forEach(lemma_set_word => {
+          json_pos = Number(json_lemma_transes[i].pos);
+
+          let lemma_tt_box = '<span class="lemma_tt" onclick="event.stopPropagation()"><span id="tt_top"><div class="lemma_tag_tt">'+json_lemma_transes[i].lemma_form+'</div><span id="pos_tag_box_tt">'+tt_pos_arr[json_pos]+'</span></span><span id="tt_mid"><div id="tt_meaning">'+json_lemma_transes[i].lemma_trans+'</div></span><span id="tt_bottom"></span></span>';
+
+          lemma_set_word.innerHTML = lemma_set_word.innerHTML + lemma_tt_box;
+          i++;
+        });
+      }
+
+    }
+    xhttp.send(send_data);
+  };
+  httpRequest("POST", "lemma_tooltip.php");
+
+};
+
+const lemmaRecordTooltipUpdate = function (current_words) {
+  current_words.forEach(current_word => {
+    let current_lemma_tt = current_word.querySelector('.lemma_tt');
+    if(current_lemma_tt != null) {
+      current_lemma_tt.remove();
+    }
+  });
+
+  let current_toknos = new Array();
+  let current_word_eng_ids = new Array();
+  current_words.forEach(current_word => {
+    let current_tokno = current_word.dataset.tokno;
+    let current_word_eng_id = current_word.dataset.word_engine_id;
+    current_toknos.push(current_tokno);
+    current_word_eng_ids.push(current_word_eng_id);
+  });
+
+  const httpRequest = (method, url) => {
+
+    // let send_data = toknos_POST_data;
+    let send_data = "toknos=" + current_toknos + "&word_eng_ids=" + current_word_eng_ids;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'json';
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        tooltips_shown = true;
+        json_lemma_transes = xhttp.response;
+        console.log(json_lemma_transes);
+        if (json_lemma_transes == null) {
+          return;
+        }
+        let i = 0;
+        current_words.forEach(current_word => {
+          json_pos = Number(json_lemma_transes[i].pos);
+
+          let lemma_tt_box = '<span class="lemma_tt" onclick="event.stopPropagation()"><span id="tt_top"><div class="lemma_tag_tt">' + json_lemma_transes[i].lemma_form + '</div><span id="pos_tag_box_tt">' + tt_pos_arr[json_pos] + '</span></span><span id="tt_mid"><div id="tt_meaning">' + json_lemma_transes[i].lemma_trans + '</div></span><span id="tt_bottom"></span></span>';
+
+          current_word.innerHTML = current_word.innerHTML + lemma_tt_box;
+          i++;
+        });
+      }
+
+    }
+    xhttp.send(send_data);
+  };
+  httpRequest("POST", "lemma_tooltip.php");
+
+
+
+};
+
 
 let pos = 1;
 let lemma_form_tag_intial = "";
 let lemma_meaning_no = 1;
 let lemma_id = 0;
 let meanings = {};
+let tooltips_shown = false;
 
 let display_word;
 let tokno_current = 0;
@@ -688,6 +831,7 @@ function showAnnotate(event) {
   display_word = event.target;
   tokno_current = event.target.dataset.tokno;
   
+ // document.getElementById("tt_styles").setAttribute("href", "tooltip_edit.css");
   
   let previous_selections = document.querySelectorAll('.tooltip_selected');
   previous_selections.forEach(previous_selection => {
@@ -826,6 +970,9 @@ const delAnnotate = function () {
   });
   meanings = {};
   annot_box.remove();
+  if(tooltips_shown == true) {
+    document.getElementById("tt_styles").setAttribute("href", "tooltip_edit_lemma_tt.css");
+  }
 };
 
 const makeDraggable = function () {
@@ -894,7 +1041,4 @@ const makeDraggable = function () {
       else { document.getElementById("tt_styles").href = "tooltip_none_style_2.css";}
     }
   }); */
-
-
-
 

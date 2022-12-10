@@ -12,6 +12,12 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+$conn_2 = new mysqli($servername, $username, $password, $dbname_pb);
+
+if ($conn_2->connect_error) {
+  die("Connection failed: " . $conn_2->connect_error);
+}
+
 
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
@@ -69,13 +75,14 @@ $sql = "CREATE TABLE abbreviations (abbr_id INT UNSIGNED PRIMARY KEY, eng_trans 
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS progress_bar";
-$result = $conn->query($sql);
+$result = $conn_2->query($sql);
 $sql = "CREATE TABLE progress_bar (word_num INT UNSIGNED)";
-$result = $conn->query($sql);
+$result = $conn_2->query($sql);
 $sql = "INSERT INTO progress_bar (word_num) VALUES (0)";
-$result = $conn->query($sql);
+$result = $conn_2->query($sql);
 
 
-$conn->close(); 
+$conn->close();
+$conn_2->close(); 
 
 ?>

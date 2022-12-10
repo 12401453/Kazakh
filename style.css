@@ -8,6 +8,7 @@
   p1 {
     font-family: Bookerly; font-size: 24px; color: #cbd9f4;
     max-width: 100%;
+    align-self: stretch;
 
       }
 
