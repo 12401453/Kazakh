@@ -521,8 +521,10 @@ function switchMeaningAJAX() {
       if (xhttp.readyState == 4) {
         let json_response = xhttp.response;
         console.log(json_response);
-        meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
-        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
+        if(json_response.lemma_textarea_content != null) {
+          meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+        }
+        document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no] == undefined ? "" : meanings[lemma_meaning_no];
       }
     }
     xhttp.send(send_data);
@@ -539,14 +541,19 @@ const switchMeaning = function (event) {
 
   let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
   if (bool_uparrow && lemma_meaning_no < 10) {
-    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+      meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
     lemma_meaning_no++;
   }
   else if (bool_uparrow == false && lemma_meaning_no > 1) {
-    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+      meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
     lemma_meaning_no--;
   }
   document.getElementById("number").innerHTML = lemma_meaning_no;
+
   if (lemma_meaning_no == 10) {
     document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
     document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
@@ -593,7 +600,10 @@ const disRegard = function () {
 };
 
 const lemmaRecord = function () {
-  meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+  if(document.getElementById("lemma_textarea").value.trim() != "" || meanings[lemma_meaning_no] != undefined) {
+    meanings[lemma_meaning_no] = document.getElementById("lemma_textarea").value;
+  }
+  
   let clicked_lemma_meaning_no = lemma_meaning_no;
   for (let lemma_meaning_no in meanings) {
     lemma_meaning = meanings[lemma_meaning_no];
@@ -616,9 +626,7 @@ const lemmaRecord = function () {
       // console.log(xhttp.responseText);
       if (xhttp.readyState == 4) {
         console.log("Lemma updated");
-      //  document.getElementById('annot_box').remove();
-        display_word.classList.add("tooltip");
-        display_word.classList.remove("tooltip_selected");
+      //  document.getElementById('annot_box').remove();        
         // display_word.classList.add("lemma_set");
         let dataselectorstring = '[data-word_engine_id="' + word_engine_id + '"]';
 
@@ -627,7 +635,7 @@ const lemmaRecord = function () {
           current_word.classList.add("lemma_set");
         });
         if(tooltips_shown == true) {
-          lemmaRecordTooltipUpdate(current_words);
+          lemmaRecordTooltipUpdate(current_words); //this being repeated for every meaning{} sometimes causes an issue with double tooltips; the lemma_record.php scripts are fired off without waiting for the previous one to return
         }
       }
     }
@@ -637,6 +645,8 @@ const lemmaRecord = function () {
   httpRequest("POST", "lemma_record.php");
   }
   document.getElementById('annot_box').remove();
+  display_word.classList.add("tooltip");
+  display_word.classList.remove("tooltip_selected");
   meanings = {};
 };
 
