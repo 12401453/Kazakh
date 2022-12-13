@@ -642,7 +642,7 @@ const lemmaRecord = function () {
     xhttp.send(send_data);
   }
 
-  httpRequest("POST", "lemma_record.php");
+  httpRequest("POST", "lemma_record_test.php");
   }
   document.getElementById('annot_box').remove();
   display_word.classList.add("tooltip");

@@ -50,6 +50,7 @@ if(is_null($lemma_id)) {
   if(is_null($first_lemma_id)) {
     $lemma_tag_content = $word;
     
+    //this should be rewritten to match logic of C++ version and also loop through eng_transes until it finds a non-empty one
     $sql = "SELECT eng_trans1, pos FROM lemmas WHERE lemma = '$word' AND lang_id = $lang_id";
     $res = $conn->query($sql);
     $row = $res->fetch_assoc();
