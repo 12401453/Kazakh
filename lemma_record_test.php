@@ -12,7 +12,7 @@ if(isset($_POST['lemma_form'])) {
 if(isset($_POST['lemma_meaning'])) {
   $lemma_meaning = addslashes($_POST['lemma_meaning']);
 }
-if($lemma_meaning == "") {
+if($lemma_meaning == "" || $lemma_meaning == "null") {
   $lemma_meaning = "NULL";
 }
 else {
@@ -72,7 +72,7 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $first_lemma_id = $row["first_lemma_id"];
 
-$sql = "INSERT IGNORE INTO lemmas (lemma, ".$eng_trans_sql_string.", lang_id, pos) VALUES ('$lemma_form', $lemma_meaning, $lang_id, $pos)";
+$sql = "INSERT IGNORE INTO lemmas (lemma, lang_id, pos) VALUES ('$lemma_form', $lang_id, $pos)";
 $res = $conn->query($sql);
 
 $sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id AND pos = $pos";
@@ -80,11 +80,11 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $lemma_id_target = $row["lemma_id"];
 
-if(is_null($lemma_id_current)) {
+ //this will update all the meanings that had been touched by the frontend before the lemma was submitted
+$sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
+$res = $conn->query($sql);
 
-  //this will update all the meanings that have been touched by the frontend before the lemma was submitted
-  $sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
-  $res = $conn->query($sql);
+if(is_null($lemma_id_current)) {
 
   //this is about updating which lemma_meaning_no is assigned to this particular display_word so should only run for the clicked_lemma_meaning_no
   if($lemma_meaning_no == $clicked_lemma_meaning_no) {
@@ -106,8 +106,7 @@ else {
       $res = $conn->query($sql);
     } 
   }
-  $sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
-  $res = $conn->query($sql);
+  
 }
 
 if(is_null($first_lemma_id)) {
