@@ -518,15 +518,17 @@ function switchMeaningAJAX() {
 
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
-    xhttp.responseType = 'json';
+    xhttp.responseType = 'text';
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xhttp.onload = () => {
       if (xhttp.readyState == 4) {
-        let json_response = xhttp.response;
-        console.log(json_response);
-        if(json_response.lemma_textarea_content != null) {
-          meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
+        //let json_response = xhttp.response;
+        let response_meaning = xhttp.response;
+        console.log(response_meaning);
+        //console.log(json_response);
+        if(response_meaning != "") {
+          meanings[lemma_meaning_no] = response_meaning;
         }
         document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no] == undefined ? "" : meanings[lemma_meaning_no];
       }
