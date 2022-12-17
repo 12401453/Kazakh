@@ -60,11 +60,19 @@ foreach ($tokno_arr as $tokno) {
     $row = $res->fetch_assoc();
     $lemma_id = $row["first_lemma_id"];
 
-    $sql = "SELECT lemma, eng_trans1, pos FROM lemmas WHERE lemma_id = $lemma_id";
+    $sql = "SELECT lemma, eng_trans1, eng_trans2, eng_trans3, eng_trans4, eng_trans5, eng_trans6, eng_trans7, eng_trans8, eng_trans9, eng_trans10, pos FROM lemmas WHERE lemma_id = $lemma_id";
     $res = $conn->query($sql);
     $row = $res->fetch_assoc();
     $lemma_form = $row["lemma"];
-    $lemma_trans = $row["eng_trans1"];
+
+    for($i = 1; $i < 11; $i++) {
+      $eng_trans_selector = "eng_trans".$i;
+      $lemma_trans = $row[$eng_trans_selector];
+      if($lemma_trans) break;
+    }
+    //$lemma_trans = $row["eng_trans1"];
+    
+    
     $pos = $row["pos"];
   }
 
