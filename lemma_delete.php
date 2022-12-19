@@ -48,7 +48,7 @@ if(is_null($leftover_lemma_id)) {
     $res = $conn->query($sql);
   }
 
-  echo "false";
+  echo "0";
 }
 else {
 
@@ -66,7 +66,7 @@ else {
     $res = $conn->query($sql);
   }
 
-  echo "true";
+  echo "1";
 }
 
 $conn->close();

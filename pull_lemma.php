@@ -29,13 +29,20 @@ $res = $conn->query($sql);
 
 $eng_trans_selector = "eng_trans".$lemma_meaning_no;
 
-$sql = "SELECT $eng_trans_selector, lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND pos = $pos AND lang_id = $lang_id";
+if($pos == 0) {
+  $sql = "SELECT $eng_trans_selector, lemma_id, pos FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id";
+}
+else {
+  $sql = "SELECT $eng_trans_selector, lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND pos = $pos AND lang_id = $lang_id";
+}
+
 $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $lemma_textarea_content = $row[$eng_trans_selector];
 $lemma_id = $row["lemma_id"];
+if($pos == 0) $pos = $row["pos"];
 
-$json_response = json_encode(array("lemma_textarea_content" => $lemma_textarea_content, "lemma_id" => $lemma_id)); //remove htmlentites() from textarea_content because it is being set with the textarea.value property instead of as innerHTML
+$json_response = json_encode(array("lemma_textarea_content" => $lemma_textarea_content, "lemma_id" => $lemma_id, "pos" => $pos)); //remove htmlentites() from textarea_content because it is being set with the textarea.value property instead of as innerHTML
 echo $json_response;
 
 

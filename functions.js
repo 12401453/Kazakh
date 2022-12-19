@@ -343,6 +343,7 @@ const adverb_pos = '<span id="pos_tag_adverb" class="pos_tag" onclick="selectPoS
 const prep_pos = '<span id="pos_tag_prep" class="pos_tag" title="preposition" onclick="selectPoS()">prep.</span>';
 const conj_pos = '<span id="pos_tag_conj" class="pos_tag" title="conjunction" onclick="selectPoS()">conj.</span>';
 const part_pos = '<span id="pos_tag_part" class="pos_tag" title="particle/interjection" onclick="selectPoS()">part.</span>';
+const ques_pos = '<span id="pos_tag_ques" class="pos_tag" title="interrogative" onclick="selectPoS()">ques.</span>';
 
 const noun_pos_tt = '<span id="pos_tag_noun_tt" class="pos_tag_tt" title="noun"></span>';
 const verb_pos_tt = '<span id="pos_tag_verb_tt" class="pos_tag_tt" title="verb"></span>';
@@ -351,8 +352,9 @@ const adverb_pos_tt = '<span id="pos_tag_adverb_tt" class="pos_tag_tt" title="ad
 const prep_pos_tt = '<span id="pos_tag_prep_tt" class="pos_tag_tt" title="preposition"></span>';
 const conj_pos_tt = '<span id="pos_tag_conj_tt" class="pos_tag_tt" title="conjunction"></span>';
 const part_pos_tt = '<span id="pos_tag_part_tt" class="pos_tag_tt" title="particle/interjection"></span>';
+const ques_pos_tt = '<span id="pos_tag_ques_tt" class="pos_tag_tt" title="interrogative"></span>';
 
-const tt_pos_arr = {1: noun_pos_tt, 2: verb_pos_tt, 3: adj_pos_tt, 4: adverb_pos_tt, 5: prep_pos_tt, 6: conj_pos_tt, 7: part_pos_tt,};
+const tt_pos_arr = {1: noun_pos_tt, 2: verb_pos_tt, 3: adj_pos_tt, 4: adverb_pos_tt, 5: prep_pos_tt, 6: conj_pos_tt, 7: part_pos_tt, 8: ques_pos_tt,};
 
 function choosePoS(pos_number) {
   let pos_html = noun_pos;
@@ -377,6 +379,9 @@ function choosePoS(pos_number) {
       break;  
     case 7:
       pos_html = part_pos;
+      break;
+    case 8:
+      pos_html = ques_pos;
       break;    
   }
   return pos_html;
@@ -427,6 +432,11 @@ const changePoS = function () {
       pos = 7;
       pullInLemma(false);
       break;
+    case "ques_pos":
+      document.getElementById('pos_tag_box').innerHTML = ques_pos;
+      pos = 8;
+      pullInLemma(false);
+      break;
   }
 };
 
@@ -457,9 +467,12 @@ const selectPoS = function () {
     case "pos_tag_part":
       pos_tag_select_current = "part_pos";
       break;
+    case "pos_tag_ques":
+      pos_tag_select_current = "ques_pos";
+      break;
   }
 
-  let frag = document.createRange().createContextualFragment('<span id="noun_pos" class="pos_tag_select">noun</span><span id="verb_pos" class="pos_tag_select">verb</span><span id="adj_pos" class="pos_tag_select" title="adjective">adject.</span><span id="adverb_pos" class="pos_tag_select">adverb</span><span id="prep_pos" class="pos_tag_select" title="preposition">prep.</span><span id="conj_pos" class="pos_tag_select" title="conjunction">conj.</span><span id="part_pos" class="pos_tag_select" title="particle/interjection">part.</span>');
+  let frag = document.createRange().createContextualFragment('<span id="noun_pos" class="pos_tag_select">noun</span><span id="verb_pos" class="pos_tag_select">verb</span><span id="adj_pos" class="pos_tag_select" title="adjective">adject.</span><span id="adverb_pos" class="pos_tag_select">adverb</span><span id="prep_pos" class="pos_tag_select" title="preposition">prep.</span><span id="conj_pos" class="pos_tag_select" title="conjunction">conj.</span><span id="part_pos" class="pos_tag_select" title="particle/interjection">part.</span><span id="ques_pos" class="pos_tag_select" title="interrogative">ques.</span>');
 
   document.getElementById(pos_tag_current_id).after(frag);
   document.getElementById(pos_tag_current_id).onclick = deadFunc;
@@ -471,6 +484,7 @@ const selectPoS = function () {
   document.getElementById('prep_pos').onclick = changePoS;
   document.getElementById('conj_pos').onclick = changePoS;
   document.getElementById('part_pos').onclick = changePoS;
+  document.getElementById('ques_pos').onclick = changePoS;
 
   document.getElementById('pos_tag_box').removeChild(document.getElementById(pos_tag_select_current));
 
@@ -484,7 +498,14 @@ const pullInLemma = function (can_skip = true) {
   }
   document.getElementById('save_button').onclick = "";
   const httpRequest = (method, url) => {
-    let send_data = "lemma_form=" + lemma_form + "&lemma_meaning_no=" + lemma_meaning_no + "&pos=" + pos + "&lang_id=" + lang_id;
+
+    let send_data = "lemma_form=" + lemma_form + "&lemma_meaning_no=" + lemma_meaning_no + "&pos=";
+    if(pos == pos_initial) {
+      send_data += "0&lang_id=" + lang_id;
+    }
+    else {
+      send_data += pos + "&lang_id=" + lang_id;
+    }
 
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, url, true);
@@ -498,9 +519,25 @@ const pullInLemma = function (can_skip = true) {
         lemma_id = json_response.lemma_id;
         if(lemma_id != null) {
           meanings = {};
+          //possibly replace these two below
           meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
           lemma_textarea_content_initial = json_response.lemma_textarea_content;
+          //possibly replace these two above
+
+          /* with this
+          let new_lemma_textarea_content = json_response.lemma_textarea_content;
+          if(new_lemma_textarea_content != "") {
+            meanings[lemma_meaning_no] = new_lemma_textarea_content;
+          }
+          lemma_textarea_content_initial = new_lemma_textarea_content;
+          with this */
+
           document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
+
+          pos = Number(json_response.pos);
+          pos_initial = pos;
+          document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
+          //need to set pos_initial again as its fucking up
         }
         
 
@@ -668,7 +705,7 @@ const lemmaDelete = function () {
 
     xhttp.onload = () => {
       if(xhttp.readyState == 4) {
-        let lemma_still_set = xhttp.responseText.trim() == "false" ? false : true;
+        let lemma_still_set = xhttp.responseText.trim() == "0" ? false : true;
 
         console.log('Lemma deleted');
         document.getElementById('annot_box').remove();
@@ -827,6 +864,7 @@ let lemma_meaning_no = 1;
 let lemma_id = 0;
 let meanings = {};
 let tooltips_shown = false;
+let pos_initial = 1;
 
 let display_word;
 let tokno_current = 0;
@@ -874,6 +912,7 @@ function showAnnotate(event) {
         lemma_meaning_no = Number(json_response.lemma_meaning_no);
         lemma_id = Number(json_response.lemma_id);
         pos = Number(json_response.pos);
+        pos_initial = pos;
 
         if(lemma_meaning_no != 0) {
           meanings[lemma_meaning_no] = lemma_textarea_content;
@@ -981,6 +1020,7 @@ const delAnnotate = function () {
   if(tooltips_shown == true) {
     document.getElementById("tt_styles").setAttribute("href", "tooltip_edit_lemma_tt.css");
   }
+  //pos_initial = 1;
 };
 
 const makeDraggable = function () {
