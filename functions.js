@@ -517,20 +517,18 @@ const pullInLemma = function (can_skip = true) {
         let json_response = xhttp.response;
         console.log(json_response);
         lemma_id = json_response.lemma_id;
+        meanings = {};
         if(lemma_id != null) {
-          meanings = {};
-          //possibly replace these two below
+    
+         /*
           meanings[lemma_meaning_no] = json_response.lemma_textarea_content;
           lemma_textarea_content_initial = json_response.lemma_textarea_content;
-          //possibly replace these two above
-
-          /* with this
+         */
           let new_lemma_textarea_content = json_response.lemma_textarea_content;
           if(new_lemma_textarea_content != "") {
             meanings[lemma_meaning_no] = new_lemma_textarea_content;
           }
           lemma_textarea_content_initial = new_lemma_textarea_content;
-          with this */
 
           document.getElementById("lemma_textarea").value = meanings[lemma_meaning_no];
 
@@ -872,7 +870,8 @@ let word_engine_id = 0;
 
 
 function showAnnotate(event) {
-   
+  meanings = {};
+  
   display_word = event.target;
   tokno_current = event.target.dataset.tokno;
   
