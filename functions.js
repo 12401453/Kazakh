@@ -207,13 +207,17 @@ function progressBar(word_count) {
 function loadText() {
 
   let newtext_raw = document.getElementById('newtext').value.trim();
-  if(newtext_raw == '') {return; }
+  let text_title_raw = document.getElementById('text_title').value.trim();
+  if(text_title_raw == '' && newtext_raw == '') { return; }
+  if(text_title_raw == '') { alert("Do not leave Text Title blank"); return; }
+  if(newtext_raw == '') {alert("You cannot submit a blank text"); return; }
   let words = newtext_raw.split(' ');
   let word_count = words.length;
 
   let newtext = encodeURIComponent(newtext_raw);
  
-  let text_title = encodeURIComponent(document.getElementById('text_title').value.trim());
+ 
+  let text_title = encodeURIComponent(text_title_raw);
   let langselect = document.getElementById('langselect').value;
 
   
@@ -646,6 +650,8 @@ const lemmaRecord = function () {
   }
   
   let clicked_lemma_meaning_no = lemma_meaning_no;
+  let meanings_length = Object.keys(meanings).length;
+  let count = 1;
   for (let lemma_meaning_no in meanings) {
     lemma_meaning = meanings[lemma_meaning_no];
     
@@ -675,9 +681,12 @@ const lemmaRecord = function () {
         current_words.forEach(current_word => {
           current_word.classList.add("lemma_set");
         });
-        if(tooltips_shown == true) {
+        console.log("meanings_lengths: ", meanings_length); //remove
+        console.log("count: ", count); //remove
+        if(tooltips_shown == true && count == meanings_length) {
           lemmaRecordTooltipUpdate(current_words); //this being repeated for every meaning{} sometimes causes an issue with double tooltips; the lemma_record.php scripts are fired off without waiting for the previous one to return
         }
+        count++;
       }
     }
     xhttp.send(send_data);
