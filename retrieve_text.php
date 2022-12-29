@@ -51,12 +51,6 @@ $chunk_end = $row["chunk_id"];
 
 $chunk_end_plus1 = $chunk_end + 1;
 
-
-/*
-$length = $dt_end - $dt_start;
-$words_per_page = 750;
-$pg1_dt_end = $length <= 750 ? $dt_end : $dt_start + $words_per_page; */
-
 $length = $chunk_end_plus1 - $chunk_start;
 $words_per_page = 750;
 $pg1_chunk_end = $length <= $words_per_page ? $chunk_end : $chunk_start + $words_per_page - 1;
@@ -88,7 +82,7 @@ if ($result->num_rows > 0) {
       $word_engine_id = $row["word_engine_id"];
 
       $bool_wordeng_id_null = is_null($word_engine_id);
-      $bool_lemma_id_null = true;
+    //  $bool_lemma_id_null = true;
 
       $outer_tt_span = '';
 
@@ -100,10 +94,13 @@ if ($result->num_rows > 0) {
         $row = $res->fetch_assoc();
         $first_lemma_id = $row["first_lemma_id"];
 
-        $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
+      //  $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
 
-        if($bool_lemma_id_null == false) {
-          $outer_tt_span = '<span class="tooltip lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        if(is_null($lemma_id) == false) {
+          $outer_tt_span = '<span class="tooltip lemma_set_unexplicit lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        }
+        else if(is_null($first_lemma_id) == false) {
+          $outer_tt_span = '<span class="tooltip lemma_set_unexplicit" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
         }
         else {
           $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
@@ -123,18 +120,15 @@ if ($result->num_rows > 0) {
       echo $text_word;
 
       if($bool_wordeng_id_null == false) { 
-      /*  if($bool_lemma_id_null == false) {
-          echo '<span class="lemma_tt" data-lemma_id="'.$lemma_id.'"><div class="lemma_tag"></div></span>';
-        } */
         echo '</span>';
-      /*  echo '<span class="tooltiptext5">'.'<input type="submit" class="tooltip_opt" value="Edit" id="editbtn"><input type="submit" class="tooltip_opt" value="Ignore" id="delbtn">'.'</span></span>'; */
       }
       if($row_chunk["dt_end"] == $tokno) { echo '</span> ';  $row_chunk = $res_chunk->fetch_assoc(); $word_count++;}  //the space is important
   
     } 
     
     if($length > $words_per_page) {echo '</span>';}
-    echo '<div id="wordcount"><br>*****WORD COUNT: '.$word_count.'*******</div></div>';
+   // echo '<div id="wordcount"><br>*****WORD COUNT: '.$word_count.'*******</div>';
+    echo '</div>';
     if($length > $words_per_page) {
       echo '<br><div id="pagenos">';
       $page_nos = ceil(($length/$words_per_page));
@@ -151,10 +145,6 @@ if ($result->num_rows > 0) {
       echo $page_nos.'</span></div>';
 
     }
-
-  
-
-   // echo '<br><br>*****WORD COUNT: '.$word_count.'*******';
 
     } else {
       echo "";

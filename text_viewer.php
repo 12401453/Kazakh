@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<link rel="stylesheet" type="text/css" href="tooltip_edit.css" id="tt_styles">
+<link rel="stylesheet" type="text/css" href="tooltip_prevs.css" id="tt_styles">
 <link rel="stylesheet" type="text/css" href="flexbox.css" id="flexbox_styles">
 
   <link href="style.css" rel="stylesheet" media="all and (min-width: 769px)" type="text/css">
