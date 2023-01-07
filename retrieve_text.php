@@ -54,6 +54,7 @@ $chunk_end_plus1 = $chunk_end + 1;
 
 $length = $chunk_end_plus1 - $chunk_start;
 $words_per_page = 750;
+$words_per_page_minus_1 = $words_per_page - 1;
 $pg1_chunk_end = $length <= $words_per_page ? $chunk_end : $chunk_start + $words_per_page - 1;
 
 $sql = "SELECT dt_end FROM chunks WHERE chunk_id = $pg1_chunk_end";
@@ -135,7 +136,10 @@ if ($result->num_rows > 0) {
       $page_nos = ceil(($length/$words_per_page));
       for($i = $page_nos; $i > 1; $i--) {
         $page_cur = /*0-$i+1+$page_nos;*/ 1+ $page_nos- $i;
-        echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_start+$words_per_page-1;
+        echo '<span class="pageno" onclick="selectText_splitup(';
+        echo $chunk_start;
+        echo ', ';
+        echo $chunk_start+$words_per_page_minus_1;
         echo ', '.$page_nos.', '.$page_cur;
         echo ')">';
         echo $page_cur.'</span>';
