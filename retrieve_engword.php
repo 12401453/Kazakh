@@ -103,7 +103,7 @@ else {
 
 
 
-$json_response = json_encode(array("lemma_tag_content" => htmlentities($lemma_tag_content), "lemma_textarea_content_html" => htmlentities($lemma_textarea_content), "lemma_textarea_content" => $lemma_textarea_content, "lemma_meaning_no" => $lemma_meaning_no, "lemma_id" => $lemma_id, "pos" => $pos));
+$json_response = json_encode(array("lemma_tag_content" => $lemma_tag_content, "lemma_textarea_content" => $lemma_textarea_content, "lemma_meaning_no" => $lemma_meaning_no, "lemma_id" => $lemma_id, "pos" => $pos));
 echo $json_response;
 
 $conn->close();
