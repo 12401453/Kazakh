@@ -12,6 +12,10 @@ cursor: pointer;
   color: rgb(252, 119, 119);
 }
 
+.multiword {
+  border-bottom: 2px dotted rgb(0 255 186 / 50%);
+}
+
 .lemma_set_unexplicit {
   color: rgb(0 255 186 / 76%);
 
