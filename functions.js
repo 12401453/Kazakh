@@ -564,7 +564,7 @@ function switchMeaningAJAX() {
     xhttp.onload = () => {
       if (xhttp.readyState == 4) {
         //let json_response = xhttp.response;
-        let response_meaning = xhttp.response;
+        let response_meaning = xhttp.response.trim();
         console.log(response_meaning);
         //console.log(json_response);
         if(response_meaning != "") {
