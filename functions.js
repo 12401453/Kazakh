@@ -531,7 +531,7 @@ const pullInLemma = function (can_skip = true) {
         let json_response = xhttp.response;
         console.log(json_response);
         lemma_id = json_response.lemma_id;
-        meanings = {};
+        meanings = Object.create(null);
         if(lemma_id != null) {
     
          /*
@@ -878,8 +878,9 @@ let lemma_form_tag_initial = "";
 let lemma_textarea_content_initial = "";
 let lemma_meaning_no = 1;
 let lemma_id = 0;
-let meanings = {};
-let multiword_meanings = {};
+let meanings = Object.create(null);
+let multiword_meanings = Object.create(null);
+let multiword_indices = Object.create(null);
 let tooltips_shown = false;
 let pos_initial = 1;
 
@@ -890,7 +891,7 @@ let word_engine_id = 0;
 let box_no = 0;
 
 function showAnnotate(event) {
-  meanings = {};
+  meanings = Object.create(null);
    
   display_word = event.target;
   tokno_current = display_word.dataset.tokno;
@@ -1026,7 +1027,7 @@ function showAnnotate(event) {
 };
 
 const fetchLemmaData = function () {
-  meanings = {};
+  meanings = Object.create(null);
   const httpRequest = (method, url) => {
 
     let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current+"&lang_id="+lang_id;
@@ -1081,9 +1082,22 @@ const fetchLemmaData = function () {
   httpRequest("POST", "retrieve_engword.php");
 };
 
+const selectMultiword = (event) => {
+  let mw_candidate = event.target;
+  if(mw_candidate.matches('.mw_current_select')) {
+    mw_candidate.classList.remove("mw_current_select");
+  }
+  else {
+    mw_candidate.classList.add("mw_current_select");
+    multiword_indices[mw_candidate.dataset.tokno] = mw_candidate.dataset.word_engine_id;
+  }
+  
+
+};
 const fetchMultiwordData = function () {
-  meanings = {};
-  multiword_meanings = {};
+  meanings = Object.create(null);
+  multiword_meanings = Object.create(null);
+  multiword_indices = Object.create(null);
  
   const httpRequest = (method, url) => {
 
@@ -1106,6 +1120,13 @@ const fetchMultiwordData = function () {
         let multiword_id = Number(json_response.multiword_id);
         pos = Number(json_response.pos);
         //pos_initial = pos;
+        let adjacent_toknos = json_response.adjacent_toknos;
+        //console.log(adjacent_toknos);
+
+         for(let adjacent_tokno of adjacent_toknos) {
+          let wrd = document.querySelector('[data-tokno="'+adjacent_tokno+'"]');
+          if(wrd != null) wrd.onclick = selectMultiword; //the adjacent_toknos could include words from the next page which will make the querySelector fail
+        }
 
         document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
         if(multiword_meaning_no != 0) {
@@ -1117,7 +1138,7 @@ const fetchMultiwordData = function () {
         document.getElementById("number").innerHTML = multiword_meaning_no;     
         document.getElementById('lemma_tag').value = multiword_tag_content;
         setLemmaTagSize();
-        document.getElementById('lemma_textarea').value = multiword_textarea_content; //might be able to get rid of _html versions on back and frontend doing it this way
+        document.getElementById('lemma_textarea').value = multiword_textarea_content;
 
         document.getElementById('lemma_textarea').focus();
 
@@ -1160,7 +1181,7 @@ const delAnnotate = function () {
   display_word.classList.add("tooltip");
   display_word.classList.remove("tooltip_selected");
   display_word = null;
-  meanings = {};
+  meanings = Object.create(null);
   box_no = 0;
   pos = 1;
   pos_initial = 1;
