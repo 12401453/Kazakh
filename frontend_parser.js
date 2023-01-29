@@ -4,49 +4,52 @@ let text_words = new Array();
 let word_eng_words = new Array();
 let space_index = new Array();
 let tokens = text.split(' ');
-let start_range = 0;
-let end_range = 0;
-let p = 0;
-let tb_copy = "";
+
+
 let text_word = "";
 let word_eng_word = "";
 let is_a_word = true;
+let shit = 0;
+let unshit = 0;
 
-let x = 0;
 
 for(let token of tokens) {
-    p = 0;
+    shit = 0;
+    unshit = 0;
    
-    while(p != -1) {
-        start_range = 0;
-        p = token.search(/\P{L}/u);
-        if(p == -1) break;
-        end_range = p - 1;
-        tb_copy = token.slice(start_range, end_range);
-        token = token.slice(p);
-        
-        if(tb_copy.search(/\p{L}/u) != -1) {
+    while(unshit != -1 && shit != -1) {
+        shit = token.search(/\P{L}/u);
+        unshit = token.search(/\p{L}/u);
+        if(shit == 0) {
+            is_a_word = false;
+            if(unshit == -1) {
+                text_word = token;
+                
+            }
+            else {
+                text_word = token.slice(0,unshit);
+                token = token.slice(unshit);
+            }
+        }
+        else if(shit == -1) {
             is_a_word = true;
+            text_word = token;
+            
         }
         else {
-            is_a_word = false;
+            is_a_word = true;
+            text_word = token.slice(0, shit);
+            token = token.slice(shit);
         }
 
+        text_words.push(text_word);        
         if(is_a_word) {
-            text_word = tb_copy;
-            if(lang_id == 7) word_eng_word = tb_copy.toLocaleLowerCase('tr');
-            else word_eng_word = tb_copy.toLowerCase();
+            if(lang_id == 7) word_eng_word = text_word.toLocaleLowerCase('tr');
+            else word_eng_word = text_word.toLowerCase();
+            word_eng_words.push(word_eng_word);
         }
-        text_words.push(text_word);
-        word_eng_words.push(word_eng_word);
-      
-       
-       
-        word_eng_word = "";
-        text_word = "";
-        console.log(end_range);
+        
     }
-    x++;
 
 
     space_index.push(text_words.length - 1);
