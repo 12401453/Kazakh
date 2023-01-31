@@ -24,7 +24,7 @@ $res = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS display_text";
 $result = $conn->query($sql);
-$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, lemma_id INT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, lemma_id INT UNSIGNED, multiword_id INT UNSIGNED, multiword_meaning_no TINYINT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS chunks";
@@ -47,14 +47,14 @@ $result = $conn->query($sql);
 $sql = "CREATE TABLE lemmas (lemma_id INT UNSIGNED AUTO_INCREMENT UNIQUE, lemma VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, eng_trans1 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans2 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans3 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans4 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans5 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans6 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans7 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans8 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans9 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans10 TEXT CHARACTER SET utf8 COLLATE utf8_bin, lang_id SMALLINT UNSIGNED, pos TINYINT UNSIGNED, PRIMARY KEY(lemma, lang_id, pos)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
-$sql = "DROP TABLE IF EXISTS multiword_index";
+$sql = "DROP TABLE IF EXISTS multiword_lemmas";
 $result = $conn->query($sql);
-$sql = "CREATE TABLE multiword_index (tokno_start INT UNSIGNED, tokno_end INT UNSIGNED, multiword_id INT UNSIGNED) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql = "CREATE TABLE multiword_lemmas (multiword_id INT UNSIGNED AUTO_INCREMENT UNIQUE, multiword_lemma_form VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_bin, eng_trans1 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans2 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans3 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans4 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans5 TEXT CHARACTER SET utf8 COLLATE utf8_bin, pos TINYINT UNSIGNED, lang_id SMALLINT UNSIGNED, PRIMARY KEY(multiword_lemma_form, pos, lang_id)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS multiwords";
 $result = $conn->query($sql);
-$sql = "CREATE TABLE multiwords (multiword_id INT UNSIGNED, word_engine_id1 INT UNSIGNED, word_engine_id2 INT UNSIGNED, word_engine_id3 INT UNSIGNED, word_engine_id4 INT UNSIGNED, word_engine_id5 INT UNSIGNED, word_engine_id6 INT UNSIGNED, word_engine_id7 INT UNSIGNED, word_engine_id8 INT UNSIGNED, word_engine_id9 INT UNSIGNED, word_engine_id10 INT UNSIGNED, eng_trans1 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans2 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans3 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans4 TEXT CHARACTER SET utf8 COLLATE utf8_bin, eng_trans5 TEXT CHARACTER SET utf8 COLLATE utf8_bin, lang_id SMALLINT UNSIGNED) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql = "CREATE TABLE multiwords (multiword_id INT UNSIGNED, word_eng_id1 INT UNSIGNED, word_eng_id2 INT UNSIGNED, word_eng_id3 INT UNSIGNED, word_eng_id4 INT UNSIGNED, word_eng_id5 INT UNSIGNED, word_eng_id6 INT UNSIGNED, word_eng_id7 INT UNSIGNED, word_eng_id8 INT UNSIGNED, word_eng_id9 INT UNSIGNED, word_eng_id10 INT UNSIGNED, lang_id SMALLINT UNSIGNED, PRIMARY KEY(multiword_id, lang_id, word_eng_id1, word_eng_id2, word_eng_id3, word_eng_id4, word_eng_id5, word_eng_id6, word_eng_id7, word_eng_id8, word_eng_id9, word_eng_id10)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS context_trans";
