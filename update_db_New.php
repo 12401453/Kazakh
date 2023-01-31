@@ -29,13 +29,8 @@ if(isset($_POST['space_index'])) {
 //echo $text_words."\n";
 //echo $word_eng_words."\n";
 
-//include 'db_details_web.php';
-$servername = "localhost";
-$username = "joe";
-$password = "password";
-$dbname = "Kazakh_test";
+include 'db_details_TEST.php';
 
-//$dbname_pb = "progressBar";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
