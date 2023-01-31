@@ -4,6 +4,7 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 
 $dt_start = $row["dt_start"];
+if(is_null($dt_start)) { return; }
 $dt_end = $row["dt_end"];
 $text_title = $row["text_title"];
 
