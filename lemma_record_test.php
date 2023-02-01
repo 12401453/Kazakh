@@ -12,6 +12,7 @@ if(isset($_POST['lemma_form'])) {
 if(isset($_POST['lemma_meaning'])) {
   $lemma_meaning = addslashes($_POST['lemma_meaning']);
 }
+
 if($lemma_meaning == "" || $lemma_meaning == "null") {
   $lemma_meaning = "NULL";
 }

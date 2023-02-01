@@ -1,4 +1,4 @@
-//this works but my PHP is slow as fuck and I don't know why so I'm shelving this
+//this works but the PHP is only about 16% faster even with pre-parsed data and I don't know why so I'm shelving it
 const loadText_New = function () {
     let text = document.getElementById("newtext").value.trim();
     let text_title = encodeURIComponent(document.getElementById('text_title').value.trim());

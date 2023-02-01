@@ -1,4 +1,5 @@
 <?php
+//the JS parsing works fine but this PHP is only about 16% faster even with pre-parsed data and I don't know why so I'm shelving it
 
 $text_title = '';
 if(isset($_POST['text_title'])) {

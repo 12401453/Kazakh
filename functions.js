@@ -512,8 +512,7 @@ const pullInLemma = function (can_skip = true) {
   }
   document.getElementById('save_button').onclick = "";
   const httpRequest = (method, url) => {
-
-    let send_data = "lemma_form=" + lemma_form + "&lemma_meaning_no=" + lemma_meaning_no + "&pos=";
+    let send_data = "lemma_form=" + encodeURIComponent(lemma_form) + "&lemma_meaning_no=" + lemma_meaning_no + "&pos=";
     if(pos == pos_initial) {
       send_data += "0&lang_id=" + lang_id;
     }
@@ -905,6 +904,7 @@ function showAnnotate(event) {
     previous_selection.classList.add("tooltip");
     previous_selection.classList.remove("tooltip_selected");
   }); */
+  display_word.onclick = "";
   display_word.classList.add("tooltip_selected");
   display_word.classList.remove("tooltip");
 
@@ -1123,10 +1123,15 @@ const fetchMultiwordData = function () {
         //pos_initial = pos;
         let adjacent_toknos = json_response.adjacent_toknos;
         //console.log(adjacent_toknos);
-
-         for(let adjacent_tokno of adjacent_toknos) {
+        
+        display_word.classList.add("mw_current_select");
+        for(let adjacent_tokno of adjacent_toknos) {
           let wrd = document.querySelector('[data-tokno="'+adjacent_tokno+'"]');
-          if(wrd != null) wrd.onclick = selectMultiword; //the adjacent_toknos could include words from the next page which will make the querySelector fail
+          //the adjacent_toknos could include words from the next page which will make the querySelector return null
+          if(wrd != null) {
+            wrd.classList.add("mw_selectable");
+            wrd.onclick = selectMultiword; 
+          }
         }
 
         document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
@@ -1180,7 +1185,8 @@ const delAnnotate = function () {
     previous_selection.classList.remove("tooltip_selected");
   }); */
   display_word.classList.add("tooltip");
-  display_word.classList.remove("tooltip_selected");
+  display_word.classList.remove("tooltip_selected", "mw_current_select");
+  display_word.onclick = showAnnotate;
   display_word = null;
   meanings = Object.create(null);
   multiword_meanings = Object.create(null);
