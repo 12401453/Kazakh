@@ -95,9 +95,21 @@ if ($result->num_rows > 0) {
         $res = $conn->query($sql);
         $row = $res->fetch_assoc();
         $first_lemma_id = $row["first_lemma_id"];
-
-      //  $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
-
+        
+        //if-statements are cheaper than PHP's dogshit slow string concatenation
+        if(is_null($multiword_id)) {
+          if(is_null($first_lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip\">";
+          else if(is_null($lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit\">";
+          else $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit lemma_set\">";
+        }
+        else {
+          $multiword_count = $row["multiword_count"];
+          if(is_null($first_lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip multiword\" data-multiword=\"$multiword_count\">";
+          else if(is_null($lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit multiword\" data-multiword=\"$multiword_count\">";
+          else $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit lemma_set multiword\" data-multiword=\"$multiword_count\">";
+        }
+      
+        /*
         if(is_null($lemma_id) == false) {
           $outer_tt_span = '<span class="tooltip lemma_set_unexplicit lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
         }
@@ -106,7 +118,7 @@ if ($result->num_rows > 0) {
         }
         else {
           $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-        }
+        }*/
       }
 
      // if($line_break == 2) { echo '<br>'; }

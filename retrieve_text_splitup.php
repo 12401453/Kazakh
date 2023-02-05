@@ -65,47 +65,59 @@ if ($result->num_rows > 0) {
       $word_engine_id = $row["word_engine_id"];
    
      
-       $bool_wordeng_id_null = is_null($word_engine_id);
-      // $bool_lemma_id_null = true;
+      $bool_wordeng_id_null = is_null($word_engine_id);
 
-        $outer_tt_span = '';
+      $outer_tt_span = '';
 
-        if($bool_wordeng_id_null == false) {
-          $lemma_id = $row["lemma_id"];
+      if($bool_wordeng_id_null == false) {
+        $lemma_id = $row["lemma_id"];
+        $multiword_id = $row["multiword_id"];
+        
+        $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
+        $res = $conn->query($sql);
+        $row2 = $res->fetch_assoc();
+        $first_lemma_id = $row2["first_lemma_id"];
+
+        //if-statements are cheaper than PHP's dogshit slow string concatenation
+        if(is_null($multiword_id)) {
+          if(is_null($first_lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip\">";
+          else if(is_null($lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit\">";
+          else $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit lemma_set\">";
+        }
+        else {
+          $multiword_count = $row["multiword_count"];
+          if(is_null($first_lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip multiword\" data-multiword=\"$multiword_count\">";
+          else if(is_null($lemma_id)) $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit multiword\" data-multiword=\"$multiword_count\">";
+          else $outer_tt_span = "<span data-word_engine_id=\"$word_engine_id\" data-tokno=\"$tokno\" class=\"tooltip lemma_set_unexplicit lemma_set multiword\" data-multiword=\"$multiword_count\">";
+        }
+              
+        /*
+        if(is_null($lemma_id) == false) {
+          $outer_tt_span = '<span class="tooltip lemma_set_unexplicit lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        }
+        else if(is_null($first_lemma_id) == false) {
+          $outer_tt_span = '<span class="tooltip lemma_set_unexplicit" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        }
+        else {
+          $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
+        } */
+      }
+
+    //  if($line_break == 2) { echo '<br>'; }
+      if($line_break == 2 && $just_done_lb == false) { echo '<br><br>'; $just_done_lb = true; }
+      else if($line_break == 2) { $just_done_lb = false; }
+      if($just_done_lb == true && $line_break != 2) {$just_done_lb = false; } 
+      if($line_break == 3) {echo '  '; }
+      if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
           
-          $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
-          $res = $conn->query($sql);
-          $row = $res->fetch_assoc();
-          $first_lemma_id = $row["first_lemma_id"];
+      if($bool_wordeng_id_null == false) {
+        echo $outer_tt_span;        
+      }
+      echo $text_word;
 
-         // $bool_lemma_id_null = is_null($lemma_id) && is_null($first_lemma_id);
-
-          if(is_null($lemma_id) == false) {
-            $outer_tt_span = '<span class="tooltip lemma_set_unexplicit lemma_set" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-          }
-          else if(is_null($first_lemma_id) == false) {
-            $outer_tt_span = '<span class="tooltip lemma_set_unexplicit" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-          }
-          else {
-            $outer_tt_span = '<span class="tooltip" data-word_engine_id="'.$word_engine_id.'" data-tokno="'.$tokno.'">';
-          }
-        }
-
-      //  if($line_break == 2) { echo '<br>'; }
-        if($line_break == 2 && $just_done_lb == false) { echo '<br><br>'; $just_done_lb = true; }
-        else if($line_break == 2) { $just_done_lb = false; }
-        if($just_done_lb == true && $line_break != 2) {$just_done_lb = false; } 
-        if($line_break == 3) {echo '  '; }
-        if($row_chunk["dt_start"] == $tokno) { echo '<span class="chunk">';}
-            
-        if($bool_wordeng_id_null == false) {
-          echo $outer_tt_span;        
-        }
-        echo $text_word;
-
-        if($bool_wordeng_id_null == false) { 
-          echo '</span>';
-        }
+      if($bool_wordeng_id_null == false) { 
+        echo '</span>';
+      }
 
       if($row_chunk["dt_end"] == $tokno) { echo '</span> '; //the space is important
         $row_chunk = $res_chunk->fetch_assoc(); 

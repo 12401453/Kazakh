@@ -24,7 +24,7 @@ $res = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS display_text";
 $result = $conn->query($sql);
-$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, lemma_id INT UNSIGNED, multiword_id INT UNSIGNED, multiword_meaning_no TINYINT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql ="CREATE TABLE display_text (text_word VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_bin, line_break TINYINT, word_engine_id INT UNSIGNED, lemma_meaning_no TINYINT UNSIGNED, lemma_id INT UNSIGNED, multiword_id INT UNSIGNED, multiword_meaning_no TINYINT UNSIGNED, multiword_count INT UNSIGNED, tokno INT UNSIGNED AUTO_INCREMENT PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS chunks";
@@ -54,7 +54,7 @@ $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS multiwords";
 $result = $conn->query($sql);
-$sql = "CREATE TABLE multiwords (multiword_id INT UNSIGNED, word_eng_id1 INT UNSIGNED, word_eng_id2 INT UNSIGNED, word_eng_id3 INT UNSIGNED, word_eng_id4 INT UNSIGNED, word_eng_id5 INT UNSIGNED, word_eng_id6 INT UNSIGNED, word_eng_id7 INT UNSIGNED, word_eng_id8 INT UNSIGNED, word_eng_id9 INT UNSIGNED, word_eng_id10 INT UNSIGNED, lang_id SMALLINT UNSIGNED, PRIMARY KEY(multiword_id, lang_id, word_eng_id1, word_eng_id2, word_eng_id3, word_eng_id4, word_eng_id5, word_eng_id6, word_eng_id7, word_eng_id8, word_eng_id9, word_eng_id10)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
+$sql = "CREATE TABLE multiwords (multiword_id INT UNSIGNED, word_eng_id1 INT UNSIGNED DEFAULT 0, word_eng_id2 INT UNSIGNED DEFAULT 0, word_eng_id3 INT UNSIGNED DEFAULT 0, word_eng_id4 INT UNSIGNED DEFAULT 0, word_eng_id5 INT UNSIGNED DEFAULT 0, word_eng_id6 INT UNSIGNED DEFAULT 0, word_eng_id7 INT UNSIGNED DEFAULT 0, word_eng_id8 INT UNSIGNED DEFAULT 0, word_eng_id9 INT UNSIGNED DEFAULT 0, word_eng_id10 INT UNSIGNED DEFAULT 0, lang_id SMALLINT UNSIGNED, PRIMARY KEY(multiword_id, lang_id, word_eng_id1, word_eng_id2, word_eng_id3, word_eng_id4, word_eng_id5, word_eng_id6, word_eng_id7, word_eng_id8, word_eng_id9, word_eng_id10)) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS context_trans";
