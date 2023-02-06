@@ -896,6 +896,8 @@ function showAnnotate(event) {
   if(display_word != null) delAnnotate();   
   display_word = event.target;
   tokno_current = display_word.dataset.tokno;
+  word_engine_id = display_word.dataset.word_engine_id;
+  console.log(word_engine_id);
 
   //let mw_page_index = display_word.dataset.multiword;
   //if(mw_page_index != undefined) { box_no = 2;}
@@ -909,9 +911,6 @@ function showAnnotate(event) {
   display_word.onclick = "";
   display_word.classList.add("tooltip_selected");
   display_word.classList.remove("tooltip");
-
-  word_engine_id = display_word.dataset.word_engine_id;
-  console.log(word_engine_id);
 
   const httpRequest = (method, url) => {
 

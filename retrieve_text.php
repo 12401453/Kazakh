@@ -90,11 +90,12 @@ if ($result->num_rows > 0) {
 
       if($bool_wordeng_id_null == false) {
         $lemma_id = $row["lemma_id"];
+        $multiword_id = $row["multiword_id"];
         
         $sql = "SELECT first_lemma_id FROM word_engine WHERE word_engine_id = $word_engine_id";
         $res = $conn->query($sql);
-        $row = $res->fetch_assoc();
-        $first_lemma_id = $row["first_lemma_id"];
+        $row2 = $res->fetch_assoc();
+        $first_lemma_id = $row2["first_lemma_id"];
         
         //if-statements are cheaper than PHP's dogshit slow string concatenation
         if(is_null($multiword_id)) {
