@@ -1027,9 +1027,6 @@ function showAnnotate(event) {
 
 };
 
-const showMultiwordAnnotate = () => {
-  console.log("showMultiwordAnnotate triggered");
-}
 const fetchLemmaData = function () {
   meanings = Object.create(null);
   const httpRequest = (method, url) => {
@@ -1112,9 +1109,16 @@ const selectMultiword = (event) => {
     mw_candidate.classList.add("mw_current_select");
     multiword_indices[mw_candidate.dataset.tokno] = mw_candidate.dataset.word_engine_id;
   }
-  
-
 };
+
+const showMultiwordAnnotate = (event) => {
+  display_word = event.target;
+  tokno_current = display_word.dataset.tokno;
+  word_engine_id = display_word.dataset.word_engine_id;
+  displayAnnotBox();
+  console.log("showMultiwordAnnotate triggered");
+};
+
 const fetchMultiwordData = function () {
   meanings = Object.create(null);
   multiword_meanings = Object.create(null);
