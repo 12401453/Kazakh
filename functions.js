@@ -598,6 +598,7 @@ function switchMeaningAJAX() {
 }
 
 const switchMeaning = function (event) {
+  if(event.target.matches('.nav_arrow_deactiv')) return;
   let grey_arrows = document.querySelectorAll('.nav_arrow_deactiv');
   grey_arrows.forEach(grey_arrow => {
     grey_arrow.classList.add("nav_arrow");
@@ -890,8 +891,12 @@ let lemma_textarea_content_initial = "";
 let lemma_meaning_no = 1;
 let lemma_id = 0;
 let meanings = Object.create(null);
+
 let multiword_meanings = Object.create(null);
 let multiword_indices = Object.create(null);
+let multiword_id = 0;
+let multiword_meaning_no = 1;
+
 let tooltips_shown = false;
 let pos_initial = 1;
 
@@ -1266,8 +1271,8 @@ const fetchMultiwordData = function (box_present = true) {
         let multiword_textarea_content = json_response.multiword_textarea_content;
         //multiword_textarea_content_initial = multiword_textarea_content;
         
-        let multiword_meaning_no = Number(json_response.multiword_meaning_no);
-        let multiword_id = Number(json_response.multiword_id);
+        multiword_meaning_no = Number(json_response.multiword_meaning_no);
+        multiword_id = Number(json_response.multiword_id);
         pos = Number(json_response.pos);
         //pos_initial = pos;
         let adjacent_toknos = json_response.adjacent_toknos;
@@ -1359,6 +1364,11 @@ const delAnnotate = function (total = true) {
     display_word = null;
     annot_box.remove();
   }
+
+  lemma_id = 0;
+  lemma_meaning_no = 1;
+  multiword_id = 0;
+  multiword_meaning_no = 1
 
   meanings = Object.create(null);
   multiword_meanings = Object.create(null);
