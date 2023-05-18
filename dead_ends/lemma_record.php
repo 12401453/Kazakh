@@ -12,8 +12,7 @@ if(isset($_POST['lemma_form'])) {
 if(isset($_POST['lemma_meaning'])) {
   $lemma_meaning = addslashes($_POST['lemma_meaning']);
 }
-
-if($lemma_meaning == "" || $lemma_meaning == "null") {
+if($lemma_meaning == "") {
   $lemma_meaning = "NULL";
 }
 else {
@@ -73,41 +72,73 @@ $res = $conn->query($sql);
 $row = $res->fetch_assoc();
 $first_lemma_id = $row["first_lemma_id"];
 
-$sql = "INSERT IGNORE INTO lemmas (lemma, lang_id, pos) VALUES ('$lemma_form', $lang_id, $pos)";
-$res = $conn->query($sql);
-
-$sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id AND pos = $pos";
-$res = $conn->query($sql);
-$row = $res->fetch_assoc();
-$lemma_id_target = $row["lemma_id"];
-
- //this will update all the meanings that had been touched by the frontend before the lemma was submitted
-$sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
-$res = $conn->query($sql);
-
 if(is_null($lemma_id_current)) {
+
+  $sql = "INSERT IGNORE INTO lemmas (lemma, ".$eng_trans_sql_string.", lang_id, pos) VALUES ('$lemma_form', $lemma_meaning, $lang_id, $pos)";
+  $res = $conn->query($sql);
+
+  $sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id AND pos = $pos";
+  $res = $conn->query($sql);
+  $row = $res->fetch_assoc();
+  $lemma_id_target = $row["lemma_id"];
+
+  //this will update all the meanings that have been touched by the frontend before the lemma was submitted
+  $sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
+  $res = $conn->query($sql);
 
   //this is about updating which lemma_meaning_no is assigned to this particular display_word so should only run for the clicked_lemma_meaning_no
   if($lemma_meaning_no == $clicked_lemma_meaning_no) {
     $sql = "UPDATE display_text SET lemma_id = $lemma_id_target, lemma_meaning_no = $clicked_lemma_meaning_no WHERE tokno = $tokno_current";
     $res = $conn->query($sql);
-  } 
+  }
+  
 }
+
 else {
-  //if this word already has an assigned lemma but we want to change it to a lemma which IS already in the lemmas table
-  if($lemma_id_target != $lemma_id_current) {
+
+  $sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id AND pos = $pos";
+  $res = $conn->query($sql);
+  $row = $res->fetch_assoc();
+  $lemma_id_target = $row["lemma_id"];
+
+  //if this word already has an assigned lemma but we want to change it to a lemma which isn't already in the lemmas table
+  if(is_null($lemma_id_target)) {
+    $sql = "INSERT IGNORE INTO lemmas (lemma, ".$eng_trans_sql_string.", lang_id, pos) VALUES ('$lemma_form', $lemma_meaning, $lang_id, $pos)";
+    $res = $conn->query($sql);
+
+    $sql = "SELECT lemma_id FROM lemmas WHERE lemma = '$lemma_form' AND lang_id = $lang_id AND pos = $pos";
+    $res = $conn->query($sql);
+    $row = $res->fetch_assoc();
+    $lemma_id_target = $row["lemma_id"];
+
     if($lemma_meaning_no == $clicked_lemma_meaning_no) {
       $sql = "UPDATE display_text SET lemma_id = $lemma_id_target, lemma_meaning_no = $clicked_lemma_meaning_no WHERE tokno = $tokno_current";
       $res = $conn->query($sql);
     }
+
+  }
+  //if this word already has an assigned lemma but we want to change it to a lemma which IS already in the lemmas table
+  else if($lemma_id_target != $lemma_id_current) {
+
+    if($lemma_meaning_no == $clicked_lemma_meaning_no) {
+      $sql = "UPDATE display_text SET lemma_id = $lemma_id_target, lemma_meaning_no = $clicked_lemma_meaning_no WHERE tokno = $tokno_current";
+      $res = $conn->query($sql);
+    }
+
+    $sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
+    $res = $conn->query($sql);
   }
   else {
+    
     if($lemma_meaning_no == $clicked_lemma_meaning_no) {
       $sql = "UPDATE display_text SET lemma_meaning_no = $clicked_lemma_meaning_no WHERE tokno = $tokno_current";
       $res = $conn->query($sql);
-    } 
+    }
+
+    $sql = "UPDATE lemmas SET ".$eng_trans_sql_string." = $lemma_meaning WHERE lemma_id = $lemma_id_target";
+    $res = $conn->query($sql);
   }
-  
+
 }
 
 if(is_null($first_lemma_id)) {

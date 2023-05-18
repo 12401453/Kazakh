@@ -680,7 +680,6 @@ const lemmaRecord = function () {
 
     let lemma_form = encodeURIComponent(document.getElementById('lemma_tag').value.trim());
     lemma_meaning = encodeURIComponent(lemma_meaning);
-   // let lemma_meaning = encodeURIComponent(document.getElementById('lemma_textarea').value);
 
     let send_data = "word_engine_id=" + word_engine_id + "&lemma_form=" + lemma_form + "&lemma_meaning=" + lemma_meaning + "&lemma_meaning_no=" + lemma_meaning_no + "&lang_id=" + lang_id + "&tokno_current=" + tokno_current + "&pos=" + pos +"&clicked_lemma_meaning_no=" + clicked_lemma_meaning_no;
 
@@ -712,7 +711,7 @@ const lemmaRecord = function () {
     xhttp.send(send_data);
   }
 
-  httpRequest("POST", "lemma_record_test.php");
+  httpRequest("POST", "lemma_record.php");
   }
   /*document.getElementById('annot_box').remove();
   display_word.classList.add("tooltip");
@@ -830,6 +829,7 @@ const lemmaTooltip = function () {
 
 };
 
+//this only updates tooltips for words sharing the word_engine_id of the word being updated by lemmaRecord()
 const lemmaRecordTooltipUpdate = function (current_words) {
   current_words.forEach(current_word => {
     let current_lemma_tt = current_word.querySelector('.lemma_tt');
@@ -880,8 +880,6 @@ const lemmaRecordTooltipUpdate = function (current_words) {
   };
   httpRequest("POST", "lemma_tooltip.php");
 
-
-
 };
 
 
@@ -907,126 +905,6 @@ let word_engine_id = 0;
 let annotation_mode = 0;
 
 function showAnnotate(event) {
- /* meanings = Object.create(null);
-  if(display_word != null) delAnnotate();   
-  display_word = event.target;
-  tokno_current = display_word.dataset.tokno;
-  word_engine_id = display_word.dataset.word_engine_id;
-  console.log(word_engine_id);
-
-  display_word.onclick = "";
-  display_word.classList.add("tooltip_selected");
-  display_word.classList.remove("tooltip");
-
-  const httpRequest = (method, url) => {
-
-    let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current+"&lang_id="+lang_id;
- 
-    const xhttp = new XMLHttpRequest();
-    xhttp.open(method, url, true);
-    xhttp.responseType = 'json';
-    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
- 
-    xhttp.onload = () => {
-      console.log("sent");
-    // console.log(xhttp.responseText);
-      if(xhttp.readyState == 4)  {
-
-        let json_response = xhttp.response;
-        let lemma_tag_content = json_response.lemma_tag_content;
-        lemma_form_tag_initial = lemma_tag_content;
-        let lemma_textarea_content = json_response.lemma_textarea_content;
-        lemma_textarea_content_initial = lemma_textarea_content;
-        //let lemma_textarea_content_html = json_response.lemma_textarea_content_html;
-        lemma_meaning_no = Number(json_response.lemma_meaning_no);
-        lemma_id = Number(json_response.lemma_id);
-        pos = Number(json_response.pos);
-        pos_initial = pos;
-
-        if(lemma_meaning_no != 0) {
-          meanings[lemma_meaning_no] = lemma_textarea_content;
-        }
-        else {
-          lemma_meaning_no = 1;
-        }
-        
-
-        if(document.getElementById('annot_box') != null) {
-          let annot_box = document.getElementById('annot_box');
-          annot_box.remove();
-        }
-        
-        displayAnnotBox();
-        document.getElementById('pos_tag_box').innerHTML = choosePoS(pos);
-        document.getElementById("number").innerHTML = lemma_meaning_no;
-        document.getElementById('lemma_tag').value = lemma_tag_content;
-        document.getElementById('lemma_textarea').value = lemma_textarea_content; //might be able to get rid of _html versions on back and frontend doing it this way
-
-        document.getElementById('lemma_tag').focus();
-
-        if(lemma_meaning_no == 1) {
-          document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
-          document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
-        }
-        else if (lemma_meaning_no == 10) {
-          document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
-          document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
-        }
-
-        if(lemma_id == 0) {
-          document.getElementById('delete_lemma_button').style.display = "none";
-        }
-        document.getElementById('delete_lemma_button').onclick = lemmaDelete;
-
-        document.getElementById('disregard_button').onclick = disRegard;
-        document.getElementById('save_button').onclick = lemmaRecord;
-        document.getElementById('meaning_leftarrow').onclick = switchMeaning;
-        document.getElementById('meaning_rightarrow').onclick = switchMeaning;
-        document.getElementById('lemma_tag').onblur = pullInLemma;
-
-        document.getElementById("lemma_box").classList.add("current_box");
-        let current_box = document.querySelector('.current_box');
-
-        let left_column = document.getElementById('left_column');
-
-        function selectBox(box) {
-          if (current_box) {
-            current_box.classList.remove("current_box");
-          }
-          current_box = box;
-          current_box.classList.add("current_box");
-
-          if(current_box.id == "lemma_box") {
-            document.getElementById("right_body").style.visibility = "visible";
-            document.getElementById("right_footer").style.visibility = "visible";
-            document.getElementById('lemma_textarea').focus();
-          }
-          else if(current_box.id == "multiword_box") {
-            document.getElementById("right_body").style.visibility = "visible";
-            document.getElementById("right_footer").style.visibility = "visible";
-            document.getElementById('lemma_textarea').focus();
-          }
-          else {
-            document.getElementById("right_body").style.visibility = "hidden";
-            document.getElementById("right_footer").style.visibility = "hidden";
-          }
-        }
-        left_column.onclick = function (event) {
-          let target = event.target;
-          if (target.className != 'box') return;
-
-          selectBox(target);
-        };
-                      
-        document.getElementById('lemma_tag').oninput = setLemmaTagSize;
-        setLemmaTagSize();
-          
-      }    
-    }
-    xhttp.send(send_data);
-  }
-  
-  httpRequest("POST", "retrieve_engword.php"); */
   if(display_word != null) delAnnotate();
   display_word = event.target;
   display_word.onclick = "";
@@ -1034,9 +912,8 @@ function showAnnotate(event) {
   display_word.classList.remove("tooltip");
   tokno_current = display_word.dataset.tokno;
   word_engine_id = display_word.dataset.word_engine_id;
-  //boxFunction(1);
+  
   fetchLemmaData(false);
-
 };
 
 const fetchLemmaData = function (box_present = true) {
@@ -1044,7 +921,6 @@ const fetchLemmaData = function (box_present = true) {
   annotation_mode = 1;
   meanings = Object.create(null);
   const httpRequest = (method, url) => {
-
     let send_data = "word_engine_id="+word_engine_id+"&tokno_current="+tokno_current+"&lang_id="+lang_id;
  
     const xhttp = new XMLHttpRequest();
@@ -1080,6 +956,8 @@ const fetchLemmaData = function (box_present = true) {
 
         document.getElementById('lemma_tag').focus();
 
+        reactivateArrows(lemma_meaning_no, 10);
+        /*¬¬
         if(lemma_meaning_no == 1) {
           document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
           document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
@@ -1087,7 +965,7 @@ const fetchLemmaData = function (box_present = true) {
         else if (lemma_meaning_no == 10) {
           document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
           document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
-        }
+        } ¬¬*/
 
         if(lemma_id == 0) {
           document.getElementById('delete_lemma_button').style.display = "none";
@@ -1112,19 +990,164 @@ const fetchLemmaData = function (box_present = true) {
 };
 
 const recordMultiword = function () {
+  if(document.getElementById("lemma_textarea").value.trim() != "" || multiword_meanings[multiword_meaning_no] != undefined) {
+    multiword_meanings[multiword_meaning_no] = document.getElementById("lemma_textarea").value.trim();
+  }
 
+  let mw_meanings_length = Object.keys(multiword_meanings).length;
+  let prev_mw_count = display_word.dataset.multiword;
+  let count = 1;
+
+  let mw_meaning = multiword_meanings[multiword_meaning_no];
+
+  const httpRequest = (method, url) => {
+
+    let multiword_lemma_form = encodeURIComponent(document.getElementById('lemma_tag').value.trim());
+    mw_meaning = encodeURIComponent(mw_meaning);
+    let word_eng_ids = Object.values(multiword_indices).toString();
+    let toknos = Object.keys(multiword_indices).toString();
+
+    let send_data = "word_eng_ids="+word_eng_ids +"&toknos="+toknos+ "&multiword_lemma_form=" + multiword_lemma_form + "&multiword_lemma_meaning=" + mw_meaning + "&multiword_meaning_no=" + multiword_meaning_no + "&pos="+pos + "&lang_id="+lang_id + "&anchor_tokno=" + tokno_current;
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.responseType = 'text';
+    xhttp.onload = () => {  
+      console.log("sent");
+      // console.log(xhttp.responseText);
+      if (xhttp.readyState == 4) {
+        console.log("Multiword updated");
+        let response_numbers = xhttp.response.trim().split(",");
+        console.log(response_numbers);
+        let new_mw_count = response_numbers[0];
+        let new_mw_id = response_numbers[1];
+
+        for (let mw_meaning_no in multiword_meanings) {
+          if(mw_meaning_no == multiword_meaning_no) continue;
+          let eng_trans = multiword_meanings[mw_meaning_no];
+          updateMultiwordTranslations(new_mw_id, mw_meaning_no, eng_trans);
+          console.log(mw_meaning_no, ": ", eng_trans);
+        }
+
+        let dataselectorstring = '[data-multiword="' + prev_mw_count + '"]';
+        document.querySelectorAll(dataselectorstring).forEach(prev_mw => {
+          prev_mw.removeAttribute('data-multiword');
+          prev_mw.classList.remove("multiword");
+        });
+
+        document.querySelectorAll('.mw_current_select').forEach(mwc => {  
+          mwc.classList.add("multiword");
+          mwc.setAttribute("data-multiword", new_mw_count);
+        });
+        console.log("mw_meanings_lengths: ", mw_meanings_length); //remove
+        console.log("count: ", count); //remove
+        document.querySelectorAll('.multiword').forEach(multiword => {
+          multiword.addEventListener('mouseover', underlineMultiwords);
+          multiword.addEventListener('mouseout', removeUnderlineMultiwords);
+        });
+        if(tooltips_shown == true) {
+          //lemmaRecordTooltipUpdate(current_words);
+        }
+        delAnnotate();
+      }
+    }
+    xhttp.send(send_data);
+
+  };
+
+  httpRequest("POST", "record_multiword.php");
+};
+
+const updateMultiwordTranslations = (new_mw_id, mw_meaning_no, eng_trans) => {
+  const httpRequest = (method, url) => {
+    let send_data = "multiword_id="+new_mw_id + "&multiword_meaning_no="+mw_meaning_no + "&mw_meaning="+eng_trans;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        console.log(`updated mw_trans${mw_meaning_no}`);
+      }
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "update_MW_translations.php");
 };
 
 const deleteMultiword = function () {
 
 };
 
-const switchMultiwordMeanings = function() {
+const switchMultiwordMeanings = function(event) {
+  if(event.target.matches('.nav_arrow_deactiv')) return;
+  let grey_arrows = document.querySelectorAll('.nav_arrow_deactiv');
+  grey_arrows.forEach(grey_arrow => {
+    grey_arrow.classList.add("nav_arrow");
+    grey_arrow.classList.remove("nav_arrow_deactiv");
+  });
 
+  let bool_uparrow = event.target.id == "meaning_rightarrow" ? true : false;
+  if (bool_uparrow && multiword_meaning_no < 5) {
+    if(document.getElementById("lemma_textarea").value.trim() != "" || multiword_meanings[multiword_meaning_no] != undefined) {
+      multiword_meanings[multiword_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
+    multiword_meaning_no++;
+  }
+  else if (bool_uparrow == false && multiword_meaning_no > 1) {
+    if(document.getElementById("lemma_textarea").value.trim() != "" || multiword_meanings[multiword_meaning_no] != undefined) {
+      multiword_meanings[multiword_meaning_no] = document.getElementById("lemma_textarea").value;
+    }
+    multiword_meaning_no--;
+  }
+  document.getElementById("number").innerHTML = multiword_meaning_no;
+  
+  if (multiword_meaning_no == 5) {
+    document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
+  }
+  if (multiword_meaning_no == 1) {
+    document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
+  }
+  if (multiword_id != 0 && multiword_meanings[multiword_meaning_no] === undefined) {
+    switchMultiwordMeaningAJAX();
+  }
+
+  document.getElementById("lemma_textarea").value = multiword_meanings[multiword_meaning_no] == undefined ? "" : multiword_meanings[multiword_meaning_no];
+  document.getElementById("lemma_textarea").focus();
 };
 
-const pullInMultiword = function() {
+const switchMultiwordMeaningAJAX = function() {
+  const httpRequest = (method, url) => {
+    let send_data = "multiword_id=" + multiword_id + "&multiword_meaning_no=" + multiword_meaning_no;
 
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(method, url, true);
+    xhttp.responseType = 'text';
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhttp.onload = () => {
+      if (xhttp.readyState == 4) {
+        //let json_response = xhttp.response;
+        let response_meaning = xhttp.response.trim();
+        console.log(response_meaning);
+        //console.log(json_response);
+        if(response_meaning != "") {
+          multiword_meanings[multiword_meaning_no] = response_meaning;
+        }
+        document.getElementById("lemma_textarea").value = multiword_meanings[multiword_meaning_no] == undefined ? "" : multiword_meanings[multiword_meaning_no];
+      }
+    }
+    xhttp.send(send_data);
+  }
+  httpRequest("POST", "retrieve_MW_meanings.php");
+};
+
+const pullInMultiword = function(can_skip = true) {
+  console.log("pullInMultiword");
 };
 
 const toggleSave = (on, recordFunc) => {
@@ -1146,6 +1169,8 @@ const selectMultiword = (event) => {
   let mw_tag_content = document.getElementById("lemma_tag").value.trim();
   let left_right = display_word.dataset.tokno < mw_tokno ? true : false;
 
+  let no_of_mwc = Object.keys(multiword_indices).length;
+
   if(mw_candidate.matches('.mw_current_select')) {
     mw_candidate.classList.remove("mw_current_select");
     let mw_candidate_text = "";
@@ -1158,7 +1183,7 @@ const selectMultiword = (event) => {
     if(no_of_mwc == 2) toggleSave(false, recordMultiword);
     delete multiword_indices[mw_tokno];
   }
-  else if(Object.keys(multiword_indices).length < 10) {
+  else if(no_of_mwc < 10) {
     mw_candidate.classList.add("mw_current_select");
     let mw_candidate_text = "";
     document.querySelectorAll('.mw_current_select').forEach(mwc => {
@@ -1180,15 +1205,15 @@ const showMultiwordAnnotate = (event) => {
   display_word.classList.remove("tooltip");
   tokno_current = display_word.dataset.tokno;
   word_engine_id = display_word.dataset.word_engine_id;
-  //boxFunction(2);
   fetchMultiwordData(false);
 };
 
 const boxFunction = function (annotation_mode = 1) {
-  if(document.getElementById('annot_box') != null) {
+ /* if(document.getElementById('annot_box') != null) {
     let annot_box = document.getElementById('annot_box');
     annot_box.remove();
-  }
+    console.log("if statement trigegred");
+  } */
   displayAnnotBox();
   switch(annotation_mode) {
     case(1):
@@ -1267,16 +1292,14 @@ const fetchMultiwordData = function (box_present = true) {
         let json_response = xhttp.response;
         let multiword_tag_content = json_response.multiword_tag_content;
         if(multiword_tag_content == "") multiword_tag_content = display_word.firstChild.textContent.trim();
-        //multiword_form_tag_initial = multiword_tag_content;
         let multiword_textarea_content = json_response.multiword_textarea_content;
-        //multiword_textarea_content_initial = multiword_textarea_content;
         
         multiword_meaning_no = Number(json_response.multiword_meaning_no);
         multiword_id = Number(json_response.multiword_id);
         pos = Number(json_response.pos);
         //pos_initial = pos;
         let adjacent_toknos = json_response.adjacent_toknos;
-        //console.log(adjacent_toknos);
+        console.log(adjacent_toknos);
         
         if(current_mw_number != undefined) {
           document.querySelectorAll('[data-multiword="'+current_mw_number+'"]').forEach(current_mw => {
@@ -1348,6 +1371,23 @@ const fetchMultiwordData = function (box_present = true) {
    
 };
 
+const reactivateArrows = (meaning_no, max_meaning_no) => {
+  let leftarrow = document.getElementById("meaning_leftarrow");
+  let rightarrow = document.getElementById("meaning_rightarrow");
+  leftarrow.classList.add("nav_arrow");
+  rightarrow.classList.add("nav_arrow");
+  leftarrow.classList.remove("nav_arrow_deactiv");
+  rightarrow.classList.remove("nav_arrow_deactiv");
+  if(meaning_no == 1) {
+    document.getElementById("meaning_leftarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_leftarrow").classList.remove("nav_arrow");
+  }
+  else if (meaning_no == max_meaning_no) {
+    document.getElementById("meaning_rightarrow").classList.add("nav_arrow_deactiv");
+    document.getElementById("meaning_rightarrow").classList.remove("nav_arrow");
+  }
+};
+
 const displayAnnotBox = function () {
   let annot_box = document.createRange().createContextualFragment('<div id="annot_box"><div id="annot_topbar" ondblclick="makeDraggable()"><span id="close_button" onclick="delAnnotate()">Close</span><span id="disregard_button" title="Make this word unannotatable and delete it from the WordEngine (DOES NOTHING ATM)">Disregard</span></div><div id="annot"><div id="left_column"><span id="lemma_box" class="box">Lemma translation</span><span id="multiword_box" class="box" title="not yet implemented">Multiword</span><span id="context_box" class="box" title="not yet implemented">Context translation</span><span id="morph_box" class="box" title="not yet implemented">Morphology</span><span id="accent_box" class="box" title="not yet implemented">Accentology</span></div><div id="right_column"><div id="right_header"><textarea id="lemma_tag"></textarea></div><div id="right_body"><textarea id="lemma_textarea" autocomplete="off"></textarea></div><div id="right_footer"><span id="pos_tag_box"></span><div id="meaning_no_box"><div id="meaning_leftarrow" class="nav_arrow"><</div><div id="meaning_no">Meaning <span id="number"></span></div><div id="meaning_rightarrow" class="nav_arrow">></div></div><div id="save_and_delete_box"><div id="save_button">Save</div><div id="delete_lemma_button">Delete</div></div></div></div></div></div>');
   
@@ -1373,6 +1413,7 @@ const delAnnotate = function (total = true) {
   meanings = Object.create(null);
   multiword_meanings = Object.create(null);
   multiword_indices = Object.create(null);
+
   document.querySelectorAll('.mw_selectable').forEach(mws => {
     mws.classList.remove("mw_selectable", "mw_current_select");
     mws.onclick = showAnnotate;
@@ -1388,6 +1429,7 @@ const delAnnotate = function (total = true) {
 
 };
 
+//this is stolen
 const makeDraggable = function () {
   dragAnnotBox(document.getElementById("annot_box"));
 
