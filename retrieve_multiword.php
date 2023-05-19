@@ -37,7 +37,7 @@ $display_text_word_eng_id = 0;
 $adjacent_toknos_array = "[";
 
 for($i = -1; $i > -51; $i--) {
-  $tokno += $i;
+  $tokno = $tokno_initial + $i;
 
   $sql_stmt->execute();
   $sql_stmt->bind_result($text_word, $adjacent_tokno, $display_text_word_eng_id);
@@ -50,8 +50,9 @@ for($i = -1; $i > -51; $i--) {
     $adjacent_toknos_array .= $adjacent_tokno.",";
   }
 }
+
 for($i = 1; $i < 51; $i++) {
-  $tokno += $i;
+  $tokno = $tokno_initial + $i;
 
   $sql_stmt->execute();
   $sql_stmt->bind_result($text_word, $adjacent_tokno, $display_text_word_eng_id);
@@ -65,7 +66,7 @@ for($i = 1; $i < 51; $i++) {
   }
 }
 
-$adjacent_toknos_array .= "]";
+$adjacent_toknos_array = substr($adjacent_toknos_array, 0, -1)."]";
 
 $sql_stmt->close();
 
@@ -91,6 +92,11 @@ if(!is_null($multiword_id)) {
   if(is_null($mw_lemma_meaning)) {
     $mw_lemma_meaning = "";
   }
+}
+else {
+  $pos = 1;
+  $mw_lemma_form = "";
+  $mw_lemma_meaning = "";
 }
 
 $json_response = json_encode(array("multiword_tag_content" => $mw_lemma_form, "multiword_textarea_content" => $mw_lemma_meaning, "multiword_meaning_no" => $multiword_meaning_no, "multiword_id" => $multiword_id, "pos" => $pos, "adjacent_toknos" => $adjacent_toknos_array));

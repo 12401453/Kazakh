@@ -1298,7 +1298,7 @@ const fetchMultiwordData = function (box_present = true) {
         multiword_id = Number(json_response.multiword_id);
         pos = Number(json_response.pos);
         //pos_initial = pos;
-        let adjacent_toknos = json_response.adjacent_toknos;
+        let adjacent_toknos = JSON.parse(json_response.adjacent_toknos);
         console.log(adjacent_toknos);
         
         if(current_mw_number != undefined) {

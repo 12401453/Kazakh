@@ -2,14 +2,14 @@
 .tooltip {
 position: relative;
 display: inline-block;
-/*color: rgb(252, 119, 119); */
+/*color: rgb(255 115 205);; */
 color: #cbd9f4;
 cursor: pointer;
 border-bottom: 2px solid rgb(23, 33, 54, 0);
 }
 
 .tooltip:hover {
-  color: rgb(252, 119, 119);
+  color: rgb(255 115 205);
 }
 
 .multiword {
@@ -41,7 +41,7 @@ border-bottom: 2px solid rgb(23, 33, 54, 0);
 .tooltip_selected {
   position: relative;
   display: inline-block;
-  color: rgb(252, 119, 119);
+  color: rgb(255 115 205);
   cursor: pointer;
   }
 
