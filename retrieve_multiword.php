@@ -68,9 +68,9 @@ for($i = 1; $i < 51; $i++) {
 
 $adjacent_toknos_array = substr($adjacent_toknos_array, 0, -1)."]";
 
-$sql_stmt->close();
+//$sql_stmt->close();
 
-$sql_stmt = $conn->prepare("SELECT multiword_id, multiword_meaning_no FROM display_text WHERE tokno = ?");
+$sql_stmt/* = $conn*/->prepare("SELECT multiword_id, multiword_meaning_no FROM display_text WHERE tokno = ?");
 $sql_stmt->bind_param("i", $tokno_initial);
 $sql_stmt->execute();
 $sql_stmt->bind_result($multiword_id, $multiword_meaning_no);
@@ -98,6 +98,7 @@ else {
   $mw_lemma_form = "";
   $mw_lemma_meaning = "";
 }
+$sql_stmt->close();
 
 $json_response = json_encode(array("multiword_tag_content" => $mw_lemma_form, "multiword_textarea_content" => $mw_lemma_meaning, "multiword_meaning_no" => $multiword_meaning_no, "multiword_id" => $multiword_id, "pos" => $pos, "adjacent_toknos" => $adjacent_toknos_array));
 

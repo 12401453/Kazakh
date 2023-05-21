@@ -49,65 +49,69 @@ if ($conn->connect_error) {
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
 
+$res = $conn->query("START TRANSACTION");
 
 $sql_stmt = $conn->prepare("INSERT IGNORE INTO multiword_lemmas (multiword_lemma_form, pos, lang_id) VALUES (?, ?, ?)");
 $sql_stmt->bind_param("sii", $multiword_lemma_form, $pos, $lang_id);
 $sql_stmt->execute();
 
-$sql_stmt->close();
-
-$sql_stmt = $conn->prepare("SELECT multiword_id FROM multiword_lemmas WHERE multiword_lemma_form = ? AND pos = ? AND lang_id = ?");
+$sql_stmt->prepare("SELECT multiword_id FROM multiword_lemmas WHERE multiword_lemma_form = ? AND pos = ? AND lang_id = ?");
 $sql_stmt->bind_param("sii", $multiword_lemma_form, $pos, $lang_id);
 $sql_stmt->execute();
 $sql_stmt->bind_result($multiword_id);
 $sql_stmt->fetch();
 
-$sql_stmt->close();
-
-$sql_stmt = $conn->prepare("SELECT multiword_count FROM display_text WHERE tokno = ?");
+$sql_stmt->prepare("SELECT multiword_count FROM display_text WHERE tokno = ?");
 $sql_stmt->bind_param("i", $anchor_tokno);
 $sql_stmt->execute();
 $sql_stmt->bind_result($multiword_count);
 $sql_stmt->fetch();
 
-$sql_stmt->close();
-
 if(is_null($multiword_count)) {
     $sql_stmt->prepare("SELECT MAX(multiword_count) AS max_count FROM display_text");
     $sql_stmt->execute();
     $sql_stmt->bind_result($multiword_count);
-    $multiword_count += 1;
     $sql_stmt->fetch();
-
-    $sql_stmt->close();
+    $multiword_count += 1;
 }
 else {
-    $sql_stmt->prepare("UPDATE display_text SET multiword_id = ?, multiword_count = ? WHERE tokno = ?");
-    $tokno = $toknos[0];
-    $sql_stmt->bind_param("iii", $multiword_id, $multiword_count, $tokno);
-
-    for($i = 0; $i < $word_count; $i++) {
-        $tokno = $toknos[$i];
-        $sql_stmt->execute();
-    }
-    $sql_stmt->close();
-
-    $sql_string = "INSERT IGNORE INTO multiwords (multiword_id, ";
-    for($i = 0; $i < $word_count; $i++) {
-        $sql_string .= "word_engine_id".strval($i + 1).", ";
-    }
-    $sql_string .= "lang_id) VALUES (";
-    for($i = 0; $i < $word_count+2; $i++) {
-        $sql_string .= "?";
-        if($i < $word_count+1) {
-            $sql_string .= ", ";
-        }
-    }
-    $sql_string .= ")";
-
-    $sql_stmt->prepare($sql_string);
-    $sql_stmt->bind_param("")
-    //problem because bind_param() expects all the variables to be bound at once, whereas we have a variable number of word_eng_id's to bind
+    $sql_stmt->prepare("UPDATE display_text SET multiword_id = NULL, multiword_meaning_no = NULL, multiword_count = NULL WHERE multiword_count = ?");
+    $sql_stmt->bind_param("i", $multiword_count);
+    $sql_stmt->execute();
 }
+
+$sql_stmt->prepare("UPDATE display_text SET multiword_id = ?, multiword_count = ? WHERE tokno = ?");
+$tokno = $toknos[0];
+$sql_stmt->bind_param("iii", $multiword_id, $multiword_count, $tokno);
+for($i = 0; $i < $word_count; $i++) {
+    $tokno = $toknos[$i];
+    $sql_stmt->execute();
+}
+
+$sql_string = "INSERT IGNORE INTO multiwords (multiword_id, ";
+for($i = 0; $i < $word_count; $i++) {
+    $sql_string .= "word_engine_id".strval($i + 1).", ";
+}
+$sql_string .= "lang_id) VALUES (".$multiword_id.", ";
+for($i = 0; $i < $word_count; $i++) {
+    $sql_string .= $word_eng_ids[$i].", ";
+}
+$sql_string .= $lang_id.")";
+$sql_stmt->prepare($sql_string);
+$sql_stmt->execute();
+
+$sql_stmt->prepare("UPDATE multiword_lemmas SET eng_trans".$multiword_meaning_no." = ? WHERE multiword_id = ?");
+$sql_stmt->bind_param("si", $multiword_lemma_meaning, $multiword_id);
+$sql_stmt->execute();
+
+$sql_stmt->prepare("UPDATE display_text SET multiword_meaning_no = ? WHERE multiword_count = ?");
+$sql_stmt->bind_param("ii", $multiword_meaning_no, $multiword_count);
+$sql_stmt->execute();
+
+$sql_stmt->close();
+
+$res = $conn->query("COMMIT");
+
+echo $multiword_count.",".$multiword_id;
 
 ?>
