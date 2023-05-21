@@ -1,6 +1,16 @@
 <?php
 
 //sample send_data: word_eng_ids=27294,2146&toknos=128192,128193&multiword_lemma_form=k%C5%82a%C5%9B%C4%87%20si%C4%99&multiword_lemma_meaning=lay%20down&multiword_meaning_no=1&pos=2&lang_id=3&anchor_tokno=128192
+/*
+$_POST = array ("word_eng_ids" => "639,67",
+                "toknos" => "10342,10344",
+                "multiword_lemma_form" => "klæde af",
+                "multiword_lemma_meaning" => "undress",
+                "multiword_meaning_no" => "1",
+                "pos" => "2",
+                "lang_id" => "8",
+                "anchor_tokno" => "10342"
+); */
 
 $word_eng_ids = "";
 if(isset($_POST["word_eng_ids"])) {
@@ -90,7 +100,7 @@ for($i = 0; $i < $word_count; $i++) {
 
 $sql_string = "INSERT IGNORE INTO multiwords (multiword_id, ";
 for($i = 0; $i < $word_count; $i++) {
-    $sql_string .= "word_engine_id".strval($i + 1).", ";
+    $sql_string .= "word_eng_id".strval($i + 1).", ";
 }
 $sql_string .= "lang_id) VALUES (".$multiword_id.", ";
 for($i = 0; $i < $word_count; $i++) {
@@ -114,4 +124,5 @@ $res = $conn->query("COMMIT");
 
 echo $multiword_count.",".$multiword_id;
 
+$conn->close();
 ?>
