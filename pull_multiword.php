@@ -21,12 +21,13 @@ $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
 
 $sql_string = "SELECT multiword_id FROM multiwords WHERE ";
-
+//need to change this so it specifies the rest of the word_eng_idX columns as NULL
 for($i = 0; $i < $word_eng_count; $i++) {
     $sql_string .= "word_eng_id".($i + 1)." = ".$word_eng_ids[$i];
     $sql_string .= " AND ";
 }
 $sql_string .= "lang_id = ".$lang_id;
+
 
 $sql_stmt = $conn->prepare($sql_string);
 $sql_stmt->execute();
