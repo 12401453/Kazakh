@@ -45,6 +45,7 @@ else {
     $sql_stmt->execute();
     $sql_stmt->bind_result($mw_lemma_form, $pos, $mw_lemma_meaning);
     $sql_stmt->fetch();
+    if(is_null($mw_lemma_meaning)) $mw_lemma_meaning = ""; //incase someone has deleted eng_trans1 but left others
 }
 $sql_stmt->close();
 
