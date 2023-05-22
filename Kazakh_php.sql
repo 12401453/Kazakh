@@ -26538,7 +26538,7 @@ INSERT INTO `display_text` VALUES
 ('var',1,72,NULL,NULL,NULL,NULL,9591,NULL),
 ('de',1,57,NULL,NULL,NULL,NULL,9592,NULL),
 (',',0,NULL,NULL,NULL,NULL,NULL,9593,NULL),
-('gik',1,136,2,14,NULL,NULL,9594,NULL),
+('gik',1,136,NULL,NULL,NULL,NULL,9594,NULL),
 ('i',1,3,NULL,NULL,NULL,NULL,9595,NULL),
 ('skole',1,1588,NULL,NULL,NULL,NULL,9596,NULL),
 ('med',1,137,NULL,NULL,NULL,NULL,9597,NULL),
@@ -26783,8 +26783,8 @@ INSERT INTO `display_text` VALUES
 ('store',1,77,NULL,NULL,NULL,NULL,9836,NULL),
 ('fugle',1,320,NULL,NULL,NULL,NULL,9837,NULL),
 (',',0,NULL,NULL,NULL,NULL,NULL,9838,NULL),
-('uden',1,205,NULL,NULL,NULL,NULL,9839,NULL),
-('stemme',1,1040,NULL,NULL,NULL,NULL,9840,NULL),
+('uden',1,205,1,19,7,1,9839,7),
+('stemme',1,1040,1,18,7,1,9840,7),
 ('!',0,NULL,NULL,NULL,NULL,NULL,9841,NULL),
 ('\"',0,NULL,NULL,NULL,NULL,NULL,9842,NULL),
 ('men',1,20,NULL,NULL,NULL,NULL,9843,NULL),
@@ -27146,7 +27146,7 @@ INSERT INTO `display_text` VALUES
 ('den',1,12,NULL,NULL,NULL,NULL,10199,NULL),
 ('tidlige',1,1658,NULL,NULL,NULL,NULL,10200,NULL),
 ('morgen',1,848,NULL,NULL,NULL,NULL,10201,NULL),
-('gik',1,136,NULL,NULL,NULL,NULL,10202,NULL),
+('gik',1,136,1,20,NULL,NULL,10202,NULL),
 ('dronningen',1,1653,NULL,NULL,NULL,NULL,10203,NULL),
 ('ind',1,190,NULL,NULL,NULL,NULL,10204,NULL),
 ('i',1,3,NULL,NULL,NULL,NULL,10205,NULL),
@@ -27286,9 +27286,9 @@ INSERT INTO `display_text` VALUES
 ('på',1,11,NULL,NULL,NULL,NULL,10339,NULL),
 ('Elisa',1,1585,NULL,NULL,NULL,NULL,10340,NULL),
 (',',0,NULL,NULL,NULL,NULL,NULL,10341,NULL),
-('klædte',1,639,NULL,NULL,NULL,NULL,10342,NULL),
+('klædte',1,639,NULL,NULL,4,1,10342,4),
 ('hende',1,300,NULL,NULL,NULL,NULL,10343,NULL),
-('af',1,67,NULL,NULL,NULL,NULL,10344,NULL),
+('af',1,67,NULL,NULL,4,1,10344,4),
 (',',0,NULL,NULL,NULL,NULL,NULL,10345,NULL),
 ('og',1,15,NULL,NULL,NULL,NULL,10346,NULL),
 ('lod',1,203,NULL,NULL,NULL,NULL,10347,NULL),
@@ -33496,8 +33496,8 @@ INSERT INTO `display_text` VALUES
 ('.',0,NULL,NULL,NULL,NULL,NULL,16549,NULL),
 ('\n',2,NULL,NULL,NULL,NULL,NULL,16550,NULL),
 ('\n',2,NULL,NULL,NULL,NULL,NULL,16551,NULL),
-('Еске',0,2364,NULL,NULL,NULL,NULL,16552,NULL),
-('салсақ',1,2365,NULL,NULL,NULL,NULL,16553,NULL),
+('Еске',0,2364,NULL,NULL,6,1,16552,6),
+('салсақ',1,2365,1,17,6,1,16553,6),
 (',',0,NULL,NULL,NULL,NULL,NULL,16554,NULL),
 ('11',1,2366,NULL,NULL,NULL,NULL,16555,NULL),
 ('қаңтарда',1,2367,NULL,NULL,NULL,NULL,16556,NULL),
@@ -35393,8 +35393,8 @@ INSERT INTO `display_text` VALUES
 ('»',0,NULL,NULL,NULL,NULL,NULL,18446,NULL),
 ('деген',1,2613,NULL,NULL,NULL,NULL,18447,NULL),
 ('ой',1,3252,NULL,NULL,NULL,NULL,18448,NULL),
-('пайда',1,3253,NULL,NULL,NULL,NULL,18449,NULL),
-('болады',1,2498,NULL,NULL,NULL,NULL,18450,NULL),
+('пайда',1,3253,NULL,NULL,5,1,18449,5),
+('болады',1,2498,NULL,NULL,5,1,18450,5),
 ('.',0,NULL,NULL,NULL,NULL,NULL,18451,NULL),
 ('Және',1,2397,NULL,NULL,NULL,NULL,18452,NULL),
 ('бұл',1,2342,NULL,NULL,NULL,NULL,18453,NULL),
@@ -37124,7 +37124,7 @@ CREATE TABLE `lemmas` (
   `pos` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`lemma`,`lang_id`,`pos`),
   UNIQUE KEY `lemma_id` (`lemma_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37137,14 +37137,17 @@ INSERT INTO `lemmas` VALUES
 (4,'bevægelse','movement',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
 (3,'blå','blue',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,3),
 (7,'dejlig','beautiful','lovely, fine',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,3),
-(14,'gik',NULL,'test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
+(20,'gå','go',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,2),
 (8,'hos','chez',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,5),
 (5,'ligesom','just like',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,4),
 (16,'skrive','write',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,2),
 (6,'sted','place, spot',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
+(18,'stemme','voice',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
 (15,'stjerne','star',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
 (12,'tro','believe',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,2),
+(19,'uden','utan',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,5),
 (2,'vand','water',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,8,1),
+(17,'салу','put, place',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,2),
 (11,'қарамастан','despite',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,5),
 (9,'қатынас','relations',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,2,1);
 /*!40000 ALTER TABLE `lemmas` ENABLE KEYS */;
@@ -37192,7 +37195,7 @@ CREATE TABLE `multiword_lemmas` (
   `lang_id` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`multiword_lemma_form`,`pos`,`lang_id`),
   UNIQUE KEY `multiword_id` (`multiword_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37202,7 +37205,11 @@ CREATE TABLE `multiword_lemmas` (
 LOCK TABLES `multiword_lemmas` WRITE;
 /*!40000 ALTER TABLE `multiword_lemmas` DISABLE KEYS */;
 INSERT INTO `multiword_lemmas` VALUES
-(1,'i stedet for','[at +infin] instead of [doing sth.]',NULL,NULL,NULL,NULL,5,8),
+(6,'eске салу','remind',NULL,NULL,NULL,NULL,2,2),
+(1,'i stedet for','[at +infin] instead of [doing sth.]',NULL,'mw_meaning test3',NULL,NULL,5,8),
+(4,'klæde af','undefined','mw test 2',NULL,NULL,NULL,2,8),
+(7,'uden stemme','without a word, without a peep (silently)',NULL,NULL,NULL,NULL,4,8),
+(5,'пайда болу','emerge',NULL,NULL,NULL,NULL,2,2),
 (2,'қарым-қатынас','relationship',NULL,NULL,NULL,NULL,1,2);
 /*!40000 ALTER TABLE `multiword_lemmas` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -37240,7 +37247,11 @@ LOCK TABLES `multiwords` WRITE;
 INSERT INTO `multiwords` VALUES
 (1,3,1147,34,0,0,0,0,0,0,0,8),
 (2,3014,3015,0,0,0,0,0,0,0,0,2),
-(2,3014,3367,0,0,0,0,0,0,0,0,2);
+(2,3014,3367,0,0,0,0,0,0,0,0,2),
+(4,639,67,0,0,0,0,0,0,0,0,8),
+(5,3253,2498,0,0,0,0,0,0,0,0,2),
+(6,2364,2365,0,0,0,0,0,0,0,0,2),
+(7,205,1040,0,0,0,0,0,0,0,0,8);
 /*!40000 ALTER TABLE `multiwords` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -37973,7 +37984,7 @@ INSERT INTO `word_engine` VALUES
 (1601,'giftede',8,NULL),
 (1352,'giftes',8,NULL),
 (1678,'giftige',8,NULL),
-(136,'gik',8,14),
+(136,'gik',8,20),
 (2197,'gitrede',8,NULL),
 (2221,'gitter',8,NULL),
 (2205,'gitteret',8,NULL),
@@ -39150,7 +39161,7 @@ INSERT INTO `word_engine` VALUES
 (1848,'stedmoder',8,NULL),
 (568,'steg',8,NULL),
 (1607,'stegte',8,NULL),
-(1040,'stemme',8,NULL),
+(1040,'stemme',8,18),
 (569,'stemmer',8,NULL),
 (277,'sten',8,NULL),
 (878,'stenart',8,NULL),
@@ -39437,7 +39448,7 @@ INSERT INTO `word_engine` VALUES
 (104,'ud',8,NULL),
 (2270,'udbredte',8,NULL),
 (2,'ude',8,NULL),
-(205,'uden',8,NULL),
+(205,'uden',8,19),
 (1594,'udenad',8,NULL),
 (1024,'udenfor',8,NULL),
 (1719,'udført',8,NULL),
@@ -40557,7 +40568,7 @@ INSERT INTO `word_engine` VALUES
 (3875,'салдарларға',2,NULL),
 (2337,'салдары',2,NULL),
 (3191,'салдарынан',2,NULL),
-(2365,'салсақ',2,NULL),
+(2365,'салсақ',2,17),
 (3859,'салт',2,NULL),
 (3429,'салуға',2,NULL),
 (3471,'санайды',2,NULL),
@@ -41226,4 +41237,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-19 12:57:11
+-- Dump completed on 2023-05-21 12:46:55
