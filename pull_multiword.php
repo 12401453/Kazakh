@@ -20,11 +20,16 @@ if ($conn->connect_error) {
 $sql = "SET NAMES UTF8";
 $res = $conn->query($sql);
 
+$null_count = 1;
 $sql_string = "SELECT multiword_id FROM multiwords WHERE ";
 //need to change this so it specifies the rest of the word_eng_idX columns as NULL
 for($i = 0; $i < $word_eng_count; $i++) {
     $sql_string .= "word_eng_id".($i + 1)." = ".$word_eng_ids[$i];
     $sql_string .= " AND ";
+    $null_count++;
+}
+for(; $null_count < 11; $null_count++) {
+    $sql_string .= "word_eng_id".$null_count." = 0 AND ";
 }
 $sql_string .= "lang_id = ".$lang_id;
 
