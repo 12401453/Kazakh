@@ -1,0 +1,30 @@
+
+
+$multiword_id = $_POST["multiword_id"];
+$mw_length = 2;
+
+$
+
+UPDATE display_text SET multiword_id = NULL, multiword_meaning_no = NULL, multiword_count = NULL WHERE tokno = toknos[0] AND tokno = toknos[1] ...;
+
+
+SELECT multiword_count FROM display_text WHERE multiword_id = $multiword_id AND (word_engine_id1 = xxx OR word_engine_id2 = yyy);
+
+$mw_counts = array(multiword_counts in order);
+
+$x = 1;
+//$mw_leftover = false;
+for($i = 0, $j = 1; $i < count(mw_counts); $i++, $j++){
+    if(mw_counts[$i] == $mw_counts[[$j]) $x++;
+    if($x == $mw_length) {
+        //$mw_leftover = true;
+        $sql_string = "DELETE FROM multiwords WHERE word_engine_id1 = "xxx" ... AND word_engine_id10 = NULL";
+        break;
+    }
+}
+
+SELECT multiword_id FROM multiwords WHERE multiword_id = $multiword_id;
+if(is_null(row)) DELETE FROM multiword_lemmas WHERE multiword_id = $multiword_id;
+
+
+
