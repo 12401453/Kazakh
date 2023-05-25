@@ -1098,6 +1098,7 @@ const deleteMultiword = function () {
         document.querySelectorAll(dataselectorstring).forEach(prev_mw => {
           prev_mw.removeAttribute('data-multiword');
           prev_mw.classList.remove("multiword");
+          prev_mw.onclick = showAnnotate;
         });
 
       }
