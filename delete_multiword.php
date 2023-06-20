@@ -68,7 +68,7 @@ for($i = 0, $j = 1; $i < $mw_counts_length && $j < $mw_counts_length; $i++, $j++
 if($mw_leftover == false) {
     $sql_string = "DELETE FROM multiwords WHERE multiword_id = $multiword_id AND ";
     $null_count = 1;
-    //need to change this so it specifies the rest of the word_eng_idX columns as NULL
+
     for($i = 0; $i < $mw_length; $i++) {
         $sql_string .= "word_eng_id".($i + 1)." = ".$word_eng_ids[$i];
         $sql_string .= " AND ";
