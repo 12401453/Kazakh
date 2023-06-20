@@ -122,7 +122,10 @@ if ($result->num_rows > 0) {
       $page_nos = ceil(($length/$words_per_page));
       for($i = $page_nos; $i > 1; $i--) {
         $page_cur = /*0-$i+1+$page_nos;*/ 1+ $page_nos- $i;
-        echo '<span class="pageno" onclick="selectText_splitup('.$chunk_start.', '.$chunk_start+$words_per_page-1;
+        echo '<span class="pageno" onclick="selectText_splitup(';
+        echo $chunk_start;
+        echo ', ';
+        echo $chunk_start+$words_per_page-1;
         echo ', '.$page_nos.', '.$page_cur;
         echo ')">';
         echo $page_cur.'</span>';

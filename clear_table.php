@@ -66,7 +66,7 @@ $sql = "DROP TABLE IF EXISTS languages";
 $result = $conn->query($sql);
 $sql = "CREATE TABLE languages (lang_id SMALLINT UNSIGNED PRIMARY KEY, lang_name VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin UNIQUE) DEFAULT CHARSET=utf8 COLLATE utf8_bin";
 $result = $conn->query($sql);
-$sql = "INSERT INTO languages (lang_id, lang_name) VALUES (8, 'Danish'), (7, 'Turkish'), (1, 'Russian'), (2, 'Kazakh'), (3, 'Polish'), (4, 'Bulgarian')";
+$sql = "INSERT INTO languages (lang_id, lang_name) VALUES (8, 'Danish'), (7, 'Turkish'), (1, 'Russian'), (2, 'Kazakh'), (3, 'Polish'), (4, 'Bulgarian'), (6, 'Swedish')";
 $result = $conn->query($sql);
 
 $sql = "DROP TABLE IF EXISTS abbreviations";
