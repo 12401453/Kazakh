@@ -216,8 +216,8 @@ function progressBar(word_count) {
 
 function loadText() {
 
-  let newtext_raw = document.getElementById('newtext').value.trim();
-  let text_title_raw = document.getElementById('text_title').value.trim();
+  let newtext_raw = document.getElementById('newtext').value.replaceAll('\u00AD', '').trim();
+  let text_title_raw = document.getElementById('text_title').value.replaceAll('\u00AD', '').trim();
   if(text_title_raw == '' && newtext_raw == '') { return; }
   if(text_title_raw == '') { alert("Do not leave Text Title blank"); return; }
   if(newtext_raw == '') {alert("You cannot submit a blank text"); return; }
